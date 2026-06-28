@@ -12,8 +12,26 @@
 
   --font-display: "Playfair Display", serif;
   --font-body: "Nunito", system-ui, sans-serif;
+  --font-handwriting: "Caveat", cursive;
 
   --radius-pill: 40px;
   --radius-card: 20px;
+}
+
+
+@keyframes wave { 0% { transform: scale(1); opacity: .5; } 100% { transform: scale(1.9); opacity: 0; } }
+@keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+@layer theme {
+  /* Custom scrollbar — slim, impressionist tints */
+  *::-webkit-scrollbar { width: 10px; height: 10px; }
+  *::-webkit-scrollbar-track { background: #F6F3EE; }
+  *::-webkit-scrollbar-thumb { background: linear-gradient(#B57EDC,#6A0DAD); border-radius: 40px; border: 2px solid #F6F3EE; }
+  * { scrollbar-width: thin; scrollbar-color: #6A0DAD #F6F3EE; }
 }
 
