@@ -1,0 +1,11 @@
+{
+  "nav": {
+    "about": "О нас",
+    "services": "Услуги & цены",
+    "faqs": "Частые вопросы",
+    "blog": "Блог",
+    "whatsapp": "WhatsApp", 
+    "instagram": "Instagram", 
+    "contact": "Как нас найти"
+  }
+}
