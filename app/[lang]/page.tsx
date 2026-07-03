@@ -1,7 +1,7 @@
-import { WhatsAppButton } from "./ui/WhatsAppButton";
-import { WhatsAppButtonWave } from "./ui/WhatsAppButtonWave";
-import { NavLink } from "./ui/NavLink";
-import { BurgerMenuButton } from "./ui/BurgerMenuButton";
+import { WhatsAppButton } from "../ui/WhatsAppButton";
+import { WhatsAppButtonWave } from "../ui/WhatsAppButtonWave";
+import { NavLink } from "../ui/NavLink";
+import { BurgerMenuButton } from "../ui/BurgerMenuButton";
 
 export default function Home() {
   return (

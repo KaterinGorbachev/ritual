@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Nunito, Caveat } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
+import { NavLink } from "../ui/NavLink";
+import { Dropdown } from "../ui/Dropdown";
+import { LangButton } from "../ui/LangButton";
 
 const playfair = Playfair_Display({
   variable: "--font-display",
@@ -32,7 +35,84 @@ export default function RootLayout({
       lang="en"
       className={`${playfair.variable} ${nunito.variable} ${caveat.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:z-50 focus:left-4 focus:top-4 btn-primary"
+          data-testid="skip-to-content"
+        >
+          Skip to content
+        </a>
+
+        <header
+          className="flex items-center justify-between w-full sticky top-0 px-4 py-2 shadow-md  z-40 bg-cream/85 backdrop-blur-md border-b border-mauve/30 min-h-[5vh]"
+          data-testid="header"
+        >
+          <div
+            className="flex max-w-6xl items-center justify-between gap-4 px-4 pt-3 pb-1.5"
+            aria-label="Primary"
+          >
+            <a
+              href="./#main"
+              className="flex items-center gap-2 rounded-pill"
+              aria-label="Aurelle home"
+            >
+              <svg
+                width="32"
+                height="32"
+                viewBox="0 0 32 32"
+                fill="none"
+                stroke="#6A0DAD"
+                stroke-width="1.3"
+                aria-hidden="true"
+              >
+                <circle cx="16" cy="16" r="6" />
+                <circle
+                  cx="16"
+                  cy="16"
+                  r="11"
+                  stroke="#DA1884"
+                  stroke-dasharray="2 4"
+                />
+              </svg>
+              <span className="font-display text-2xl font-semibold tracking-normal hidden md:block">
+                Ritual
+              </span>
+            </a>
+            <div className="flex items-center gap-4">
+              {/* Pages dropdown — UI only */}
+              <Dropdown className="relative group isolate" data-testid="pages-menu">
+                <summary
+                  aria-label="Toggle menu"
+                  className="lg:hidden cursor-pointer group inline-flex items-center justify-center gap-1.5 rounded-pill min-h-11 min-w-11 px-4 py-3 border-2 border-blush shadow-xs bg-cream backdrop-blur  transition duration-500 ease-in-out focus:outline-none focus:border-mint hover:bg-cream  hover:border-magenta active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed "
+                  data-testid="burger-menu-button"
+                >
+                  <span className="block h-2.5 w-2.5 rounded-full bg-mint transition-colors duration-500 ease-in-out group-focus:bg-lilac group-active:bg-lilac" />
+                  <span className="block h-2.5 w-2.5 rounded-full bg-lilac transition-colors duration-500 ease-in-out group-focus:bg-blush group-active:bg-blush" />
+                  <span className="block h-2.5 w-2.5 rounded-full bg-blush transition-colors duration-500 ease-in-out group-focus:bg-mint group-active:bg-mint" />
+                  
+                </summary>
+                <nav
+                  className="absolute left-0 mt-2 min-w-52 flex flex-col gap-4 p-2 rounded-2xl border-2 border-mauve/30 bg-cream backdrop-blur-md shadow-lg z-50"
+                  data-testid="pages-menu-panel"
+                >
+                  
+                  <li><NavLink href="#about">About Us</NavLink></li>
+                  <li><NavLink href="#services">Services &amp; Prices</NavLink></li>
+                  <li><NavLink href="#faqs">FAQs</NavLink></li>
+                  <li><NavLink href="#blog">Blog</NavLink></li>
+                  <li><NavLink href="#contact">Find Us</NavLink></li>
+                </nav>
+              </Dropdown>
+
+              {/* Language selector dropdown */}
+              <LangButton />
+            </div>
+          </div>
+        </header>
+
+        {children}
+      </body>
     </html>
   );
 }
