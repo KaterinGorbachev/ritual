@@ -3,7 +3,11 @@
     "allow": [
       "PowerShell(npx tsc --noEmit -p tsconfig.json 2>&1)",
       "PowerShell(npx eslint \"app/[lang]/layout.tsx\" \"app/ui/Dropdown.tsx\" 2>&1)",
-      "PowerShell(npx eslint \"app/[lang]/layout.tsx\" \"app/ui/LangButton.tsx\" 2>&1)"
+      "PowerShell(npx eslint \"app/[lang]/layout.tsx\" \"app/ui/LangButton.tsx\" 2>&1)",
+      "PowerShell(npx eslint \"app/[lang]/layout.tsx\" 2>&1)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\katri\\Desktop\\masage-salon\\ritual\\ritual-crm\\.next\\types"
     ]
   }
 }

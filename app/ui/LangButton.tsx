@@ -4,25 +4,26 @@ import { useRouter, usePathname } from "next/navigation";
 import { Dropdown } from "./Dropdown";
 
 const languages = [
-  { locale: "en-US", label: "English", code: "EN" },
-  { locale: "ru-RU", label: "Русский", code: "RU" },
-  { locale: "es-ES", label: "Español", code: "ES" },
+  { locale: "en", label: "English", code: "EN" },
+  { locale: "ru", label: "Русский", code: "RU" },
+  { locale: "es", label: "Español", code: "ES" },
 ] as const;
 
 export function LangButton() {
   const router = useRouter();
   const pathname = usePathname();
 
-  // Current locale is the first path segment, e.g. "/es-ES/about" -> "es-ES"
+  // Current locale is the first path segment, e.g. "/es/about" -> "es"
   const current = pathname.split("/")[1] ?? "";
   const active =
     languages.find((l) => l.locale === current) ?? languages[0];
 
   function switchTo(locale: string) {
     // Replace the first segment with the chosen locale, keep the rest.
+    // "/en/about" -> ["", "en", "about"] -> "/es/about"
     const segments = pathname.split("/");
     segments[1] = locale;
-    router.push(segments.join("/") || `/${locale}`);
+    router.push(segments.join("/"));
   }
 
   return (
@@ -47,7 +48,7 @@ export function LangButton() {
             onClick={() => switchTo(locale)}
             aria-current={locale === active.locale ? "true" : undefined}
             data-testid={`language-option-${code}`}
-            className="flex justify-between px-2 py-1 rounded-pill border-2 border-transparent text-base font-normal tracking-wider leading-5 text-ink font-body cursor-pointer hover:font-bold focus:underline active:text-magenta aria-current:font-bold aria-current:border-blush"
+            className="flex justify-between px-2 py-1 rounded-pill border-2 border-transparent text-base font-normal tracking-wider leading-5 text-ink font-body cursor-pointer hover:font-bold focus:underline active:text-magenta aria-current:font-bold "
           >
             <span>{label}</span>
             <span className="font-display italic text-magenta">{code}</span>
