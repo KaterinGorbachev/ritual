@@ -31,7 +31,7 @@ export function LangButton() {
       <summary
         aria-label="Language selector"
         data-testid="language-selector-button"
-        className="cursor-pointer group items-center justify-center gap-1.5 rounded-full w-11 h-11 px-4 py-3 border-2 border-blush shadow-xs bg-cream backdrop-blur  transition duration-500 ease-in-out focus:outline-none focus:border-mint fous:ring-2 focus:ring-mint  hover:brightness-95 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed text-ink font-body text-base font-light flex list-none select-none [&::-webkit-details-marker]:hidden"
+        className="cursor-pointer group items-center justify-center gap-1.5 rounded-full w-11 h-11 px-4 py-3 border-2 border-transparent shadow-sm bg-cream backdrop-blur  transition duration-500 ease-in-out focus:outline-none focus:border-mint fous:ring-2 focus:ring-mint  hover:brightness-95 hover:border-magenta active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed text-ink font-body text-base font-light flex list-none select-none [&::-webkit-details-marker]:hidden"
       >
         <span className="font-display text-base font-semibold tracking-normal">
           {active.code}

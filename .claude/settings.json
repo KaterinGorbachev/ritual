@@ -4,7 +4,16 @@
       "PowerShell(npx tsc --noEmit -p tsconfig.json 2>&1)",
       "PowerShell(npx eslint \"app/[lang]/layout.tsx\" \"app/ui/Dropdown.tsx\" 2>&1)",
       "PowerShell(npx eslint \"app/[lang]/layout.tsx\" \"app/ui/LangButton.tsx\" 2>&1)",
-      "PowerShell(npx eslint \"app/[lang]/layout.tsx\" 2>&1)"
+      "PowerShell(npx eslint \"app/[lang]/layout.tsx\" 2>&1)",
+      "Bash(npx playwright *)",
+      "Bash(node -e \"import\\('@vitest/browser/providers/playwright'\\).then\\(m => console.log\\('OK exports:', Object.keys\\(m\\)\\)\\).catch\\(e => console.log\\('FAIL:', e.message\\)\\)\")",
+      "Bash(node -e \"import\\('@vitest/browser'\\).then\\(m => console.log\\(Object.keys\\(m\\).filter\\(k=>/play|provider|prov/i.test\\(k\\)\\)\\)\\).catch\\(e=>console.log\\('FAIL',e.message\\)\\)\")",
+      "Bash(npm install *)",
+      "Bash(node -e \"import\\('@vitest/browser-playwright'\\).then\\(m=>console.log\\('OK:',Object.keys\\(m\\)\\)\\).catch\\(e=>console.log\\('FAIL',e.message\\)\\)\")",
+      "Bash(npx vitest *)",
+      "Bash(node -p \"const d=require\\('./package.json'\\).devDependencies; ['vitest','@vitest/browser','@vitest/browser-playwright','vitest-browser-react','playwright','@testing-library/jest-dom','jsdom'].map\\(k=>k+': '+\\(d[k]||'—'\\)\\).join\\('\\\\n'\\)\")",
+      "PowerShell(npx vitest run app/test/ui/WhatsAppButton.db.test.tsx)",
+      "PowerShell(npx vitest run app/test/ui/WhatsAppButton.test.tsx)"
     ],
     "additionalDirectories": [
       "C:\\Users\\katri\\Desktop\\masage-salon\\ritual\\ritual-crm\\.next\\types"

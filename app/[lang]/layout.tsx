@@ -58,10 +58,10 @@ export default async function RootLayout({
         </a>
 
         <header
-          className="flex items-center justify-center w-full sticky top-0 px-4 py-2 shadow-md  z-40 bg-cream/85 backdrop-blur-md border-b border-mauve/30 min-h-[5vh] "
+          className="flex items-center justify-center w-full sticky top-2 max-w-400 shadow-sm  z-40 bg-cream/85 backdrop-blur-md border-b border-mauve/30 min-h-[5vh] rounded-pill "
           data-testid="header"
         >
-          <div className="flex items-center justify-between w-full max-w-400 px-2 md:px-4 pt-3 pb-1.5 gap-4">
+          <div className="flex items-center justify-between w-full px-2 md:px-4 pt-3 pb-2 gap-4">
             <div
               className="flex items-center justify-center "
               aria-label="Primary"
@@ -122,7 +122,7 @@ export default async function RootLayout({
                 </nav>
               </div>
               <WhatsAppButton
-                number="+34666666666"
+                
                 message="Hello, I would like to book a massage appointment."
                 className="inline-flex lg:ml-6"
               >
@@ -150,7 +150,7 @@ export default async function RootLayout({
               >
                 <summary
                   aria-label="Toggle menu"
-                  className=" cursor-pointer group inline-flex items-center justify-center gap-1.5 rounded-pill min-h-11 min-w-9 px-2 py-2 border-2 border-blush shadow-xs bg-cream backdrop-blur  transition duration-500 ease-in-out focus:outline-none focus:border-mint hover:bg-cream  hover:border-magenta active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed "
+                  className=" cursor-pointer group inline-flex items-center justify-center gap-1.5 rounded-pill min-h-11 min-w-9 px-2 py-2 border-2 border-transparent shadow-sm bg-cream backdrop-blur  transition duration-500 ease-in-out focus:outline-none focus:border-mint hover:bg-cream  hover:border-magenta hover:brightness-95 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed "
                   data-testid="burger-menu-button"
                 >
                   <span className="block h-2.5 w-2.5 rounded-full bg-mint transition-colors duration-500 ease-in-out group-focus:bg-lilac group-active:bg-lilac" />
