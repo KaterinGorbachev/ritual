@@ -31,6 +31,8 @@ export const getDocById = async (table, id) => {
       }
     }
 
+    
+
     return {
       ok: true,
       data: { id: snapshot.id, ...snapshot.data() },
@@ -61,7 +63,7 @@ export const getInfo = async (table) => {
       ...doc.data(),
     }))
 
-    log('Firebase getInfo data:', data)
+    console.log('Firebase getInfo data:', data)
 
     return {
       ok: true,

@@ -6,10 +6,12 @@ export async function WhatsAppButton({
     // Source the WhatsApp number from the "messanger" document in the
     // "ContactData" collection (field: telephone).
     let number = "";
-    const response = await getDocById("ContactData", "messanger");
+    const response = await getDocById("contactData", "messanger");
+    console.log("WhatsAppButton: full response from Firestore:", JSON.stringify(response));
     if (response.ok) {
         const contact = response.data as { telephone?: string } | undefined;
-        number = contact?.telephone ?? "";
+        number = contact?.telephone ?? "not-found";
+        console.log("WhatsAppButton: fetched number from Firestore:", number);
     }
 
     // Build a wa.me link: digits only, plus the prefilled message.
