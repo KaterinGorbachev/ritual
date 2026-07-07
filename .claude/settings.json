@@ -13,7 +13,9 @@
       "Bash(npx vitest *)",
       "Bash(node -p \"const d=require\\('./package.json'\\).devDependencies; ['vitest','@vitest/browser','@vitest/browser-playwright','vitest-browser-react','playwright','@testing-library/jest-dom','jsdom'].map\\(k=>k+': '+\\(d[k]||'—'\\)\\).join\\('\\\\n'\\)\")",
       "PowerShell(npx vitest run app/test/ui/WhatsAppButton.db.test.tsx)",
-      "PowerShell(npx vitest run app/test/ui/WhatsAppButton.test.tsx)"
+      "PowerShell(npx vitest run app/test/ui/WhatsAppButton.test.tsx)",
+      "Bash(netstat -ano)",
+      "Bash(curl -s http://localhost:3000/)"
     ],
     "additionalDirectories": [
       "C:\\Users\\katri\\Desktop\\masage-salon\\ritual\\ritual-crm\\.next\\types"

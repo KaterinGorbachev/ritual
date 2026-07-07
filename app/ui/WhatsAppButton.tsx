@@ -8,10 +8,11 @@ export async function WhatsAppButton({
     let number = "";
     const response = await getDocById("contactData", "messanger");
     console.log("WhatsAppButton: full response from Firestore:", JSON.stringify(response));
+    {/** use a default number for firebase error */}
     if (response.ok) {
         const contact = response.data as { telephone?: string } | undefined;
-        number = contact?.telephone ?? "not-found";
-        console.log("WhatsAppButton: fetched number from Firestore:", number);
+        number = contact?.telephone ?? "";
+        
     }
 
     // Build a wa.me link: digits only, plus the prefilled message.

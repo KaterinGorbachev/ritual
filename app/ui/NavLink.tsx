@@ -7,7 +7,7 @@ export function NavLink({ href, children, className = "", ...props }: React.Comp
                     {children}
                 </span>
                 {/* Visible text: normal by default, bold on hover of THIS link only — same grid cell, no reflow */}
-                <span className="col-start-1 row-start-1 group-hover/navlink:font-bold">
+                <span className="col-start-1 row-start-1  group-hover/navlink:font-bold group-hover/navlink:text-magenta">
                     {children}
                 </span>
             </span>

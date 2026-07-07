@@ -7,5 +7,12 @@
     "whatsapp": "WhatsApp",
     "instagram": "Instagram",
     "contact": "Find Us"
-  }
+  }, 
+  "footer": {
+    "address": "Address",
+    "workingHours": "Working Hours", 
+    "getDirections": "Get Directions",
+    "commentAboutAppointments": "By appointment only"
+  }, 
+  ""
 }

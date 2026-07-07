@@ -63,8 +63,7 @@ export const getInfo = async (table) => {
       ...doc.data(),
     }))
 
-    console.log('Firebase getInfo data:', data)
-
+    
     return {
       ok: true,
       data,
