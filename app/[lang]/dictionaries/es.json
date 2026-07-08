@@ -13,5 +13,14 @@
     "workingHours": "Horario de trabajo", 
     "getDirections": "Obtener direcciones", 
     "commentAboutAppointments": "Solo con cita previa"
+  }, 
+  "daysOfWeek": {
+    "monday": "Lunes",
+    "tuesday": "Martes",
+    "wednesday": "Miércoles",
+    "thursday": "Jueves",
+    "friday": "Viernes",
+    "saturday": "Sábado",
+    "sunday": "Domingo"
   }
 }

@@ -1,9 +1,9 @@
 import { getInfo } from "../lib/handleData"
 
 export async function FooterContactDetails({
-    className = "", address,  hours, commentAboutAppointments
+    className = "", address,  hours, commentAboutAppointments, daysOfWeek
 }:{
-    className?: string, address: string, hours: string, commentAboutAppointments: string
+    className?: string, address: string, hours: string, commentAboutAppointments: string, daysOfWeek: { monday: string, tuesday: string, wednesday: string, thursday: string, friday: string, saturday: string, sunday: string }
 }) {
     let whatsappNumber = "";
     let addressText = "";
@@ -25,8 +25,8 @@ export async function FooterContactDetails({
         const hoursInfo = contactData.find(item => item.id === "workingHours")
         hoursFromText = hoursInfo.from 
         hoursToText = hoursInfo.to
-        dayStart = hoursInfo.dayStart
-        dayEnd = hoursInfo.dayEnd
+        dayStart = daysOfWeek[hoursInfo.dayStart]
+        dayEnd = daysOfWeek[hoursInfo.dayEnd]   
         const messangerInfo = contactData.find(item => item.id === "messanger")
         whatsappNumber = messangerInfo.telephone
         const instagramInfo = contactData.find(item => item.id === "instagram")
