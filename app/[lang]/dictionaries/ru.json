@@ -12,7 +12,11 @@
     "address": "Адрес",
     "workingHours": "Часы работы", 
     "getDirections": "Построить маршрут", 
-    "commentAboutAppointments": "Только по предварительной записи"
+    "commentAboutAppointments": "Только по предварительной записи", 
+    "privacyPolicy": "Политика конфиденциальности",
+    "contactUs": "Связаться с нами", 
+    "rightsReserved": "Все права защищены", 
+    "designedBy": "Придумано и разработано"
   }, 
   "daysOfWeek": {
     "monday": "Понедельник",

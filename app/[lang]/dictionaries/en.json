@@ -12,7 +12,11 @@
     "address": "Address",
     "workingHours": "Working Hours", 
     "getDirections": "Get Directions",
-    "commentAboutAppointments": "By appointment only"
+    "commentAboutAppointments": "By appointment only", 
+    "privacyPolicy": "Privacy Policy", 
+    "contactUs": "Contact Us", 
+    "rightsReserved": "All rights reserved", 
+    "designedBy": "Designed and developed by"
   }, 
   "daysOfWeek": {
     "monday": "Monday",

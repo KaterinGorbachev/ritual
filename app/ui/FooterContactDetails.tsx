@@ -1,5 +1,5 @@
 import { getInfo } from "../lib/handleData"
-import { MapLeaflet } from "./MapLeaflet";
+import { MapLeafletClient as MapLeaflet } from "./MapLeafletClient";
 
 type DayKey = "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday" | "sunday";
 

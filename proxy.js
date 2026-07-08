@@ -32,9 +32,10 @@ export function proxy(request) {
 
 export const config = {
   matcher: [
-    // Skip all internal paths (_next)
-    "/((?!_next).*)",
-    // Optional: only run on root (/) URL
-    // '/'
+    // Run on everything except Next internals and static assets.
+    // The trailing (?!...\\.\\w+$) skips any path ending in a file extension
+    // (e.g. /Monet_....jpg, favicon.ico), so public files are served as-is
+    // instead of being redirected to /es/<file>.
+    "/((?!_next|.*\\.\\w+$).*)",
   ],
 };

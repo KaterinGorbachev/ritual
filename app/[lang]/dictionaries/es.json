@@ -12,7 +12,11 @@
     "address": "Dirección",
     "workingHours": "Horario de trabajo", 
     "getDirections": "Obtener direcciones", 
-    "commentAboutAppointments": "Solo con cita previa"
+    "commentAboutAppointments": "Solo con cita previa", 
+    "privacyPolicy": "Política de Privacidad", 
+    "contactUs": "Contáctenos", 
+    "rightsReserved": "Todos los derechos reservados", 
+    "designedBy": "Diseñado y desarrollado por"
   }, 
   "daysOfWeek": {
     "monday": "Lunes",

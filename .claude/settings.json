@@ -25,7 +25,16 @@
       "WebFetch(domain:andresmpa.medium.com)",
       "Bash(npm i *)",
       "Bash(node -e \"const p=require\\('./node_modules/react-leaflet/package.json'\\); console.log\\('react-leaflet', p.version\\)\")",
-      "Bash(node -e \"const p=require\\('./node_modules/react/package.json'\\); console.log\\('react', p.version\\)\")"
+      "Bash(node -e \"const p=require\\('./node_modules/react/package.json'\\); console.log\\('react', p.version\\)\")",
+      "Bash(cd \"c:/Users/katri/Desktop/masage-salon/ritual/ritual-crm\" && grep -oiE \"\\(BubbleCanvas|bubble-canvas|Error:[^<]{0,120}|response\\\\.data|FooterContact|WhatsApp[A-Za-z]*|possibly 'undefined'\\)\" /tmp/body.html | sort -u | head -30)",
+      "Read(//tmp/**)",
+      "Bash(cd \"c:/Users/katri/Desktop/masage-salon/ritual/ritual-crm\" && grep -oiE \"\\(app|node_modules|\\\\.next\\)[^\\\\\"'<> ]*\\\\.\\(tsx?|jsx?\\):[0-9]+\" /tmp/body.html | sort -u | head -20; echo \"---\"; grep -oiE \"at [A-Za-z0-9_]+ \\\\\\([^\\)]*\\\\\\)\" /tmp/body.html | head -20)",
+      "Bash(curl -s -o /tmp/body.html -w \"%{http_code}\" http://localhost:3000/en)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:3000/Monet_-_Monets_Garten_in_Giverny.jpg\")",
+      "Bash(curl -s -o /dev/null -w \"%{redirect_url}\\\\n\" \"http://localhost:3000/Monet_-_Monets_Garten_in_Giverny.jpg\")",
+      "Bash(curl -s -o /tmp/body.html -w \"%{http_code}\\\\n\" http://localhost:3000/en)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"http://localhost:3000/Monet_-_Monets_Garten_in_Giverny.jpg\")",
+      "Bash(curl -s -I \"http://localhost:3000/Monet_-_Monets_Garten_in_Giverny.jpg\")"
     ],
     "additionalDirectories": [
       "C:\\Users\\katri\\Desktop\\masage-salon\\ritual\\ritual-crm\\.next\\types"

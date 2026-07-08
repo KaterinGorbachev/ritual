@@ -59,10 +59,10 @@ export default async function RootLayout({
         </a>
 
         <header
-          className="flex items-center justify-center w-full sticky top-2 max-w-400 shadow-sm  z-40 bg-cream/85 backdrop-blur-md border-b border-mauve/30 min-h-[5vh] rounded-pill "
+          className="flex items-center justify-center w-full sticky top-2 max-w-400 z-40 min-h-[5vh]  px-2"
           data-testid="header"
         >
-          <div className="flex items-center justify-between w-full px-2 md:px-4 pt-3 pb-2 gap-4">
+          <div className="flex items-center justify-between w-full px-2 md:px-4 pt-3 pb-2 gap-4 shadow-sm bg-cream/85 backdrop-blur-md border-b border-mauve/30 rounded-pill">
             <div
               className="flex items-center justify-center "
               aria-label="Primary"
@@ -201,16 +201,29 @@ export default async function RootLayout({
           {children}
         </main>
 
-        <footer className="flex flex-col items-center justify-center w-full bg-gradient-to-b from-cream via-blush/20 to-blush/80">
-          <section id="visit" className=" px-4 py-16 md:py-24 w-full max-w-400" aria-labelledby="visit-title">
-            <div className="flex flex-col items-center justify-center gap-4 text-center rounded-pill bg-cream/80 p-6 min-h-40 shadow-[inset_0_0_0_1px_rgba(26,26,26,0.06),0_1px_0_rgba(255,255,255,0.7)]">
-            <FooterContactDetails address={dict.footer.address} hours={dict.footer.workingHours} commentAboutAppointments={dict.footer.commentAboutAppointments} daysOfWeek={JSON.parse(JSON.stringify(dict.daysOfWeek))} ariaLabelMapBox={dict.ariaLabels.map} ariaLabelGoogleMapButton={dict.ariaLabels.googleMapButton} />
+        <footer className="flex flex-col items-center justify-center w-full ">
+          <section id="visit" className="flex  items-center justify-center  w-full bg-gradient-to-b from-cream via-blush/20 to-blush/80 pt-16 lg:pt-32 pb-8 px-2">
+            <div className="flex flex-col items-center justify-center gap-4 text-center rounded-pill bg-cream/80 py-6 px-4 min-h-40 shadow-[inset_0_0_0_1px_rgba(26,26,26,0.06),0_1px_0_rgba(255,255,255,0.7)] max-w-400">
+              <FooterContactDetails address={dict.footer.address} hours={dict.footer.workingHours} commentAboutAppointments={dict.footer.commentAboutAppointments} daysOfWeek={JSON.parse(JSON.stringify(dict.daysOfWeek))} ariaLabelMapBox={dict.ariaLabels.map} ariaLabelGoogleMapButton={dict.ariaLabels.googleMapButton} />
             
               
             </div>
+          </section>
+          <section className="flex flex-col gap-12 items-center justify-center  w-full bg-gradient-to-b from-blush/80 to-blush pt-10 pb-6 px-4">
+            <div className="flex flex-row flex-wrap items-center justify-center gap-4 max-w-400">
+              <NavLink href="">{dict.nav.blog}</NavLink>
+              <NavLink href="">{dict.footer.privacyPolicy}</NavLink>
+              <NavLink href="">{dict.footer.contactUs}</NavLink>
+            </div>
+            <p className="text-sm text-ink/70 text-center">
+              &copy; 2026 Ritual. {dict.footer.rightsReserved} - {dict.footer.designedBy} <a href="https://www.linkedin.com/in/katerina-gorbacheva-93717324a/" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline text-iris">
+                Katerina Gorbacheva
+              </a>
+            </p>
           </section>
         </footer>
       </body>
     </html>
   );
 }
+          
