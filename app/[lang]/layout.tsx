@@ -125,7 +125,7 @@ export default async function RootLayout({
               <WhatsAppButton
                 
                 message="Hello, I would like to book a massage appointment."
-                className="inline-flex lg:ml-6"
+                className="inline-flex md:ml-6"
               >
                 <svg
                   width="20"
@@ -204,7 +204,8 @@ export default async function RootLayout({
         <footer className="flex flex-col items-center justify-center w-full bg-gradient-to-b from-cream via-blush/20 to-blush/80">
           <section id="visit" className=" px-4 py-16 md:py-24 w-full max-w-400" aria-labelledby="visit-title">
             <div className="flex flex-col items-center justify-center gap-4 text-center rounded-pill bg-cream/80 p-6 min-h-40 shadow-[inset_0_0_0_1px_rgba(26,26,26,0.06),0_1px_0_rgba(255,255,255,0.7)]">
-            <FooterContactDetails address={dict.footer.address} hours={dict.footer.workingHours} commentAboutAppointments={dict.footer.commentAboutAppointments} daysOfWeek={JSON.parse(JSON.stringify(dict.daysOfWeek))} />
+            <FooterContactDetails address={dict.footer.address} hours={dict.footer.workingHours} commentAboutAppointments={dict.footer.commentAboutAppointments} daysOfWeek={JSON.parse(JSON.stringify(dict.daysOfWeek))} ariaLabelMapBox={dict.ariaLabels.map} ariaLabelGoogleMapButton={dict.ariaLabels.googleMapButton} />
+            
               
             </div>
           </section>

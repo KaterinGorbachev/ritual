@@ -1,9 +1,27 @@
 import { getInfo } from "../lib/handleData"
+import { MapLeaflet } from "./MapLeaflet";
+
+type DayKey = "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday" | "sunday";
+
+// Shape of a document in the Firestore "contactData" collection. Fields are
+// optional because each document (address, workingHours, messanger, …) only
+// carries the ones relevant to it.
+type ContactDataItem = {
+    id: string;
+    location?: string;
+    coordinates?: string;
+    from?: string;
+    to?: string;
+    dayStart?: DayKey;
+    dayEnd?: DayKey;
+    telephone?: string;
+    url?: string;
+};
 
 export async function FooterContactDetails({
-    className = "", address,  hours, commentAboutAppointments, daysOfWeek
+    className = "", address,  hours, commentAboutAppointments, daysOfWeek, ariaLabelMapBox, ariaLabelGoogleMapButton
 }:{
-    className?: string, address: string, hours: string, commentAboutAppointments: string, daysOfWeek: { monday: string, tuesday: string, wednesday: string, thursday: string, friday: string, saturday: string, sunday: string }
+    className?: string, address: string, hours: string, commentAboutAppointments: string, daysOfWeek: Record<DayKey, string>, ariaLabelMapBox: string, ariaLabelGoogleMapButton: string
 }) {
     let whatsappNumber = "";
     let addressText = "";
@@ -12,28 +30,39 @@ export async function FooterContactDetails({
     let dayStart = "";
     let dayEnd = "";
     let instagramUrl = "";
-    
+    const coordinates = { lat: 0, lng: 0 };
+
 
     // get contact data from firestore
     // used function to get all collection data from firestore
     const response = await getInfo("contactData");
     if (response.ok && response.data.length > 0) {
-        const contactData = response.data;
+        const contactData = response.data as ContactDataItem[];
         const addressInfo = contactData.find(item => item.id === "address")
-        addressText = addressInfo.location
-        
-        const hoursInfo = contactData.find(item => item.id === "workingHours")
-        hoursFromText = hoursInfo.from 
-        hoursToText = hoursInfo.to
-        dayStart = daysOfWeek[hoursInfo.dayStart]
-        dayEnd = daysOfWeek[hoursInfo.dayEnd]   
-        const messangerInfo = contactData.find(item => item.id === "messanger")
-        whatsappNumber = messangerInfo.telephone
-        const instagramInfo = contactData.find(item => item.id === "instagram")
-        instagramUrl = instagramInfo.url
+        addressText = addressInfo?.location ?? ""
+        // Coordinates are stored as a "lat, lng" string, e.g. "39.4720, -0.3759".
+        // Parse defensively so a missing/malformed value doesn't break the footer.
+        if (typeof addressInfo?.coordinates === "string") {
+            const coordinatesInfo = addressInfo.coordinates.split(",").map((n) => parseFloat(n.trim()))
+            if (coordinatesInfo.length === 2 && !Number.isNaN(coordinatesInfo[0]) && !Number.isNaN(coordinatesInfo[1])) {
+                coordinates.lat = coordinatesInfo[0]
+                coordinates.lng = coordinatesInfo[1]
+            } else {
+                console.error("FooterContactDetails: could not parse coordinates:", addressInfo.coordinates)
+            }
+        } else {
+            console.error("FooterContactDetails: address doc has no 'coordinates' field")
+        }
 
-        
-        console.log("FooterDetailsBox: fetched WhatsApp number from Firestore:", instagramUrl);
+        const hoursInfo = contactData.find(item => item.id === "workingHours")
+        hoursFromText = hoursInfo?.from ?? ""
+        hoursToText = hoursInfo?.to ?? ""
+        dayStart = hoursInfo?.dayStart ? daysOfWeek[hoursInfo.dayStart] : ""
+        dayEnd = hoursInfo?.dayEnd ? daysOfWeek[hoursInfo.dayEnd] : ""
+        const messangerInfo = contactData.find(item => item.id === "messanger")
+        whatsappNumber = messangerInfo?.telephone ?? ""
+        const instagramInfo = contactData.find(item => item.id === "instagram")
+        instagramUrl = instagramInfo?.url ?? ""
     }
     else {
         console.error("FooterDetailsBox: Failed to retrieve contactData from Firestore:", response);
@@ -41,7 +70,8 @@ export async function FooterContactDetails({
 
 
     return (
-        <div className="grid gap-6 rounded-card bg-transparent p-6 sm:grid-cols-2 lg:grid-cols-4 md:p-8" data-testid="contact-details">
+      <div className={`flex flex-col items-center justify-center gap-6 rounded-card bg-transparent ${className}`} data-testid="footer-contact-details">
+        <div className="grid gap-6 rounded-card bg-transparent p-4 sm:grid-cols-2 lg:grid-cols-4" data-testid="contact-details">
           {/** address */}
           <div className="flex items-start gap-3">
             <svg className="mt-0.5 shrink-0" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#DA1884" stroke-width="1.4" aria-hidden="true"><path d="M12 21s7-6.3 7-12a7 7 0 1 0-14 0c0 5.7 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg>
@@ -78,6 +108,17 @@ export async function FooterContactDetails({
                 </div>
             </a>
         </div>
+        {/* All salon data is fetched above and passed down as props. */}
+        <MapLeaflet
+            lat={coordinates.lat}
+            lng={coordinates.lng}
+            address={addressText}
+            popupTitle={address}
+            ariaLabel={ariaLabelMapBox}
+            googleMapLabel={ariaLabelGoogleMapButton}
+        />
+      </div>
     )
 }
-     
+
+    

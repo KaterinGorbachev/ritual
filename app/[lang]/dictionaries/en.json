@@ -22,5 +22,11 @@
     "friday": "Friday",
     "saturday": "Saturday",
     "sunday": "Sunday"
+  }, 
+  "ariaLabels": {
+    "mainNavigation": "Main Navigation",
+    "footerNavigation": "Footer Navigation", 
+    "map": "Map with the location of the salon", 
+    "googleMapButton": "Open in Google Maps"
   }
 }

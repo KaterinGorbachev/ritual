@@ -22,5 +22,11 @@
     "friday": "Viernes",
     "saturday": "Sábado",
     "sunday": "Domingo"
+  }, 
+  "ariaLabels": {
+    "mainNavigation": "Navegación principal",
+    "footerNavigation": "Navegación del pie de página", 
+    "map": "Mapa con la ubicación del salón", 
+    "googleMapButton": "Abrir en Google Maps"
   }
 }

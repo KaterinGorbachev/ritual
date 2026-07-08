@@ -15,7 +15,17 @@
       "PowerShell(npx vitest run app/test/ui/WhatsAppButton.db.test.tsx)",
       "PowerShell(npx vitest run app/test/ui/WhatsAppButton.test.tsx)",
       "Bash(netstat -ano)",
-      "Bash(curl -s http://localhost:3000/)"
+      "Bash(curl -s http://localhost:3000/)",
+      "Bash(node -e \"console.log\\(require.resolve\\('leaflet/dist/leaflet.css'\\)\\)\")",
+      "Bash(npx tsc *)",
+      "Bash(curl -s http://localhost:3000/es)",
+      "Bash(node -e \"const L=require\\('leaflet'\\); console.log\\('version:', L.version, 'has map:', typeof L.map\\)\")",
+      "Bash(node \"C:\\\\Users\\\\katri\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-katri-Desktop-masage-salon-ritual-ritual-crm\\\\947eaa5c-727f-4149-8ffe-515307e85470\\\\scratchpad\\\\check-map.mjs\")",
+      "Bash(node _map_check.mjs)",
+      "WebFetch(domain:andresmpa.medium.com)",
+      "Bash(npm i *)",
+      "Bash(node -e \"const p=require\\('./node_modules/react-leaflet/package.json'\\); console.log\\('react-leaflet', p.version\\)\")",
+      "Bash(node -e \"const p=require\\('./node_modules/react/package.json'\\); console.log\\('react', p.version\\)\")"
     ],
     "additionalDirectories": [
       "C:\\Users\\katri\\Desktop\\masage-salon\\ritual\\ritual-crm\\.next\\types"

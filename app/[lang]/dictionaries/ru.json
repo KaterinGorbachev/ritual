@@ -22,5 +22,11 @@
     "friday": "Пятница",
     "saturday": "Суббота",
     "sunday": "Воскресенье"
+  }, 
+  "ariaLabels": {
+    "mainNavigation": "Главная навигация",
+    "footerNavigation": "Навигация в подвале", 
+    "map": "Карта с местоположением салона", 
+    "googleMapButton": "Открыть в Google Maps"
   }
 }

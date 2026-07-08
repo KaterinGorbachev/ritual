@@ -268,6 +268,159 @@ npx vitest run app/test/ui/WhatsAppButton.test.tsx
 The first browser run is a few seconds slower because it boots Chromium; after that,
 watch-mode reruns are fast.
 
+## Maps (Leaflet + React + Next.js)
+
+The footer shows an interactive map of the salon (see `app/ui/MapLeaflet.tsx`).
+It's built with **Leaflet** (the map engine) via **react-leaflet** (the React
+wrapper), rendered over free **OpenStreetMap** tiles — no API key, no billing.
+
+The tricky part with Leaflet in Next.js is that Leaflet talks directly to the
+browser (`window`, the DOM) the moment it loads. Next.js renders components on the
+**server** first, where there is no browser — so a naive import crashes. This section
+explains the whole setup plainly, step by step, and how we avoid that crash.
+
+### Step 1 — Install the packages
+
+```bash
+# The map engine + its TypeScript types
+npm install leaflet
+npm install -D @types/leaflet
+
+# The React wrapper that lets you write the map as JSX components
+npm install react-leaflet
+
+# A small shim that fixes Leaflet's default marker-icon image paths under bundlers
+npm install leaflet-defaulticon-compatibility
+```
+
+What each one is for:
+
+| Package | Why it's needed |
+| --- | --- |
+| `leaflet` | The actual map library (tiles, panning, zoom, markers). |
+| `@types/leaflet` | TypeScript types for Leaflet, so `lat`/`lng`/icons are type-checked. |
+| `react-leaflet` | Lets you build the map declaratively with `<MapContainer>`, `<TileLayer>`, `<Marker>`, `<Popup>` instead of imperative Leaflet calls. |
+| `leaflet-defaulticon-compatibility` | Leaflet's built-in marker icons break in bundlers (wrong image paths). This restores them. We use a custom icon, but it's still good insurance. |
+
+### Step 2 — Import the CSS (this is easy to forget)
+
+Leaflet ships its own stylesheet. **Without it the map looks broken** — tiles don't
+lay out, controls have no styling, and you often see a blank box. Import it (plus the
+icon-shim CSS) at the top of the map component:
+
+```ts
+import "leaflet/dist/leaflet.css";
+import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
+import "leaflet-defaulticon-compatibility";
+```
+
+> If your map ever renders as an **empty box with grey tiles or nothing at all**, a
+> missing `leaflet.css` import is the first thing to check.
+
+### Step 3 — Make the map a client component
+
+Add `"use client"` as the **very first line** of the map file. This tells Next.js the
+component runs in the browser, not on the server — which is exactly what Leaflet needs,
+since it touches the DOM:
+
+```ts
+"use client";
+```
+
+### Step 4 — Build the map declaratively with react-leaflet
+
+Instead of calling `L.map(...)` by hand, you describe the map as JSX. react-leaflet
+handles creating the map, and — importantly — **cleaning it up** when the component
+unmounts (no "map container is already initialized" errors):
+
+```tsx
+<MapContainer center={[lat, lng]} zoom={16} scrollWheelZoom={false}
+  style={{ height: "100%", width: "100%" }}>
+  <TileLayer
+    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+    attribution="&copy; OpenStreetMap contributors"
+  />
+  <Marker position={[lat, lng]}>
+    <Popup>Ritual salon</Popup>
+  </Marker>
+</MapContainer>
+```
+
+
+- **`<MapContainer>`** — the map itself. `center` is where it starts (a `[lat, lng]`
+  pair), `zoom` is how close in (higher = closer). It **needs an explicit height** or it
+  collapses to nothing — we give it a sized parent and `height: 100%`.
+- **`scrollWheelZoom={false}`** — stops the map from hijacking the page scroll when the
+  user scrolls past it.
+- **`<TileLayer>`** — the actual map imagery. This URL pulls free tiles from
+  OpenStreetMap. The `attribution` credit is required by their license.
+- **`<Marker>` + `<Popup>`** — the pin at the salon and the little bubble that opens
+  when you click it.
+
+### Step 5 — Give it a size (a common gotcha)
+
+A Leaflet map with **no height, or no width, shows nothing**. Two rules:
+
+- The map's container must have a real height (e.g. Tailwind `h-[340px]`, or an inline
+  `style={{ height: "100%" }}` inside a sized parent).
+- If the map sits inside a **centered flex** parent (`items-center`), a child with no
+  width shrinks to zero — so give the wrapper `w-full`.
+
+### Step 6 — Custom controls (zoom, recenter)
+
+To style your own buttons instead of Leaflet's defaults, turn the built-ins off with
+`zoomControl={false}`, then reach the live map instance with the **`useMap()`** hook.
+`useMap()` only works **inside** `<MapContainer>`, so the controls are a small child
+component:
+
+```tsx
+function MapControls() {
+  const map = useMap();               // the live Leaflet map instance
+  return (
+    <button onClick={() => map.zoomIn()}>+</button>
+    // map.zoomOut(), map.flyTo([lat, lng], 16) for recenter, etc.
+  );
+}
+```
+
+### Step 7 — A custom, on-brand pin
+
+Leaflet's default blue teardrop can be replaced with your own HTML/SVG using `divIcon`
+(a marker that's just DOM, so no image-path issues). Build it **once** at module scope,
+not on every render:
+
+```ts
+import { divIcon } from "leaflet";
+
+const salonIcon = divIcon({
+  className: "",
+  html: '<span class="salon-pin"><svg>…your pin…</svg></span>',
+  iconSize: [38, 50],
+  iconAnchor: [19, 49],   // the tip of the pin sits on the exact coordinate
+  popupAnchor: [0, -44],  // where the popup opens relative to the icon
+});
+
+// then: <Marker position={[lat, lng]} icon={salonIcon} />
+```
+
+### Step 8 — Where the coordinates come from
+
+The salon's coordinates live in **Firestore** (the `contactData` collection, `address`
+document, as a `"lat, lng"` string). They're fetched **server-side** in
+`app/ui/FooterContactDetails.tsx`, parsed there, and passed into `<MapLeaflet>` as
+`lat` / `lng` / `address` props. Keeping the data fetch on the server means one database
+read and no coordinates-parsing in the browser — the map component stays a simple,
+reusable "given these props, draw this map".
+
+### If the map doesn't show — quick checklist
+
+1. **Blank box?** → `leaflet.css` not imported (Step 2).
+2. **Crash mentioning `window is not defined`?** → missing `"use client"` (Step 3).
+3. **Zero width/height, nothing visible?** → the container has no size, or a flex parent
+   collapsed it (Step 5) — add `w-full` and a fixed height.
+4. **Map centered on the ocean (0, 0)?** → coordinates didn't parse; check the Firestore
+   `coordinates` field and the console for the parse-error log.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
