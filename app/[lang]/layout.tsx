@@ -113,7 +113,7 @@ export default async function RootLayout({
               </div>
               <WhatsAppButton
                 
-                message="Hello, I would like to book a massage appointment."
+                message={dict.nav.message}
                 className="inline-flex md:ml-6"
               >
                 <svg
@@ -185,7 +185,7 @@ export default async function RootLayout({
 
         <main
           id="main"
-          className="flex flex-col items-center justify-center w-full flex-1 px-4 py-8 scroll-mt-24"
+          className="flex flex-col items-center justify-center w-full flex-1 px-4 scroll-mt-24"
         >
           {children}
         </main>

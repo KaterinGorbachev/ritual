@@ -6,13 +6,16 @@
     "blog": "Blog",
     "whatsapp": "WhatsApp",
     "instagram": "Instagram",
-    "contact": "Cómo encontrarnos"
+    "contact": "Cómo encontrarnos", 
+    "message": "Hola, quiero agendar una cita en Ritual."
   },
   "hero": {
     "eyebrow": "estética & bienestar",
     "title": "Tu tiempo merece el Ritual",
     "subtitle": "En Ritual escuchamos y cuidamos la piel con aparatología de última generación y manos expertas: resultados visibles, en el tiempo que tienes. Relájate — el resto es nuestro ritual.",
-    "cta": "Reserva con Whatsapp"
+    "cta": "Reserva con Whatsapp", 
+    "pauseWord": "Pausa", 
+    "playWord": "Volar"
   }, 
   "footer": {
     "address": "Dirección",
@@ -38,5 +41,34 @@
     "footerNavigation": "Navegación del pie de página", 
     "map": "Mapa con la ubicación del salón", 
     "googleMapButton": "Abrir en Google Maps"
+  }, 
+  "topServices": {
+    "eyebrow": "lo que hacemos con todo lo que escuchamos",
+    "title": "Alta tecnología, manos suaves",
+    "ctaQuestion": "¿No sabes cuál elegir?",
+    "ctaComment": "Cuéntanos cómo has dormido esta semana y elegimos un ritual por ti.",
+    "ctaButton": "Pregúntanos por WhatsApp",
+    "items": {
+      "pressotherapyFacial": {
+        "name": "Presoterapia corporal + cuidado facial",
+        "description": "Una sesión de relajación completa que trabaja todo el cuerpo y el rostro a la vez. Un traje especial realiza un masaje de drenaje linfático mientras nuestra cosmetóloga cuida tu piel según su tipo y sus necesidades."
+      },
+      "microcurrent": {
+        "name": "Terapia de microcorrientes",
+        "description": "La terapia de microcorrientes con aparatología de gama premium reduce la hinchazón de forma rápida e indolora, devuelve movilidad a los músculos, alivia los espasmos, ayuda a recuperar los tejidos tras una cirugía y mejora el tono de la piel: te ves mejor y más joven sin procedimientos agresivos. También ayuda a recuperar la expresión facial tras inyecciones de bótox fallidas."
+      },
+      "rfLifting": {
+        "name": "Lifting RF de rostro, cuello y contorno de ojos",
+        "description": "Mejora el tono y la turgencia de la piel, unifica el color del rostro y suaviza la profundidad de las arrugas. Combate muy bien la flacidez. Aparatología premium."
+      },
+      "liftingMassage": {
+        "name": "Masaje facial lifting",
+        "description": "Masaje de rostro, cuello y cabeza con técnicas adaptativas que devuelven movilidad y tono a los músculos, definen el óvalo facial y reducen la hinchazón. Incluye cuidado facial con métodos de aparatología y productos cosméticos. Duración: una hora."
+      },
+      "carboxytherapy": {
+        "name": "Carboxiterapia facial",
+        "description": "El tratamiento se realiza con un aparato específico y cosmética especializada; es muy agradable y ofrece un resultado extraordinario. Unifica el tono y el color del rostro, mejora la calidad y la firmeza de la piel y refuerza sus propias defensas naturales."
+      }
+    }
   }
 }
