@@ -34,7 +34,8 @@
       "Bash(curl -s -o /dev/null -w \"%{redirect_url}\\\\n\" \"http://localhost:3000/Monet_-_Monets_Garten_in_Giverny.jpg\")",
       "Bash(curl -s -o /tmp/body.html -w \"%{http_code}\\\\n\" http://localhost:3000/en)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"http://localhost:3000/Monet_-_Monets_Garten_in_Giverny.jpg\")",
-      "Bash(curl -s -I \"http://localhost:3000/Monet_-_Monets_Garten_in_Giverny.jpg\")"
+      "Bash(curl -s -I \"http://localhost:3000/Monet_-_Monets_Garten_in_Giverny.jpg\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/en)"
     ],
     "additionalDirectories": [
       "C:\\Users\\katri\\Desktop\\masage-salon\\ritual\\ritual-crm\\.next\\types"

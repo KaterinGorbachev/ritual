@@ -23,7 +23,10 @@ export function LangButton() {
     // "/en/about" -> ["", "en", "about"] -> "/es/about"
     const segments = pathname.split("/");
     segments[1] = locale;
-    router.push(segments.join("/"));
+    // replace (not push): switching language isn't a new history entry, so Back
+    // won't cycle through locales. scroll:false keeps the reader's position
+    // instead of jumping to the top on the route change.
+    router.replace(segments.join("/"), { scroll: false });
   }
 
   return (

@@ -7,6 +7,12 @@
     "whatsapp": "WhatsApp",
     "instagram": "Instagram",
     "contact": "Cómo encontrarnos"
+  },
+  "hero": {
+    "eyebrow": "estética & bienestar",
+    "title": "Tu tiempo merece el Ritual",
+    "subtitle": "En Ritual escuchamos y cuidamos la piel con aparatología de última generación y manos expertas: resultados visibles, en el tiempo que tienes. Relájate — el resto es nuestro ritual.",
+    "cta": "Reserva con Whatsapp"
   }, 
   "footer": {
     "address": "Dirección",

@@ -7,10 +7,7 @@
 import { useEffect, useRef } from "react";
 
 // Images are served from /public at the site root.
-const MONET_SRC = "/Monet_-_Monets_Garten_in_Giverny.jpg";
-
-// Iridescent soap-film rim tints, straight from the brand palette.
-const RIMS = ["#FCAEC2", "#B57EDC", "#6A0DAD", "#78E6D0", "#DA1884"];
+const MONET_SRC = "/mone.jpg";
 
 type Bubble = {
   x: number;
@@ -21,7 +18,7 @@ type Bubble = {
   drift: number;
   wobble: number;
   mag: number; // lens zoom factor — this is the "liquid glass" strength
-  rim: string;
+  hue: number; // starting angle (rad) of the rainbow sweep — makes each bubble unique
 };
 
 type BubbleCanvasProps = {
@@ -61,7 +58,7 @@ export function BubbleCanvas({ className = "" }: BubbleCanvasProps) {
         drift: 0.3 + Math.random() * 1.0,
         wobble: 0.005 + Math.random() * 0.01,
         mag: 1.18 + Math.random() * 0.22,
-        rim: RIMS[(Math.random() * RIMS.length) | 0],
+        hue: Math.random() * Math.PI * 2,
       };
     }
 
@@ -95,7 +92,7 @@ export function BubbleCanvas({ className = "" }: BubbleCanvasProps) {
       if (!ctx) return;
       if (imgReady && bg) ctx.drawImage(img, bg.dx, bg.dy, bg.dw, bg.dh);
       else {
-        ctx.fillStyle = "#C8A2C8";
+        ctx.fillStyle = "#FCAEC2";
         ctx.fillRect(0, 0, w, h);
       }
     }
@@ -152,36 +149,75 @@ export function BubbleCanvas({ className = "" }: BubbleCanvasProps) {
       ctx.fillStyle = vg;
       ctx.fillRect(b.x - b.r, b.y - b.r, b.r * 2, b.r * 2);
 
-      // soft specular sheen (top-left)
+      // --- iridescent film: a radial rainbow band concentrated near the rim ---
+      // Soap-film interference makes the colours appear where the film is seen
+      // at a glancing angle, i.e. toward the edge. This band fades in from the
+      // centre and peaks just inside the rim. `screen` keeps it luminous, like
+      // light rather than paint. b.hue rotates the palette so bubbles differ
+      // and slowly shift as they drift.
+      ctx.globalCompositeOperation = "screen";
+      const shift = b.hue;
+      const irid = ctx.createRadialGradient(b.x, b.y, b.r * 0.45, b.x, b.y, b.r);
+      irid.addColorStop(0.0, "rgba(0,0,0,0)");
+      irid.addColorStop(0.55, hsla(shift + 0.0, 0.15));
+      irid.addColorStop(0.72, hsla(shift + 1.6, 0.28));
+      irid.addColorStop(0.85, hsla(shift + 3.1, 0.38));
+      irid.addColorStop(0.95, hsla(shift + 4.6, 0.42));
+      irid.addColorStop(1.0, hsla(shift + 5.8, 0.2));
+      ctx.fillStyle = irid;
+      ctx.fillRect(b.x - b.r, b.y - b.r, b.r * 2, b.r * 2);
+      ctx.globalCompositeOperation = "source-over";
+
+      // soft specular sheen (top-left) — the sun catching the film
       ctx.beginPath();
       ctx.ellipse(b.x - b.r * 0.34, b.y - b.r * 0.4, b.r * 0.3, b.r * 0.18, -0.6, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(255,255,255,0.55)";
+      ctx.fillStyle = "rgba(255,255,255,0.1)";
       ctx.fill();
 
       // tiny sharp catch-light
       ctx.beginPath();
       ctx.arc(b.x - b.r * 0.12, b.y - b.r * 0.55, b.r * 0.07, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(255,255,255,0.9)";
+      ctx.fillStyle = "rgba(255,255,255,0.2)";
       ctx.fill();
 
       ctx.restore();
 
-      // --- iridescent rim + outer glow (unclipped, so it sits on the edge) ---
+      // --- rainbow rim sweep: a conic gradient stroked around the edge ---
+      // A full-spectrum sweep so the "sun playing in the bubble" reads as
+      // separate colour arcs. Drawn unclipped so it sits right on the outline.
       ctx.save();
+      ctx.globalCompositeOperation = "screen";
+      const sweep = ctx.createConicGradient(shift, b.x, b.y);
+      for (let i = 0; i <= 6; i++) {
+        sweep.addColorStop(i / 6, hsla(shift + (i / 6) * Math.PI * 2, 0.35));
+      }
       ctx.beginPath();
-      ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
-      ctx.lineWidth = 1.6;
-      ctx.strokeStyle = b.rim + "99";
+      ctx.arc(b.x, b.y, b.r - 0.8, 0, Math.PI * 2);
+      ctx.lineWidth = 1.2;
+      ctx.strokeStyle = sweep;
       ctx.shadowColor = "rgba(106,13,173,0.30)";
-      ctx.shadowBlur = 12;
-      ctx.stroke();
-      ctx.shadowBlur = 0;
-      ctx.beginPath();
-      ctx.arc(b.x, b.y, b.r - 1.2, 0, Math.PI * 2);
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = "rgba(255,255,255,0.45)";
+      ctx.shadowBlur = 24;
       ctx.stroke();
       ctx.restore();
+
+      // crisp white inner highlight ring, to seat the rim
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(b.x, b.y, b.r - 1.4, 0, Math.PI * 2);
+      ctx.lineWidth = 0;
+      ctx.strokeStyle = "rgba(255,255,255,0.0)";
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    /**
+     * Build an `hsla` colour from an angle in radians. The angle maps to hue,
+     * so adding to it rotates through the full rainbow. Saturation/lightness
+     * are tuned for a bright, sunlit-film look.
+     */
+    function hsla(angleRad: number, alpha: number): string {
+      const deg = ((angleRad * 180) / Math.PI) % 360;
+      return `hsla(${deg}, 95%, 70%, ${alpha})`;
     }
 
     /** Render one static frame (background + bubbles). */
@@ -201,6 +237,7 @@ export function BubbleCanvas({ className = "" }: BubbleCanvasProps) {
         b.y -= b.speed;
         b.phase += b.wobble;
         b.x += Math.sin(b.phase) * b.drift;
+        b.hue += 0.012; // rotate the rainbow so the film shimmers as it rises
         if (b.y + b.r < 0) Object.assign(b, makeBubble(false)); // respawn below
         drawBubble(b);
       }

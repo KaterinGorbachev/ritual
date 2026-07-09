@@ -93,7 +93,7 @@ export async function FooterContactDetails({
           {/** whatsapp */}
           
           <div className="flex items-start gap-3">
-            <svg className="mt-0.5 shrink-0" width="24" height="24" viewBox="0 0 24 24" fill="#78E6D0" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2Zm5.4 13.9c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7s-3.7-3.2-3.8-3.4c-.1-.2-.9-1.2-.9-2.3s.6-1.6.8-1.8c.2-.2.4-.3.6-.3h.4c.2 0 .4 0 .6.5l.8 1.9c.1.1.1.3 0 .5l-.4.5c-.1.2-.3.3-.1.6.1.2.6 1 1.3 1.6.9.8 1.6 1 1.8 1.1.2.1.4.1.5-.1l.6-.8c.2-.2.3-.2.6-.1l1.8.9c.2.1.4.2.5.3.1.1.1.6-.1 1.2Z"/></svg>
+            <svg className="mt-0.5 shrink-0 text-mint" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" ><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2Zm5.4 13.9c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7s-3.7-3.2-3.8-3.4c-.1-.2-.9-1.2-.9-2.3s.6-1.6.8-1.8c.2-.2.4-.3.6-.3h.4c.2 0 .4 0 .6.5l.8 1.9c.1.1.1.3 0 .5l-.4.5c-.1.2-.3.3-.1.6.1.2.6 1 1.3 1.6.9.8 1.6 1 1.8 1.1.2.1.4.1.5-.1l.6-.8c.2-.2.3-.2.6-.1l1.8.9c.2.1.4.2.5.3.1.1.1.6-.1 1.2Z"/></svg>
             <div>
               <h3 className="font-display text-lg tracking-normal text-start">WhatsApp</h3>
               <p className="mt-1 inline-block text-sm leading-relaxed tracking-normal text-iris hover:text-magenta focus-aurelle rounded-pill select-text text-start">{whatsappNumber}</p>

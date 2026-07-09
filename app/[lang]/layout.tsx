@@ -59,7 +59,7 @@ export default async function RootLayout({
         </a>
 
         <header
-          className="flex items-center justify-center w-full sticky top-2 max-w-400 z-40 min-h-[5vh]  px-2"
+          className="flex items-center justify-center w-full sticky top-2 max-w-400 z-40 min-h-[5vh]  px-2 "
           data-testid="header"
         >
           <div className="flex items-center justify-between w-full px-2 md:px-4 pt-3 pb-2 gap-4 shadow-sm bg-cream/85 backdrop-blur-md border-b border-mauve/30 rounded-pill">
@@ -72,24 +72,13 @@ export default async function RootLayout({
                 className="items-center gap-2 rounded-pill hidden md:flex"
                 aria-label="Aurelle home"
               >
-                <svg
-                  width="32"
-                  height="32"
-                  viewBox="0 0 32 32"
-                  fill="none"
-                  stroke="#6A0DAD"
-                  stroke-width="1.3"
-                  aria-hidden="true"
-                >
-                  <circle cx="16" cy="16" r="6" />
-                  <circle
-                    cx="16"
-                    cy="16"
-                    r="11"
-                    stroke="#DA1884"
-                    stroke-dasharray="2 4"
+                <div className="w-10 h-10 overflow-hidden flex items-center justify-center rounded-full">
+                  <img
+                    src="/Logo-Ritual-Copyright_All-rights-reserved.webp"
+                    alt="Ritual logo"
+                    className="w-full h-full object-cover"
                   />
-                </svg>
+                </div>
                 <span className="font-display text-2xl font-semibold tracking-normal ">
                   Ritual
                 </span>
