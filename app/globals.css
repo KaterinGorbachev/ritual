@@ -29,6 +29,7 @@
 /* Respect users who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
+  
 }
 
 @layer theme {
@@ -37,5 +38,11 @@
   *::-webkit-scrollbar-track { background: #F6F3EE; }
   *::-webkit-scrollbar-thumb { background: linear-gradient(#B57EDC, #FCAEC2); border-radius: 40px; border: 2px solid #F6F3EE; }
   * { scrollbar-width: thin; scrollbar-color: #FCAEC2 #F6F3EE; }
+  
+}
+
+*::selection {
+  background-color: var(--color-blush);
+  color: var(--color-ink);
 }
 
