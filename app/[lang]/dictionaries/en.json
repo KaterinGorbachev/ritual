@@ -50,15 +50,15 @@
     "ctaButton": "Ask on WhatsApp",
     "items": {
       "pressotherapyFacial": {
-        "name": "Body pressotherapy + facial",
-        "description": "A session of complete relaxation that works on the whole body and the face at once. A specialised suit delivers a lymphatic drainage massage while our cosmetologist treats your skin according to its type and its needs."
+        "name": "Body pressotherapy suit while facial treatment",
+        "description": "A session of complete relaxation that works on the whole body and the face at once. A specialised suit delivers a lymphatic drainage massage while our cosmetologist treats your face skin according to its type and its needs."
       },
       "microcurrent": {
         "name": "Microcurrent therapy",
         "description": "Microcurrent therapy on premium-class equipment reduces swelling quickly and painlessly, restores muscle mobility, eases spasms, aids tissue recovery after surgery and improves skin tone — so you look better and younger without aggressive procedures. It also helps restore facial expression after unsuccessful Botox injections."
       },
       "rfLifting": {
-        "name": "RF lifting for face, neck and eye area",
+        "name": "RF lifting",
         "description": "Improves the tone and turgor of the skin, evens out your complexion and softens the appearance of wrinkles. Works well against skin laxity. Premium equipment."
       },
       "liftingMassage": {

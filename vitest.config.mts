@@ -6,6 +6,11 @@ import { fileURLToPath } from 'node:url'
 
 export default defineConfig({
   plugins: [tsconfigPaths(), react()],
+  // next/image reads process.env at module scope; the browser project has no
+  // `process`, so importing it throws before any test runs.
+  define: {
+    'process.env': '{}',
+  },
   test: {
     reporters: [
       'default',

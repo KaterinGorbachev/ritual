@@ -1,7 +1,8 @@
 import { getDictionary, toLocale } from "./dictionaries";
 import { BubbleCanvas } from "../ui/BubbleCanvas";
 import { WhatsAppButtonWave } from "../ui/WhatsAppButtonWave";
-import {Section} from "../ui/Section";
+import { Section } from "../ui/Section";
+import { ServiceCard } from "../ui/ServiceCard";
 
 export default async function HomePage({ params }: PageProps<"/[lang]"> ) {
   const { lang } = await params;
@@ -28,12 +29,15 @@ export default async function HomePage({ params }: PageProps<"/[lang]"> ) {
 
         </div>
       </div>
-      <div className="max-w-400 py-8 lg:py-10 flex flex-col items-center justify-center mt-4">
+      <div className="max-w-400 py-8 lg:py-10 flex flex-col items-center justify-center mt-4 gap-6 lg:gap-10">
         <div className="flex flex-col gap-2 items-center justify-center">
           <p className="font-handwriting text-iris text-2xl leading-normal text-center">{dict.topServices.eyebrow}</p>
           <h2 className="traking normal text-[clamp(1.75rem,5vw,2.25rem)] font-display font-semibold text-center">{dict.topServices.title}</h2>
         </div>
-        <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></ul>
+        <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <ServiceCard title={dict.topServices.items.pressotherapyFacial.name} description={dict.topServices.items.pressotherapyFacial.description} icon={<svg width="34" height="34" viewBox="0 0 32 32" fill="none" stroke="#DA1884" stroke-width="1.3" aria-hidden="true"><path d="M2 16c4 0 4-8 8-8s4 16 8 16 4-8 4-8"/></svg>} image="/presoterapy.webp"/>
+
+        </ul>
 
       </div>
     </Section>
