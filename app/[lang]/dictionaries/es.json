@@ -48,27 +48,37 @@
     "ctaQuestion": "¿No sabes cuál elegir?",
     "ctaComment": "Cuéntanos cómo has dormido esta semana y elegimos un ritual por ti.",
     "ctaButton": "Pregúntanos por WhatsApp",
-    "items": {
-      "pressotherapyFacial": {
+    "items": [
+      {
+        "id": "pressotherapyFacial",
         "name": "Un traje de presoterapia mientras ritual facial",
-        "description": "Una sesión de relajación completa que trabaja todo el cuerpo y el rostro a la vez. Un traje especial realiza un masaje de drenaje linfático mientras nuestra cosmetóloga cuida tu piel según su tipo y sus necesidades."
+        "description": "Una sesión de relajación completa que trabaja todo el cuerpo y el rostro a la vez. Un traje especial realiza un masaje de drenaje linfático mientras nuestra cosmetóloga cuida tu piel según su tipo y sus necesidades.",
+        "image": "/services/presoterapy.webp"
       },
-      "microcurrent": {
+      {
+        "id": "microcurrent",
         "name": "Terapia de microcorrientes",
-        "description": "La terapia de microcorrientes con aparatología de gama premium reduce la hinchazón de forma rápida e indolora, devuelve movilidad a los músculos, alivia los espasmos, ayuda a recuperar los tejidos tras una cirugía y mejora el tono de la piel: te ves mejor y más joven sin procedimientos agresivos. También ayuda a recuperar la expresión facial tras inyecciones de bótox fallidas."
+        "description": "La terapia de microcorrientes con aparatología de gama premium reduce la hinchazón de forma rápida e indolora, devuelve movilidad a los músculos, alivia los espasmos, ayuda a recuperar los tejidos tras una cirugía y mejora el tono de la piel: te ves mejor y más joven sin procedimientos agresivos. También ayuda a recuperar la expresión facial tras inyecciones de bótox fallidas.",
+        "image": "/services/microcurrent.webp"
       },
-      "rfLifting": {
+      {
+        "id": "rfLifting",
         "name": "Lifting RF de rostro, cuello y contorno de ojos",
-        "description": "Mejora el tono y la turgencia de la piel, unifica el color del rostro y suaviza la profundidad de las arrugas. Combate muy bien la flacidez. Aparatología premium."
+        "description": "Mejora el tono y la turgencia de la piel, unifica el color del rostro y suaviza la profundidad de las arrugas. Combate muy bien la flacidez. Aparatología premium.",
+        "image": "/services/rf-lifting.webp"
       },
-      "liftingMassage": {
+      {
+        "id": "liftingMassage",
         "name": "Masaje facial lifting",
-        "description": "Masaje de rostro, cuello y cabeza con técnicas adaptativas que devuelven movilidad y tono a los músculos, definen el óvalo facial y reducen la hinchazón. Incluye cuidado facial con métodos de aparatología y productos cosméticos. Duración: una hora."
+        "description": "Masaje de rostro, cuello y cabeza con técnicas adaptativas que devuelven movilidad y tono a los músculos, definen el óvalo facial y reducen la hinchazón. Incluye cuidado facial con métodos de aparatología y productos cosméticos. Duración: una hora.",
+        "image": "/services/massage.webp"
       },
-      "carboxytherapy": {
+      {
+        "id": "carboxytherapy",
         "name": "Carboxiterapia facial",
-        "description": "El tratamiento se realiza con un aparato específico y cosmética especializada; es muy agradable y ofrece un resultado extraordinario. Unifica el tono y el color del rostro, mejora la calidad y la firmeza de la piel y refuerza sus propias defensas naturales."
+        "description": "El tratamiento se realiza con un aparato específico y cosmética especializada; es muy agradable y ofrece un resultado extraordinario. Unifica el tono y el color del rostro, mejora la calidad y la firmeza de la piel y refuerza sus propias defensas naturales.",
+        "image": "/services/carboxytherapy.webp"
       }
-    }
+    ]
   }
 }
