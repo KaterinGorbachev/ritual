@@ -1,10 +1,12 @@
 import { getDictionary, toLocale } from "./dictionaries";
 import { BubbleCanvas } from "../ui/BubbleCanvas";
 import { WhatsAppButtonWave } from "../ui/WhatsAppButtonWave";
+import { WhatsAppButton } from "../ui/WhatsAppButton";
 import { Section } from "../ui/Section";
 import { ServiceCard } from "../ui/ServiceCard";
+import { TeamCard } from "../ui/TeamCard";
 
-export default async function HomePage({ params }: PageProps<"/[lang]"> ) {
+export default async function HomePage({ params }: PageProps<"/[lang]">) {
   const { lang } = await params;
   const dict = await getDictionary(toLocale(lang));
 
@@ -12,10 +14,10 @@ export default async function HomePage({ params }: PageProps<"/[lang]"> ) {
     <Section>
       <div
         data-testid="hero-section"
-        className="flex flex-col items-center justify-center w-full max-w-400 relative isolate min-h-140 md:min-h-165 overflow-hidden rounded-pill px-4 lg:px-32 py-8 lg:py-10 shadow-[0_0_0_1px_rgba(106,13,173,.12),0_18px_50px_-24px_rgba(106,13,173,.45)] "
+        className="flex flex-col items-center justify-center w-full max-w-400 relative isolate min-h-140 md:min-h-165 overflow-hidden rounded-pill px-4 lg:px-32 py-8 lg:py-10 shadow-[0_0_0_1px_rgba(218,24,132,.12),0_18px_50px_-24px_rgba(218,24,132,.25)] "
       >
         {/* Client-only canvas: Monet garden + liquid-glass soap bubbles. */}
-        <BubbleCanvas heroPauseWord={dict.hero.pauseWord} heroPlayWord={dict.hero.playWord}/>
+        <BubbleCanvas heroPauseWord={dict.hero.pauseWord} heroPlayWord={dict.hero.playWord} />
 
         {/* Hero content sits above the canvas on a frosted panel. */}
         <div className="relative z-1 mt-8 rounded-pill bg-cream/55 px-6 py-10 text-center backdrop-blur-md md:px-16 md:py-14 flex flex-col items-center justify-center gap-2 w-full ">
@@ -31,16 +33,47 @@ export default async function HomePage({ params }: PageProps<"/[lang]"> ) {
       </div>
       <div className="max-w-400 py-8 lg:py-10 flex flex-col items-center justify-center mt-4 gap-6 lg:gap-12">
         <div className="flex flex-col gap-2 items-center justify-center">
-          <p className="font-handwriting text-iris text-2xl leading-normal text-center">{dict.topServices.eyebrow}</p>
+          <p className="font-handwriting text-magenta text-2xl leading-normal text-center">{dict.topServices.eyebrow}</p>
           <h2 className="traking normal text-[clamp(1.75rem,5vw,2.25rem)] font-display font-semibold text-center">{dict.topServices.title}</h2>
         </div>
         <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {
             dict.topServices.items.map(item =>
-              <ServiceCard key={item.id} title={item.name} description={item.description} image={item.image}/>)
+              <ServiceCard key={item.id} title={item.name} description={item.description} image={item.image} />)
           }
-          
 
+          <li className="flex items-start justify-center flex-col py-2 px-4 relative h-full min-h-72 w-full max-w-[350px] overflow-hidden rounded-card border border-blush/20 bg-blush/70 text-start transition hover:shadow-[0_0_0_1px_rgba(218,24,132,.12),0_18px_50px_-24px_rgba(218,24,132,.45)] ">
+            <div className="flex w-full flex-col items-start justify-center py-8 gap-2">
+              <h3 className="font-display tracking-normal text-ink text-2xl text-start">{dict.topServices.ctaQuestion}</h3>
+              <p className=" text-base leading-relaxed tracking-normal text-ink/85 text-start">{dict.topServices.ctaComment}</p>
+            </div>
+            <WhatsAppButton message={dict.topServices.message} >
+              <span className="font-body text-lg md:text-xl text-ink text-center">{dict.topServices.cta}</span>
+            </WhatsAppButton>
+
+          </li>
+
+
+        </ul>
+
+      </div>
+      <div className="py-8 lg:py-18 flex flex-col items-center justify-center gap-6 lg:gap-12 bg-blush/70 min-h-50 w-full">
+        <div className="flex flex-col gap-0.5 items-center justify-center">
+          <p className="font-handwriting text-magenta text-2xl leading-normal text-center">{dict.aboutStaff.eyebrow}</p>
+          <h2 className="traking normal text-[clamp(1.75rem,5vw,2.25rem)] font-display font-semibold text-center">{dict.aboutStaff.title}</h2>
+        </div>
+
+        <ul className="flex flex-col items-center justify-center gap-8 lg:flex-row lg:items-stretch">
+          {dict.staff.map((member, i) => (
+            <TeamCard 
+            key={member.id}
+            name={member.name}
+            profession={member.service} 
+            description={member.description}
+            image={member.image}
+            className={i % 2 == 1 ? "max-w-[600px] team-card--from-right" : "max-w-[600px] team-card--from-left"}/>
+            
+          ))}
         </ul>
 
       </div>

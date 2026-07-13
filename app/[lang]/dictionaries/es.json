@@ -47,7 +47,8 @@
     "title": "Alta tecnología, manos suaves",
     "ctaQuestion": "¿No sabes cuál elegir?",
     "ctaComment": "Cuéntanos cómo has dormido esta semana y elegimos un ritual por ti.",
-    "ctaButton": "Pregúntanos por WhatsApp",
+    "cta": "Pregúntanos por WhatsApp",
+    "message": "Hola, quiero saber más sobre servicios",
     "items": [
       {
         "id": "pressotherapyFacial",
@@ -80,5 +81,25 @@
         "image": "/services/carboxytherapy.webp"
       }
     ]
-  }
+  }, 
+  "aboutStaff":{
+    "eyebrow": "nuestro equipo",
+    "title": "Creando un ritual para ti"
+  },
+  "staff": [
+    {
+      "id": "facial",
+      "name": "Alena",
+      "service": "Belleza facial · 14 años de experiencia",
+      "image": "/services/Alena.jpeg",
+      "description": "Ayuda a preservar la juventud y la belleza natural sin tratamientos radicales. Gracias a un enfoque personalizado y a técnicas profesionales, se mejora el tono de la piel, se reduce la hinchazón, se relajan los músculos faciales y se definen los contornos. Cada tratamiento combina cuidado, estética y resultados visibles."
+    },
+    {
+      "id": "body",
+      "name": "Alena",
+      "service": "Terapeuta corporal · 18 años de experiencia",
+      "image": "/services/Alena.jpeg",
+      "description": "Ayuda a aliviar la tensión muscular, recuperar la fuerza y mejorar el bienestar. Las técnicas profesionales favorecen la relajación, mejoran la circulación y devuelven ligereza al cuerpo. Cada tratamiento se adapta a tus necesidades, para que te sientas cómodo y notes resultados desde la primera sesión."
+    }
+  ]
 }

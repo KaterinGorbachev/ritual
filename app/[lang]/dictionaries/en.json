@@ -47,12 +47,13 @@
     "title": "High-tech, gentle hands",
     "ctaQuestion": "Not sure which?",
     "ctaComment": "Tell us how you slept this week and we'll choose a ritual for you.",
-    "ctaButton": "Ask on WhatsApp",
+    "cta": "Ask on WhatsApp",
+    "message": "Hello, I would like to get more info about services",
     "items": [
       {
         "id": "pressotherapyFacial",
         "name": "Body pressotherapy suit while facial treatment",
-        "description": "A session of complete relaxation that works on the whole body and the face at once. A specialised suit delivers a lymphatic drainage massage while our cosmetologist treats your face skin according to its type and its needs.", 
+        "description": "A session of complete relaxation that works on the whole body and the face at once. A specialised suit delivers a lymphatic drainage massage while our cosmetologist treats your face skin according to its type and its needs.",
         "image": "/services/presoterapy.webp"
       },
       {
@@ -80,5 +81,25 @@
         "image": "/services/carboxytherapy.webp"
       }
     ]
-  }
+  },
+  "aboutStaff":{
+    "eyebrow": "our team",
+    "title": "Making a ritual for you"
+  },
+  "staff": [
+    {
+      "id": "facial",
+      "name": "Alena",
+      "service": "Facebeauty · 14 years of hands",
+      "image": "/services/Alena.jpeg",
+      "description": "Helps preserve youth and natural beauty without radical treatments. Thanks to a personalized approach and professional techniques, skin tone is improved, puffiness is reduced, facial muscles are relaxed, and contours are defined. Each treatment combines care, aesthetics, and visible results."
+    },
+    {
+      "id": "body",
+      "name": "Alena",
+      "service": "Bodyworker · 18 years of hands",
+      "image": "/services/Alena.jpeg",
+      "description": "Helps relieve muscle tension, restore strength, and improve well-being. Professional techniques promote relaxation, improve circulation, and restore lightness to the body. Each treatment is tailored to your needs, ensuring you feel comfortable and notice results after just one session."
+    }
+  ]
 }

@@ -111,7 +111,8 @@ export function BubbleCanvas({ className = "", heroPlayWord, heroPauseWord }: Bu
       if (!running) draw();
     }
 
-    /** Paint the Monet as the background (cover fit), or a lilac fallback. */
+    /** Paint the Monet as the background (cover fit), or a lilac fallback,
+     * then wash a magenta tint over it. */
     function drawBackground() {
       if (!ctx) return;
       if (imgReady && bg) ctx.drawImage(img, bg.dx, bg.dy, bg.dw, bg.dh);
@@ -119,6 +120,14 @@ export function BubbleCanvas({ className = "", heroPlayWord, heroPauseWord }: Bu
         ctx.fillStyle = "#FCAEC2";
         ctx.fillRect(0, 0, w, h);
       }
+      // Magenta tint over the whole background. `multiply` keeps the painting's
+      // shadows and detail while pulling everything toward magenta; drop it to
+      // "source-over" for a flatter, more opaque wash.
+      ctx.save();
+      ctx.globalCompositeOperation = "multiply";
+      ctx.fillStyle = "rgba(255,173,174,0.17)";
+      ctx.fillRect(0, 0, w, h);
+      ctx.restore();
     }
 
     /**

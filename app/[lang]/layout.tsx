@@ -185,7 +185,7 @@ export default async function RootLayout({
 
         <main
           id="main"
-          className="flex flex-col items-center justify-center w-full flex-1 px-4 scroll-mt-24"
+          className="flex flex-col items-center justify-center w-full flex-1  scroll-mt-24"
         >
           {children}
         </main>
