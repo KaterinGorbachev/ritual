@@ -101,5 +101,30 @@
       "image": "/services/Alena.jpeg",
       "description": "Helps relieve muscle tension, restore strength, and improve well-being. Professional techniques promote relaxation, improve circulation, and restore lightness to the body. Each treatment is tailored to your needs, ensuring you feel comfortable and notice results after just one session."
     }
+  ],
+  "aboutCosmetics": {
+    "eyebrow": "on our shelf",
+    "title": "The brands we trust",
+    "subtitle": "Every product on our table is chosen by hand — cold-pressed, fragrance-honest and kind to reactive skin."
+  },
+  "cosmetics": [
+    {
+      "id": "utsukusy",
+      "name": "Utsukusy",
+      "description": "Professional Spanish skincare from Barcelona, blending Japanese beauty traditions with modern science.",
+      "image": "/cosmetics/utsukusy.jpg"
+    },
+    {
+      "id": "meder",
+      "name": "Meder Beauty",
+      "description": "Swiss microbiome-friendly skincare created by dermatologist Dr Tiina Meder, with biotech peptides, pre- and probiotics.",
+      "image": "/cosmetics/meder.jpg"
+    },
+    {
+      "id": "skinderma",
+      "name": "Skinderma",
+      "description": "Medical dermocosmetics with highly concentrated actives and professional peels, made to pharmaceutical GMP standards.",
+      "image":"/cosmetics/skinderma.jpeg"
+    }
   ]
 }

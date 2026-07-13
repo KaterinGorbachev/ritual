@@ -5,6 +5,7 @@ import { WhatsAppButton } from "../ui/WhatsAppButton";
 import { Section } from "../ui/Section";
 import { ServiceCard } from "../ui/ServiceCard";
 import { TeamCard } from "../ui/TeamCard";
+import { BrandMarquee } from "../ui/BrandMarquee"
 
 export default async function HomePage({ params }: PageProps<"/[lang]">) {
   const { lang } = await params;
@@ -31,12 +32,12 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
 
         </div>
       </div>
-      <div className="max-w-400 py-8 lg:py-10 flex flex-col items-center justify-center mt-4 gap-6 lg:gap-12">
+      <div className="max-w-400 py-8 lg:py-16 flex flex-col items-center justify-center  gap-6 lg:gap-12">
         <div className="flex flex-col gap-2 items-center justify-center">
           <p className="font-handwriting text-magenta text-2xl leading-normal text-center">{dict.topServices.eyebrow}</p>
           <h2 className="traking normal text-[clamp(1.75rem,5vw,2.25rem)] font-display font-semibold text-center">{dict.topServices.title}</h2>
         </div>
-        <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 px-2">
           {
             dict.topServices.items.map(item =>
               <ServiceCard key={item.id} title={item.name} description={item.description} image={item.image} />)
@@ -58,7 +59,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
 
       </div>
       <div className="py-8 lg:py-18 flex flex-col items-center justify-center gap-6 lg:gap-12 bg-blush/70 min-h-50 w-full">
-        <div className="flex flex-col gap-0.5 items-center justify-center">
+        <div className="flex flex-col gap-0.5 items-center justify-center px-4">
           <p className="font-handwriting text-magenta text-2xl leading-normal text-center">{dict.aboutStaff.eyebrow}</p>
           <h2 className="traking normal text-[clamp(1.75rem,5vw,2.25rem)] font-display font-semibold text-center">{dict.aboutStaff.title}</h2>
         </div>
@@ -71,11 +72,18 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
             profession={member.service} 
             description={member.description}
             image={member.image}
-            className={i % 2 == 1 ? "max-w-[600px] team-card--from-right" : "max-w-[600px] team-card--from-left"}/>
+            className={i % 2 == 1 ? "md:max-w-[600px] team-card--from-right" : "md:max-w-[600px] team-card--from-left"}/>
             
           ))}
         </ul>
 
+      </div>
+      <div className="max-w-400 py-8 lg:py-16 flex flex-col items-start justify-start  gap-6 lg:gap-12 w-full px-4 md:px-8 lg:px-24">
+        <div className="flex flex-col gap-2 items-start justify-start w-full">
+          <p className="font-handwriting text-magenta text-2xl leading-normal text-start">{dict.aboutCosmetics.eyebrow}</p>
+          <h2 className="traking normal text-[clamp(1.75rem,5vw,2.25rem)] font-display font-semibold text-start">{dict.aboutCosmetics.title}</h2>
+        </div>
+        <BrandMarquee items={dict.cosmetics} />
       </div>
     </Section>
   );

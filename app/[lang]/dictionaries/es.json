@@ -101,5 +101,30 @@
       "image": "/services/Alena.jpeg",
       "description": "Ayuda a aliviar la tensión muscular, recuperar la fuerza y mejorar el bienestar. Las técnicas profesionales favorecen la relajación, mejoran la circulación y devuelven ligereza al cuerpo. Cada tratamiento se adapta a tus necesidades, para que te sientas cómodo y notes resultados desde la primera sesión."
     }
+  ],
+  "aboutCosmetics": {
+    "eyebrow": "en nuestra estantería",
+    "title": "Las marcas en las que confiamos",
+    "subtitle": "Cada producto de nuestra mesa está elegido a mano — prensado en frío, delicado en su fragancia y amable con las pieles reactivas."
+  },
+  "cosmetics": [
+    {
+      "id": "utsukusy",
+      "name": "Utsukusy",
+      "description": "Cosmética profesional española de Barcelona que une la tradición japonesa de la belleza con la ciencia actual.",
+      "image": "/cosmetics/logo-utsukusy-cosmetics.jpg"
+    },
+    {
+      "id": "meder",
+      "name": "Meder Beauty",
+      "description": "Cuidado suizo respetuoso con el microbioma, creado por la dermatóloga Dra. Tiina Meder: péptidos biotecnológicos, pre y probióticos.",
+      "image": "/cosmetics/Meder_Main_Logo_Red_2023_ab3d8fa8-51f0-4695-be61-654f54fddc60_large.jpg"
+    },
+    {
+      "id": "skinderma",
+      "name": "Skinderma",
+      "description": "Dermocosmética médica con activos altamente concentrados y peelings profesionales, fabricada según normas farmacéuticas GMP.",
+      "image":"/cosmetics/skinderma.jpeg"
+    }
   ]
 }

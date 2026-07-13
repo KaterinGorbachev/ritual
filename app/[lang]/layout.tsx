@@ -191,14 +191,14 @@ export default async function RootLayout({
         </main>
 
         <footer className="flex flex-col items-center justify-center w-full ">
-          <section id="visit" className="flex  items-center justify-center  w-full bg-gradient-to-b from-cream via-blush/20 to-blush/80 pt-16 lg:pt-32 pb-8 px-2">
+          <section id="visit" className="flex  items-center justify-center  w-full bg-gradient-to-b from-blush/20 via-blush/90 to-blush pt-16 lg:pt-32 pb-8 px-2">
             <div className="flex flex-col items-center justify-center gap-4 text-center rounded-pill bg-cream/80 py-6 px-4 min-h-40 shadow-[inset_0_0_0_1px_rgba(26,26,26,0.06),0_1px_0_rgba(255,255,255,0.7)] max-w-400">
               <FooterContactDetails address={dict.footer.address} hours={dict.footer.workingHours} commentAboutAppointments={dict.footer.commentAboutAppointments} daysOfWeek={JSON.parse(JSON.stringify(dict.daysOfWeek))} ariaLabelMapBox={dict.ariaLabels.map} ariaLabelGoogleMapButton={dict.ariaLabels.googleMapButton} />
             
               
             </div>
           </section>
-          <section className="flex flex-col gap-12 items-center justify-center  w-full bg-gradient-to-b from-blush/80 to-blush pt-10 pb-6 px-4">
+          <section className="flex flex-col gap-12 items-center justify-center  w-full bg-gradient-to-b from-blush to-blush pt-10 pb-6 px-4">
             <div className="flex flex-row flex-wrap items-center justify-center gap-4 max-w-400">
               <NavLink href="">{dict.nav.blog}</NavLink>
               <NavLink href="">{dict.footer.privacyPolicy}</NavLink>
