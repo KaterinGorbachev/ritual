@@ -24,8 +24,11 @@ const MIN_CARD_FOOTPRINT = 160;
  * before the loop wraps. We can't measure DOM width on the server, so we repeat
  * the list enough times that a half is guaranteed to exceed MAX_VIEWPORT even
  * with a small number of narrow cards — then render two halves so translating
- * the track by -50% loops seamlessly. Pause-on-hover and the reduced-motion
- * fallback live in globals.css.
+ * the track by -50% loops seamlessly.
+ *
+ * Styling is inline Tailwind: `animate-marquee` (defined in globals.css @theme)
+ * scrolls the track and `group-hover` pauses it. Only the reduced-motion
+ * fallback (matched via [data-marquee]) lives in globals.css.
  */
 export function BrandMarquee({ items }: BrandMarqueeProps) {
   if (items.length === 0) return null;
@@ -38,8 +41,12 @@ export function BrandMarquee({ items }: BrandMarqueeProps) {
   const track = [...half, ...half];
 
   return (
-    <div className="brand-marquee w-full" aria-label="Brands we use">
-      <ul className="brand-marquee__track items-stretch gap-4">
+    <div
+      data-marquee
+      className="group w-full overflow-hidden py-2"
+      aria-label="Brands we use"
+    >
+      <ul className="flex w-max items-stretch gap-4 animate-marquee will-change-transform group-hover:[animation-play-state:paused]">
         {track.map((member, i) => (
           <CreamCard
             key={`${member.id}-${i}`}

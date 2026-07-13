@@ -16,6 +16,14 @@
 
   --radius-pill: 40px;
   --radius-card: 20px;
+
+  /* Brand marquee: one continuous leftward scroll. Two identical track halves
+     translated by -50% loop seamlessly. Enables the `animate-marquee` utility. */
+  --animate-marquee: brand-marquee 90s linear infinite;
+  @keyframes brand-marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
 }
 
 
@@ -41,27 +49,13 @@
 .team-card--from-left.team-card--in-view  { animation: team-slide-in-left  1.1s cubic-bezier(.22,.61,.36,1) both; }
 .team-card--from-right.team-card--in-view { animation: team-slide-in-right 1.1s cubic-bezier(.22,.61,.36,1) both; }
 
-/* --- Brand marquee --------------------------------------------------------- */
-
-/* Two identical track halves scroll left; translating by -50% loops seamlessly.
-   Hovering the viewport pauses the animation. */
-@keyframes brand-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-
-
-.brand-marquee__track {
-  display: flex;
-  width: max-content;
-  animation: brand-marquee 90s linear infinite;
-  will-change: transform;
-}
-.brand-marquee:hover .brand-marquee__track { animation-play-state: paused; }
-
-/* Respect users who prefer reduced motion */
+/* Respect users who prefer reduced motion. The marquee styling lives inline on
+   the component (see BrandMarquee.tsx); here we only kill the animation and let
+   the track become a normal scroll container so all brands stay reachable. */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 
-  /* Fall back to a normal scroll container so all brands stay reachable. */
-  .brand-marquee { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
+  [data-marquee] { overflow-x: auto !important; }
 }
 
 @layer theme {
