@@ -357,7 +357,7 @@ export function BubbleCanvas({ className = "", heroPlayWord, heroPauseWord }: Bu
           onClick={toggle}
           aria-pressed={paused}
           data-testid="bubble-canvas-toggle"
-          className="absolute top-2 right-2 z-2 w-13 h-13 text-sm shadow-xl"
+          className="absolute bottom-2 right-2 z-2 w-13 h-13 text-sm shadow-xl"
         >
           {paused ? heroPlayWord : heroPauseWord}
         </GostButton>
