@@ -14,8 +14,8 @@
     "title": "Tu tiempo merece el Ritual",
     "subtitle": "En Ritual escuchamos y cuidamos la piel con aparatología de última generación y manos expertas: resultados visibles, en el tiempo que tienes. Relájate — el resto es nuestro ritual.",
     "cta": "Reserva con Whatsapp", 
-    "pauseWord": "Pausa", 
-    "playWord": "Volar"
+    "stopWord": "Detener animaciones",
+    "resumeWord": "Reanudar animaciones"
   }, 
   "footer": {
     "address": "Dirección",
@@ -42,6 +42,52 @@
     "map": "Mapa con la ubicación del salón", 
     "googleMapButton": "Abrir en Google Maps"
   }, 
+  "servicesPage": {
+    "eyebrow": "cada precio, a la vista",
+    "title": "Servicios & Precios",
+    "description": "Busca por nombre o lee una categoría de arriba abajo. Cada ritual se reserva personalmente por WhatsApp para adaptarlo a tu piel y a tu semana.",
+    "searchLabel": "Buscar tratamientos",
+    "searchPlaceholder": "Prueba «lifting», «drenaje», «gel»…",
+    "emptyText": "Nada coincide aquí — prueba otra palabra.",
+    "noResults": "Ningún tratamiento coincide con tu búsqueda. Prueba una palabra más corta o escríbenos por WhatsApp.",
+    "durationLabel": "Duración",
+    "categories": [
+      {
+        "id": "face",
+        "title": "Rostro",
+        "blurb": "Faciales con aparatología y trabajo de lifting, ajustados a tu tipo de piel.",
+        "items": [
+          { "id": "microcurrent", "name": "Terapia de microcorrientes", "duration": "60 min", "price": "75 €" },
+          { "id": "rf-lifting", "name": "Lifting por radiofrecuencia", "duration": "50 min", "price": "80 €" },
+          { "id": "lifting-massage", "name": "Masaje facial lifting", "duration": "60 min", "price": "65 €" },
+          { "id": "carboxytherapy", "name": "Carboxiterapia facial", "duration": "45 min", "price": "70 €" },
+          { "id": "signature-facial", "name": "Facial Ritual de autor", "duration": "75 min", "price": "90 €" }
+        ]
+      },
+      {
+        "id": "body",
+        "title": "Cuerpo",
+        "blurb": "Drenaje linfático y masaje relajante en manos con décadas de práctica.",
+        "items": [
+          { "id": "pressotherapy-facial", "name": "Traje de presoterapia + facial", "duration": "70 min", "price": "95 €" },
+          { "id": "pressotherapy", "name": "Drenaje con presoterapia", "duration": "45 min", "price": "55 €" },
+          { "id": "relax-massage", "name": "Masaje corporal relajante", "duration": "60 min", "price": "70 €" },
+          { "id": "back-massage", "name": "Masaje de espalda y hombros", "duration": "30 min", "price": "40 €" }
+        ]
+      },
+      {
+        "id": "nails",
+        "title": "Uñas",
+        "blurb": "Cuidado cuidadoso de manos y pies con acabados amables y duraderos.",
+        "items": [
+          { "id": "manicure", "name": "Manicura clásica", "duration": "45 min", "price": "30 €" },
+          { "id": "gel-manicure", "name": "Manicura de gel", "duration": "60 min", "price": "40 €" },
+          { "id": "pedicure", "name": "Pedicura spa", "duration": "60 min", "price": "45 €" },
+          { "id": "nail-art", "name": "Nail art (por diseño)", "duration": "20 min", "price": "12 €" }
+        ]
+      }
+    ]
+  },
   "topServices": {
     "eyebrow": "lo que hacemos con todo lo que escuchamos",
     "title": "Alta tecnología, manos suaves",

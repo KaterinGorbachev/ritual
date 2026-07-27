@@ -1,14 +1,28 @@
-import { describe, it, expect, afterEach } from "vitest";
-import { render } from "vitest-browser-react";
+import { describe, it, expect, afterEach, beforeEach } from "vitest";
+import { render, cleanup } from "vitest-browser-react";
 import { cdp } from "vitest/browser";
 import { BubbleCanvas } from "../../ui/BubbleCanvas";
+import { MotionProvider } from "../../ui/MotionContext";
+import { StopAnimationsButton } from "../../ui/StopAnimationsButton";
 
-// The real labels come from the locale dictionaries (hero.playWord /
-// hero.pauseWord). These sentinels are deliberately not real copy, so the
-// tests assert on the toggle's *behaviour* and never break when marketing
-// rewords the button.
-const PLAY = "PLAY_LABEL";
-const PAUSE = "PAUSE_LABEL";
+// The hero canvas no longer has its own pause button — the single global
+// "stop animations" control drives it. These tests exercise that wiring: the
+// canvas has no toggle of its own, obeys the global flag, and stays decorative.
+
+// Sentinel labels — behaviour, not marketing copy.
+const STOP = "STOP_LABEL";
+const RESUME = "RESUME_LABEL";
+
+// The motion flag lives on <html> + localStorage, shared across tests.
+function reset() {
+    localStorage.clear();
+    document.documentElement.classList.remove("motion-off");
+}
+beforeEach(reset);
+afterEach(async () => {
+    await cleanup();
+    reset();
+});
 
 /**
  * BubbleCanvas reads `prefers-reduced-motion` once, inside its mount effect.
@@ -26,125 +40,109 @@ async function clearEmulatedMedia() {
     await cdp().send("Emulation.setEmulatedMedia", { features: [] });
 }
 
-/**
- * The toggle only mounts once the animation has started, which happens after
- * the Monet image resolves (onload or onerror). Every test therefore waits for
- * the button before asserting on it.
- */
-describe("BubbleCanvas pause control", () => {
-    it("starts playing, so the button offers to pause", async () => {
-        const screen = await render(<BubbleCanvas heroPlayWord={PLAY} heroPauseWord={PAUSE} />);
+function renderHero() {
+    return render(
+        <MotionProvider>
+            <BubbleCanvas />
+            <StopAnimationsButton stopWord={STOP} resumeWord={RESUME} />
+        </MotionProvider>
+    );
+}
 
-        const toggle = screen.getByTestId("bubble-canvas-toggle");
+describe("Hero canvas and the global stop control", () => {
+    it("has no pause button of its own — only the global control", async () => {
+        const screen = await renderHero();
 
-        await expect.element(toggle).toBeVisible();
-        await expect.element(toggle).toHaveTextContent(PAUSE);
-        // aria-pressed reflects "is paused" — false while the bubbles drift.
-        await expect.element(toggle).toHaveAttribute("aria-pressed", "false");
+        await expect.element(screen.getByTestId("stop-animations-toggle")).toBeVisible();
+        expect(
+            screen.container.querySelector('[data-testid="bubble-canvas-toggle"]')
+        ).toBeNull();
     });
 
-    it("animation is paused by first click", async () => {
-        const screen = await render(<BubbleCanvas heroPlayWord={PLAY} heroPauseWord={PAUSE} />);
+    it("stops and resumes the canvas via the global flag", async () => {
+        const screen = await renderHero();
 
-        const toggle = screen.getByTestId("bubble-canvas-toggle");
-        await expect.element(toggle).toHaveTextContent(PAUSE);
+        const toggle = screen.getByTestId("stop-animations-toggle");
+        expect(document.documentElement.classList.contains("motion-off")).toBe(false);
 
         await toggle.click();
+        await expect.element(toggle).toHaveAttribute("aria-label", RESUME);
+        expect(document.documentElement.classList.contains("motion-off")).toBe(true);
 
-        // Label flips to the action now available, and the pressed state is on.
-        await expect.element(toggle).toHaveTextContent(PLAY);
-        await expect.element(toggle).toHaveAttribute("aria-pressed", "true");
+        await toggle.click();
+        await expect.element(toggle).toHaveAttribute("aria-label", STOP);
+        expect(document.documentElement.classList.contains("motion-off")).toBe(false);
     });
 
-    it("resumes on the second click", async () => {
-        const screen = await render(<BubbleCanvas heroPlayWord={PLAY} heroPauseWord={PAUSE} />);
-
-        const toggle = screen.getByTestId("bubble-canvas-toggle");
-        await expect.element(toggle).toHaveTextContent(PAUSE);
-
-        await toggle.click();
-        await expect.element(toggle).toHaveTextContent(PLAY);
-
-        await toggle.click();
-
-        await expect.element(toggle).toHaveTextContent(PAUSE);
-        await expect.element(toggle).toHaveAttribute("aria-pressed", "false");
-    });
-
-    it("keeps the canvas itself click-through", async () => {
+    it("keeps the canvas decorative and click-through", async () => {
         // The canvas is decorative: pointer-events-none, aria-hidden. Only the
         // button is interactive, so screen readers and clicks reach the hero.
-        const screen = await render(<BubbleCanvas heroPlayWord={PLAY} heroPauseWord={PAUSE} />);
+        const screen = await renderHero();
 
         const canvas = screen.getByTestId("bubble-canvas");
+        await expect.element(canvas).toHaveAttribute("aria-hidden", "true");
+
+        await screen.getByTestId("stop-animations-toggle").click();
         await expect.element(canvas).toHaveAttribute("aria-hidden", "true");
     });
 });
 
-describe("BubbleCanvas and the tab being hidden", () => {
+describe("Hero canvas and the tab being hidden", () => {
     // The overrides below shadow real getters on `document`; drop them after
     // each test so the rest of the file sees a genuinely visible page.
     afterEach(restoreVisibility);
 
-    it("does not flip the button when the tab is hidden and shown again", async () => {
-        // Hiding the tab pauses the loop to save battery, but that is not the
-        // user pausing — the control must still offer to pause when they return.
-        const screen = await render(<BubbleCanvas heroPlayWord={PLAY} heroPauseWord={PAUSE} />);
+    it("stays visible and decorative across a hide/show cycle", async () => {
+        // Hiding the tab pauses the loop to save battery; showing it resumes.
+        // Nothing user-visible should change — the canvas is decorative either way.
+        const screen = await renderHero();
 
-        const toggle = screen.getByTestId("bubble-canvas-toggle");
-        await expect.element(toggle).toHaveTextContent(PAUSE);
+        const canvas = screen.getByTestId("bubble-canvas");
+        await expect.element(canvas).toHaveAttribute("aria-hidden", "true");
 
         hideTab();
         showTab();
 
-        await expect.element(toggle).toHaveTextContent(PAUSE);
-        await expect.element(toggle).toHaveAttribute("aria-pressed", "false");
+        await expect.element(canvas).toHaveAttribute("aria-hidden", "true");
+        // The global control is untouched by tab visibility.
+        await expect.element(screen.getByTestId("stop-animations-toggle")).toHaveAttribute("aria-label", STOP);
     });
 
-    it("stays paused across a hide/show cycle if the user paused first", async () => {
-        const screen = await render(<BubbleCanvas heroPlayWord={PLAY} heroPauseWord={PAUSE} />);
+    it("does not resume against a global stop when the tab returns", async () => {
+        const screen = await renderHero();
 
-        const toggle = screen.getByTestId("bubble-canvas-toggle");
-        await toggle.click();
-        await expect.element(toggle).toHaveTextContent(PLAY);
+        await screen.getByTestId("stop-animations-toggle").click();
+        expect(document.documentElement.classList.contains("motion-off")).toBe(true);
 
         hideTab();
         showTab();
 
-        // wasRunning was false, so becoming visible must not restart the loop.
-        await expect.element(toggle).toHaveTextContent(PLAY);
-        await expect.element(toggle).toHaveAttribute("aria-pressed", "true");
+        // Coming back must not undo the user's explicit stop.
+        expect(document.documentElement.classList.contains("motion-off")).toBe(true);
+        await expect
+            .element(screen.getByTestId("stop-animations-toggle"))
+            .toHaveAttribute("aria-label", RESUME);
     });
 });
 
-describe("BubbleCanvas and prefers-reduced-motion", () => {
+describe("Hero canvas and prefers-reduced-motion", () => {
     // Emulation is process-wide, so it must be undone even if a test fails.
     afterEach(clearEmulatedMedia);
 
-    it("starts paused, so the button offers to play", async () => {
-        // Set before render(): the effect reads matchMedia once, on mount.
+    it("mounts and stays decorative under reduced motion", async () => {
+        // Set before render(): the effect reads matchMedia once, on mount. With
+        // reduced motion the canvas holds a still frame instead of animating,
+        // but it must still mount and remain decorative.
         await setReducedMotion("reduce");
 
-        const screen = await render(<BubbleCanvas heroPlayWord={PLAY} heroPauseWord={PAUSE} />);
+        const screen = await renderHero();
 
-        const toggle = screen.getByTestId("bubble-canvas-toggle");
-        await expect.element(toggle).toBeVisible();
-        await expect.element(toggle).toHaveTextContent(PLAY);
-        await expect.element(toggle).toHaveAttribute("aria-pressed", "true");
-    });
-
-    it("still lets the user opt in to the animation", async () => {
-        await setReducedMotion("reduce");
-
-        const screen = await render(<BubbleCanvas heroPlayWord={PLAY} heroPauseWord={PAUSE} />);
-
-        const toggle = screen.getByTestId("bubble-canvas-toggle");
-        await expect.element(toggle).toHaveTextContent(PLAY);
-
-        await toggle.click();
-
-        await expect.element(toggle).toHaveTextContent(PAUSE);
-        await expect.element(toggle).toHaveAttribute("aria-pressed", "false");
+        const canvas = screen.getByTestId("bubble-canvas");
+        await expect.element(canvas).toHaveAttribute("aria-hidden", "true");
+        // The global control is independent of the reduced-motion preference.
+        await expect
+            .element(screen.getByTestId("stop-animations-toggle"))
+            .toHaveAttribute("aria-label", STOP);
     });
 });
 

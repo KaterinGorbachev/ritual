@@ -7,6 +7,8 @@ import { Dropdown } from "../ui/Dropdown";
 import { LangButton } from "../ui/LangButton";
 import { WhatsAppButton } from "../ui/WhatsAppButton";
 import { FooterContactDetails } from "../ui/FooterContactDetails";
+import { MotionProvider } from "../ui/MotionContext";
+import { StopAnimationsButton } from "../ui/StopAnimationsButton";
 
 const playfair = Playfair_Display({
   variable: "--font-display",
@@ -50,6 +52,7 @@ export default async function RootLayout({
       className={`${playfair.variable} ${nunito.variable} ${caveat.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col items-center scroll-smooth bg-cream text-ink font-body">
+        <MotionProvider>
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:z-50 focus:left-4 focus:top-4 btn-primary"
@@ -59,7 +62,7 @@ export default async function RootLayout({
         </a>
 
         <header
-          className="flex items-center justify-center w-full sticky top-2 max-w-400 z-40 min-h-[5vh]  px-2 "
+          className="flex flex-col gap-2 items-center justify-center w-full sticky top-2 max-w-400 z-40 min-h-[5vh]  px-2 "
           data-testid="header"
         >
           <div className="flex items-center justify-between w-full px-2 md:px-4 pt-3 pb-2 gap-4 shadow-sm bg-cream/85 backdrop-blur-md border-b border-mauve/30 rounded-pill">
@@ -88,16 +91,16 @@ export default async function RootLayout({
                 <nav>
                   <ul className="hidden lg:flex items-center gap-4 ml-4">
                     <li>
-                      <NavLink href="#about">{dict.nav.about}</NavLink>
+                      <NavLink href="/#aboutus">{dict.nav.about}</NavLink>
                     </li>
                     <li>
-                      <NavLink href="#services">{dict.nav.services}</NavLink>
+                      <NavLink href="/services">{dict.nav.services}</NavLink>
                     </li>
                     <li>
                       <NavLink href="#faqs">{dict.nav.faqs}</NavLink>
                     </li>
                     <li>
-                      <NavLink href="#contact">{dict.nav.contact}</NavLink>
+                      <NavLink href="/#contact">{dict.nav.contact}</NavLink>
                     </li>
                     <li>
                       <NavLink
@@ -132,7 +135,7 @@ export default async function RootLayout({
               </WhatsAppButton>
             </div>
 
-            <div className="flex flex-row-reverse items-center gap-2 ">
+            <div className="flex flex-row-reverse lg:flex-row items-center gap-2 ">
               {/* Pages dropdown — UI only */}
               <Dropdown
                 className="relative group isolate lg:hidden"
@@ -153,16 +156,16 @@ export default async function RootLayout({
                 >
                   <ul className="flex flex-col gap-4 p-2">
                     <li>
-                      <NavLink href="#about">{dict.nav.about}</NavLink>
+                      <NavLink href="/#aboutus">{dict.nav.about}</NavLink>
                     </li>
                     <li>
-                      <NavLink href="#services">{dict.nav.services}</NavLink>
+                      <NavLink href="/services">{dict.nav.services}</NavLink>
                     </li>
                     <li>
                       <NavLink href="#faqs">{dict.nav.faqs}</NavLink>
                     </li>
                     <li>
-                      <NavLink href="#contact">{dict.nav.contact}</NavLink>
+                      <NavLink href="/#contact">{dict.nav.contact}</NavLink>
                     </li>
                     <li>
                       <NavLink
@@ -179,7 +182,15 @@ export default async function RootLayout({
 
               {/* Language selector dropdown */}
               <LangButton />
+              <StopAnimationsButton
+                stopWord={dict.hero.stopWord}
+                resumeWord={dict.hero.resumeWord}
+              />
             </div>
+            
+          </div>
+          <div className="flex items-center justify-end w-full">
+            
           </div>
         </header>
 
@@ -187,12 +198,13 @@ export default async function RootLayout({
           id="main"
           className="flex flex-col items-center justify-center w-full flex-1  scroll-mt-24"
         >
+          
           {children}
         </main>
 
         <footer className="flex flex-col items-center justify-center w-full ">
-          <section id="visit" className="flex  items-center justify-center  w-full bg-gradient-to-b from-blush/20 via-blush/90 to-blush pt-16 lg:pt-32 pb-8 px-2">
-            <div className="flex flex-col items-center justify-center gap-4 text-center rounded-pill bg-cream/80 py-6 px-4 min-h-40 shadow-[inset_0_0_0_1px_rgba(26,26,26,0.06),0_1px_0_rgba(255,255,255,0.7)] max-w-400">
+          <section id="visit" className="flex  items-center justify-center  w-full bg-gradient-to-b from-blush/20 via-blush/90 to-blush pt-16 lg:pt-32 pb-8 px-2" >
+            <div className="flex flex-col items-center justify-center gap-4 text-center rounded-pill bg-cream/80 py-6 px-4 min-h-40 shadow-[inset_0_0_0_1px_rgba(26,26,26,0.06),0_1px_0_rgba(255,255,255,0.7)] max-w-400 scroll-mt-24" id="contact">
               <FooterContactDetails address={dict.footer.address} hours={dict.footer.workingHours} commentAboutAppointments={dict.footer.commentAboutAppointments} daysOfWeek={JSON.parse(JSON.stringify(dict.daysOfWeek))} ariaLabelMapBox={dict.ariaLabels.map} ariaLabelGoogleMapButton={dict.ariaLabels.googleMapButton} />
             
               
@@ -211,6 +223,7 @@ export default async function RootLayout({
             </p>
           </section>
         </footer>
+        </MotionProvider>
       </body>
     </html>
   );

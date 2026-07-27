@@ -14,8 +14,8 @@
     "title": "Your time deserves the Ritual",
     "subtitle": "At Ritual we listen and take care of your skin with state-of-the-art equipment and expert hands: visible results, in the time you have. Relax — the rest is our ritual.",
     "cta": "Book with Whatsapp",
-    "pauseWord": "Pause",
-    "playWord": "Flow"
+    "stopWord": "Stop animations",
+    "resumeWord": "Resume animations"
   },
   "footer": {
     "address": "Address",
@@ -41,6 +41,52 @@
     "footerNavigation": "Footer Navigation",
     "map": "Map with the location of the salon",
     "googleMapButton": "Open in Google Maps"
+  },
+  "servicesPage": {
+    "eyebrow": "every price, in the open",
+    "title": "Services & Prices",
+    "description": "Search by name, or read a category top to bottom. Every ritual is booked personally on WhatsApp so we can shape it to your skin and your week.",
+    "searchLabel": "Search treatments",
+    "searchPlaceholder": "Try “lifting”, “drainage”, “gel”…",
+    "emptyText": "Nothing here matches — try another word.",
+    "noResults": "No treatments match your search. Try a shorter word, or ask us on WhatsApp.",
+    "durationLabel": "Duration",
+    "categories": [
+      {
+        "id": "face",
+        "title": "Face",
+        "blurb": "Device-assisted facials and lifting work, tuned to your skin type.",
+        "items": [
+          { "id": "microcurrent", "name": "Microcurrent therapy", "duration": "60 min", "price": "€75" },
+          { "id": "rf-lifting", "name": "RF lifting", "duration": "50 min", "price": "€80" },
+          { "id": "lifting-massage", "name": "Lifting facial massage", "duration": "60 min", "price": "€65" },
+          { "id": "carboxytherapy", "name": "Facial carboxytherapy", "duration": "45 min", "price": "€70" },
+          { "id": "signature-facial", "name": "Signature Ritual facial", "duration": "75 min", "price": "€90" }
+        ]
+      },
+      {
+        "id": "body",
+        "title": "Body",
+        "blurb": "Lymphatic drainage and relaxing bodywork by hands with decades of practice.",
+        "items": [
+          { "id": "pressotherapy-facial", "name": "Pressotherapy suit + facial", "duration": "70 min", "price": "€95" },
+          { "id": "pressotherapy", "name": "Pressotherapy drainage", "duration": "45 min", "price": "€55" },
+          { "id": "relax-massage", "name": "Full-body relaxing massage", "duration": "60 min", "price": "€70" },
+          { "id": "back-massage", "name": "Back & shoulders massage", "duration": "30 min", "price": "€40" }
+        ]
+      },
+      {
+        "id": "nails",
+        "title": "Nails",
+        "blurb": "Careful hand and foot care with kind, long-wearing finishes.",
+        "items": [
+          { "id": "manicure", "name": "Classic manicure", "duration": "45 min", "price": "€30" },
+          { "id": "gel-manicure", "name": "Gel manicure", "duration": "60 min", "price": "€40" },
+          { "id": "pedicure", "name": "Spa pedicure", "duration": "60 min", "price": "€45" },
+          { "id": "nail-art", "name": "Nail art (per design)", "duration": "20 min", "price": "€12" }
+        ]
+      }
+    ]
   },
   "topServices": {
     "eyebrow": "what we do with all that listening",

@@ -56,7 +56,23 @@
   *, *::before, *::after { animation: none !important; transition: none !important; }
 
   [data-marquee] { overflow-x: auto !important; }
+
+  /* With animation killed, a team card that hasn't gained --in-view (never
+     scrolled to) would keep the base .team-card opacity:0 forever. Force the
+     reveal end-state so all cards stay visible. */
+  .team-card { opacity: 1 !important; transform: none !important; }
 }
+
+/* Global "stop all animations" — the class the motion flag toggles on <html>
+   (see MotionContext.tsx). Mirrors the reduced-motion rule so one button stops
+   every CSS animation/transition, keeps the marquee reachable as a scroll
+   container, and forces slide-in content visible (never hidden). */
+.motion-off *, .motion-off *::before, .motion-off *::after {
+  animation: none !important;
+  transition: none !important;
+}
+.motion-off [data-marquee] { overflow-x: auto !important; }
+.motion-off .team-card { opacity: 1 !important; transform: none !important; }
 
 @layer theme {
   /* Custom scrollbar — slim, impressionist tints */

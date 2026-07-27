@@ -18,7 +18,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
         className="flex flex-col items-center justify-center w-full max-w-400 relative isolate min-h-165 overflow-hidden lg:rounded-pill lg:relative lg:top-0 px-4 lg:px-32 py-12 lg:py-10 shadow-[0_0_0_1px_rgba(218,24,132,.12),0_18px_50px_-24px_rgba(218,24,132,.25)] fixed -top-24"
       >
         {/* Client-only canvas: Monet garden + liquid-glass soap bubbles. */}
-        <BubbleCanvas heroPauseWord={dict.hero.pauseWord} heroPlayWord={dict.hero.playWord} />
+        <BubbleCanvas />
 
         {/* Hero content sits above the canvas on a frosted panel. */}
         <div className="relative z-1 my-16 rounded-pill bg-cream/55 px-6 py-10 text-center backdrop-blur-md md:px-16 md:py-14 flex flex-col items-center justify-center gap-2 w-full ">
@@ -58,7 +58,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
         </ul>
 
       </div>
-      <div className="py-10 lg:py-18 flex flex-col items-center justify-center gap-6 lg:gap-12 bg-blush/70 min-h-50 w-full  sm:px-4">
+      <div className="py-10 lg:py-18 flex flex-col items-center justify-center gap-6 lg:gap-12 bg-blush/70 min-h-50 w-full  sm:px-4 scroll-mt-24" id="aboutus">
         <div className="flex flex-col gap-0.5 items-center justify-center px-4">
           <p className="font-handwriting text-magenta text-2xl leading-normal text-center">{dict.aboutStaff.eyebrow}</p>
           <h2 className="traking normal text-[clamp(1.75rem,5vw,2.25rem)] font-display font-semibold text-center">{dict.aboutStaff.title}</h2>

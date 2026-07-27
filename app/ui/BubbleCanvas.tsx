@@ -4,8 +4,8 @@
 // it needs the DOM, a 2D canvas context, requestAnimationFrame and event
 // listeners, none of which exist in a Server Component. The server page just
 // mounts <BubbleCanvas /> — all animation lives here.
-import { useCallback, useEffect, useRef, useState } from "react";
-import { GostButton } from "./GostButton";
+import { useEffect, useRef } from "react";
+import { useMotion } from "./MotionContext";
 
 // Images are served from /public at the site root.
 const MONET_SRC = "/mone.jpg";
@@ -24,33 +24,22 @@ type Bubble = {
 
 type BubbleCanvasProps = {
   className?: string;
-  /** Label shown while the bubbles are still — clicking it resumes them. */
-  heroPlayWord: string;
-  /** Label shown while the bubbles drift — clicking it stops them. */
-  heroPauseWord: string;
 };
 
-export function BubbleCanvas({ className = "", heroPlayWord, heroPauseWord }: BubbleCanvasProps) {
+export function BubbleCanvas({ className = "" }: BubbleCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  // The single global control: when animations are stopped, so is this canvas.
+  const { off } = useMotion();
+
   // The loop lives in the effect closure below; it publishes its play/pause
-  // handles here so the toggle button can drive it without remounting.
+  // handles here so the global flag can drive it without remounting.
   const controlsRef = useRef<{ play: () => void; pause: () => void } | null>(null);
 
-  // `paused` drives the button label only. The loop is the source of truth for
-  // whether rAF is scheduled; this mirrors it for rendering. It starts as null
-  // ("not yet decided") because reduced-motion is read inside the effect.
-  const [paused, setPaused] = useState<boolean | null>(null);
-
-  const toggle = useCallback(() => {
-    const controls = controlsRef.current;
-    if (!controls) return;
-    setPaused((wasPaused) => {
-      if (wasPaused) controls.play();
-      else controls.pause();
-      return !wasPaused;
-    });
-  }, []);
+  // Mirror `off` into a ref so the loop-owning effect (which must not re-run on
+  // toggle) can read the current value inside its start/visibility handlers.
+  const offRef = useRef(off);
+  offRef.current = off;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -293,15 +282,14 @@ export function BubbleCanvas({ className = "", heroPlayWord, heroPauseWord }: Bu
     controlsRef.current = { play, pause };
 
     // Save battery: pause while the tab is hidden, resume if it was playing.
-    // This deliberately does not touch `paused` — hiding the tab is not the
-    // user pausing, so the button must not flip to "Play" behind their back.
-    // A tab hidden while user-paused stays paused, because `wasRunning` is false.
+    // A tab hidden while globally stopped stays stopped, because `wasRunning`
+    // is false. Coming back never overrides the global "off" flag.
     let wasRunning = false;
     function onVisibility() {
       if (document.hidden) {
         wasRunning = running;
         pause();
-      } else if (wasRunning) {
+      } else if (wasRunning && !offRef.current) {
         play();
       }
     }
@@ -309,18 +297,18 @@ export function BubbleCanvas({ className = "", heroPlayWord, heroPauseWord }: Bu
     document.addEventListener("visibilitychange", onVisibility);
     window.addEventListener("resize", resize);
 
-    // Start the animation (or hold a still frame for reduced motion). Called
-    // whether or not the painting loads, so the bubbles always animate.
+    // Start the animation (or hold a still frame). Called whether or not the
+    // painting loads, so the bubbles always animate. Runs only when the user
+    // has not globally stopped motion and does not prefer reduced motion.
     function start() {
       resize();
       const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      if (reduce) {
+      if (offRef.current || reduce) {
         pause();
         draw();
       } else {
         play();
       }
-      setPaused(reduce);
     }
 
     // Load the painting, then start. On error we still start — bubbles just
@@ -343,25 +331,22 @@ export function BubbleCanvas({ className = "", heroPlayWord, heroPauseWord }: Bu
     };
   }, []);
 
+  // Apply the global flag whenever it flips. `play()`/`pause()` are no-ops when
+  // already in the target state. Resuming is the user's explicit choice, so it
+  // wins over reduced-motion (which only sets the initial state in `start()`).
+  useEffect(() => {
+    const controls = controlsRef.current;
+    if (!controls) return;
+    if (off) controls.pause();
+    else controls.play();
+  }, [off]);
+
   return (
-    <>
-      <canvas
-        ref={canvasRef}
-        className={`pointer-events-none absolute inset-0 h-full w-full ${className}`}
-        aria-hidden="true"
-        data-testid="bubble-canvas"
-      />
-      {paused !== null && (
-        <GostButton
-          type="button"
-          onClick={toggle}
-          aria-pressed={paused}
-          data-testid="bubble-canvas-toggle"
-          className="absolute bottom-2 right-2 z-2 w-13 h-13 text-sm shadow-xl"
-        >
-          {paused ? heroPlayWord : heroPauseWord}
-        </GostButton>
-      )}
-    </>
+    <canvas
+      ref={canvasRef}
+      className={`pointer-events-none absolute inset-0 h-full w-full ${className}`}
+      aria-hidden="true"
+      data-testid="bubble-canvas"
+    />
   );
 }
