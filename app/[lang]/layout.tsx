@@ -6,9 +6,11 @@ import { NavLink } from "../ui/NavLink";
 import { Dropdown } from "../ui/Dropdown";
 import { LangButton } from "../ui/LangButton";
 import { WhatsAppButton } from "../ui/WhatsAppButton";
+import { WhatsAppStoreProvider } from "../ui/WhatsAppStoreProvider";
 import { FooterContactDetails } from "../ui/FooterContactDetails";
 import { MotionProvider } from "../ui/MotionContext";
 import { StopAnimationsButton } from "../ui/StopAnimationsButton";
+import { getDocById } from "../lib/handleData";
 
 const playfair = Playfair_Display({
   variable: "--font-display",
@@ -46,6 +48,16 @@ export default async function RootLayout({
   const { lang } = await params;
   const dict = await getDictionary(toLocale(lang));
 
+  // One salon WhatsApp number for the whole site: fetch it once here and seed
+  // the Zustand store so every client component (e.g. the per-service booking
+  // buttons) can build wa.me links without its own Firestore read. Degrades to
+  // an empty number if the doc is missing — links still render, just unnumbered.
+  const messanger = await getDocById("contactData", "messanger");
+  const whatsAppNumber =
+    messanger.ok && messanger.data
+      ? ((messanger.data as { telephone?: string }).telephone ?? "")
+      : "";
+
   return (
     <html
       lang={lang}
@@ -53,6 +65,7 @@ export default async function RootLayout({
     >
       <body className="min-h-full flex flex-col items-center scroll-smooth bg-cream text-ink font-body">
         <MotionProvider>
+        <WhatsAppStoreProvider number={whatsAppNumber} />
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:z-50 focus:left-4 focus:top-4 btn-primary"

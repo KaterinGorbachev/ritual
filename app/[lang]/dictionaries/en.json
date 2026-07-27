@@ -57,11 +57,41 @@
         "title": "Face",
         "blurb": "Device-assisted facials and lifting work, tuned to your skin type.",
         "items": [
-          { "id": "microcurrent", "name": "Microcurrent therapy", "duration": "60 min", "price": "€75" },
-          { "id": "rf-lifting", "name": "RF lifting", "duration": "50 min", "price": "€80" },
-          { "id": "lifting-massage", "name": "Lifting facial massage", "duration": "60 min", "price": "€65" },
-          { "id": "carboxytherapy", "name": "Facial carboxytherapy", "duration": "45 min", "price": "€70" },
-          { "id": "signature-facial", "name": "Signature Ritual facial", "duration": "75 min", "price": "€90" }
+          {
+            "id": "microcurrent",
+            "name": "Microcurrent therapy",
+            "duration": "60 min",
+            "price": "€75",
+            "description": "Gentle low-level currents lift and tone facial muscles, ease swelling and restore expression — a favourite after a tiring week."
+          },
+          {
+            "id": "rf-lifting",
+            "name": "RF lifting",
+            "duration": "50 min",
+            "price": "€80",
+            "description": "Radiofrequency waves firm the skin from within, soften fine lines and improve laxity — without needles or downtime."
+          },
+          {
+            "id": "lifting-massage",
+            "name": "Lifting facial massage",
+            "duration": "60 min",
+            "price": "€65",
+            "description": "A face, neck and scalp massage that relaxes muscles, refines your contour and reduces puffiness, finished with device-assisted skincare."
+          },
+          {
+            "id": "carboxytherapy",
+            "name": "Facial carboxytherapy",
+            "duration": "45 min",
+            "price": "€70",
+            "description": "A dedicated device treatment that evens out tone, boosts firmness and strengthens skin's own defences. Comfortable, with visible results from the first session."
+          },
+          {
+            "id": "signature-facial",
+            "name": "Signature Ritual facial",
+            "duration": "75 min",
+            "price": "€90",
+            "description": "A deep cleanse tailored to your skin, with extraction, exfoliation and a calming mask, leaving your face clear, smooth and glowing."
+          }
         ]
       },
       {
@@ -69,10 +99,34 @@
         "title": "Body",
         "blurb": "Lymphatic drainage and relaxing bodywork by hands with decades of practice.",
         "items": [
-          { "id": "pressotherapy-facial", "name": "Pressotherapy suit + facial", "duration": "70 min", "price": "€95" },
-          { "id": "pressotherapy", "name": "Pressotherapy drainage", "duration": "45 min", "price": "€55" },
-          { "id": "relax-massage", "name": "Full-body relaxing massage", "duration": "60 min", "price": "€70" },
-          { "id": "back-massage", "name": "Back & shoulders massage", "duration": "30 min", "price": "€40" }
+          {
+            "id": "pressotherapy-facial",
+            "name": "Pressotherapy suit + facial",
+            "duration": "70 min",
+            "price": "€95",
+            "description": "Full-body relaxation in a pressotherapy suit that supports lymphatic drainage, while our cosmetologist cares for your face. Two rituals, one hour."
+          },
+          {
+            "id": "pressotherapy",
+            "name": "Pressotherapy drainage",
+            "duration": "45 min",
+            "price": "€55",
+            "description": "Slow, rhythmic drainage that moves fluid retention, eases heavy legs and leaves your whole body feeling lighter — soothing after travel."
+          },
+          {
+            "id": "relax-massage",
+            "name": "Full-body relaxing massage",
+            "duration": "60 min",
+            "price": "€70",
+            "description": "An unhurried full-body massage by hands with decades of practice — tension eases, breathing slows, and the week finally lets go."
+          },
+          {
+            "id": "back-massage",
+            "name": "Back & shoulders massage",
+            "duration": "30 min",
+            "price": "€40",
+            "description": "Targeted work on the back, neck and shoulders where the day collects — perfect between long hours at a desk."
+          }
         ]
       },
       {
@@ -80,13 +134,39 @@
         "title": "Nails",
         "blurb": "Careful hand and foot care with kind, long-wearing finishes.",
         "items": [
-          { "id": "manicure", "name": "Classic manicure", "duration": "45 min", "price": "€30" },
-          { "id": "gel-manicure", "name": "Gel manicure", "duration": "60 min", "price": "€40" },
-          { "id": "pedicure", "name": "Spa pedicure", "duration": "60 min", "price": "€45" },
-          { "id": "nail-art", "name": "Nail art (per design)", "duration": "20 min", "price": "€12" }
+          {
+            "id": "manicure",
+            "name": "Classic manicure",
+            "duration": "45 min",
+            "price": "€30",
+            "description": "Nail shaping, cuticle care and a polish of your choice — neat, precise, unhurried."
+          },
+          {
+            "id": "gel-manicure",
+            "name": "Gel manicure",
+            "duration": "60 min",
+            "price": "€40",
+            "description": "A hand massage and hydrating mask before a long-lasting gel finish that keeps its shine for weeks."
+          },
+          {
+            "id": "pedicure",
+            "name": "Spa pedicure",
+            "duration": "60 min",
+            "price": "€45",
+            "description": "A softening treatment and foot massage alongside full nail care — the ritual your feet remember."
+          },
+          {
+            "id": "nail-art",
+            "name": "Nail art (per design)",
+            "duration": "20 min",
+            "price": "€12",
+            "description": "A finishing touch — from a classic French tip to a delicate design, added onto any manicure."
+          }
         ]
       }
-    ]
+    ],
+    "bookLabel": "Book on WhatsApp",
+    "bookMessage": "Hello! I would like to book \"{service}\" at Ritual."
   },
   "topServices": {
     "eyebrow": "what we do with all that listening",
@@ -128,7 +208,7 @@
       }
     ]
   },
-  "aboutStaff":{
+  "aboutStaff": {
     "eyebrow": "our team",
     "title": "Making a ritual for you"
   },
@@ -170,7 +250,7 @@
       "id": "skinderma",
       "name": "Skinderma",
       "description": "Medical dermocosmetics with highly concentrated actives and professional peels, made to pharmaceutical GMP standards.",
-      "image":"/cosmetics/skinderma.jpeg"
+      "image": "/cosmetics/skinderma.jpeg"
     }
   ]
 }

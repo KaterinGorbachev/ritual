@@ -6,27 +6,27 @@
     "blog": "Blog",
     "whatsapp": "WhatsApp",
     "instagram": "Instagram",
-    "contact": "Cómo encontrarnos", 
+    "contact": "Cómo encontrarnos",
     "message": "Hola, quiero agendar una cita en Ritual."
   },
   "hero": {
     "eyebrow": "estética & bienestar",
     "title": "Tu tiempo merece el Ritual",
     "subtitle": "En Ritual escuchamos y cuidamos la piel con aparatología de última generación y manos expertas: resultados visibles, en el tiempo que tienes. Relájate — el resto es nuestro ritual.",
-    "cta": "Reserva con Whatsapp", 
+    "cta": "Reserva con Whatsapp",
     "stopWord": "Detener animaciones",
     "resumeWord": "Reanudar animaciones"
-  }, 
+  },
   "footer": {
     "address": "Dirección",
-    "workingHours": "Horario de trabajo", 
-    "getDirections": "Obtener direcciones", 
-    "commentAboutAppointments": "Solo con cita previa", 
-    "privacyPolicy": "Política de Privacidad", 
-    "contactUs": "Contáctenos", 
-    "rightsReserved": "Todos los derechos reservados", 
+    "workingHours": "Horario de trabajo",
+    "getDirections": "Obtener direcciones",
+    "commentAboutAppointments": "Solo con cita previa",
+    "privacyPolicy": "Política de Privacidad",
+    "contactUs": "Contáctenos",
+    "rightsReserved": "Todos los derechos reservados",
     "designedBy": "Diseñado y desarrollado por"
-  }, 
+  },
   "daysOfWeek": {
     "monday": "Lunes",
     "tuesday": "Martes",
@@ -35,13 +35,13 @@
     "friday": "Viernes",
     "saturday": "Sábado",
     "sunday": "Domingo"
-  }, 
+  },
   "ariaLabels": {
     "mainNavigation": "Navegación principal",
-    "footerNavigation": "Navegación del pie de página", 
-    "map": "Mapa con la ubicación del salón", 
+    "footerNavigation": "Navegación del pie de página",
+    "map": "Mapa con la ubicación del salón",
     "googleMapButton": "Abrir en Google Maps"
-  }, 
+  },
   "servicesPage": {
     "eyebrow": "cada precio, a la vista",
     "title": "Servicios & Precios",
@@ -57,11 +57,41 @@
         "title": "Rostro",
         "blurb": "Faciales con aparatología y trabajo de lifting, ajustados a tu tipo de piel.",
         "items": [
-          { "id": "microcurrent", "name": "Terapia de microcorrientes", "duration": "60 min", "price": "75 €" },
-          { "id": "rf-lifting", "name": "Lifting por radiofrecuencia", "duration": "50 min", "price": "80 €" },
-          { "id": "lifting-massage", "name": "Masaje facial lifting", "duration": "60 min", "price": "65 €" },
-          { "id": "carboxytherapy", "name": "Carboxiterapia facial", "duration": "45 min", "price": "70 €" },
-          { "id": "signature-facial", "name": "Facial Ritual de autor", "duration": "75 min", "price": "90 €" }
+          {
+            "id": "microcurrent",
+            "name": "Terapia de microcorrientes",
+            "duration": "60 min",
+            "price": "75 €",
+            "description": "Corrientes suaves que tonifican los músculos del rostro, reducen la hinchazón y restauran la expresión, ideal tras una semana intensa."
+          },
+          {
+            "id": "rf-lifting",
+            "name": "Lifting por radiofrecuencia",
+            "duration": "50 min",
+            "price": "80 €",
+            "description": "Ondas de radiofrecuencia que tensan la piel desde dentro, suavizan las líneas finas y mejoran la flacidez, sin agujas ni recuperación."
+          },
+          {
+            "id": "lifting-massage",
+            "name": "Masaje facial lifting",
+            "duration": "60 min",
+            "price": "65 €",
+            "description": "Masaje de rostro, cuello y cuero cabelludo que relaja los músculos, define el contorno y reduce la hinchazón, con cuidado asistido por dispositivo."
+          },
+          {
+            "id": "carboxytherapy",
+            "name": "Carboxiterapia facial",
+            "duration": "45 min",
+            "price": "70 €",
+            "description": "Tratamiento con dispositivo especializado que uniformiza el tono, mejora la firmeza y refuerza las defensas de la piel. Cómodo y con resultados desde la primera sesión."
+          },
+          {
+            "id": "signature-facial",
+            "name": "Facial Ritual de autor",
+            "duration": "75 min",
+            "price": "90 €",
+            "description": "Limpieza profunda a medida de tu piel, con extracción, exfoliación y mascarilla calmante, para un rostro limpio, suave y luminoso."
+          }
         ]
       },
       {
@@ -69,10 +99,34 @@
         "title": "Cuerpo",
         "blurb": "Drenaje linfático y masaje relajante en manos con décadas de práctica.",
         "items": [
-          { "id": "pressotherapy-facial", "name": "Traje de presoterapia + facial", "duration": "70 min", "price": "95 €" },
-          { "id": "pressotherapy", "name": "Drenaje con presoterapia", "duration": "45 min", "price": "55 €" },
-          { "id": "relax-massage", "name": "Masaje corporal relajante", "duration": "60 min", "price": "70 €" },
-          { "id": "back-massage", "name": "Masaje de espalda y hombros", "duration": "30 min", "price": "40 €" }
+          {
+            "id": "pressotherapy-facial",
+            "name": "Traje de presoterapia + facial",
+            "duration": "70 min",
+            "price": "95 €",
+            "description": "Relajación completa con traje de presoterapia que favorece el drenaje linfático, mientras cuidamos tu rostro. Dos rituales en una hora."
+          },
+          {
+            "id": "pressotherapy",
+            "name": "Drenaje con presoterapia",
+            "duration": "45 min",
+            "price": "55 €",
+            "description": "Drenaje lento y rítmico que moviliza la retención de líquidos, alivia las piernas y deja el cuerpo más ligero, reconfortante tras un viaje."
+          },
+          {
+            "id": "relax-massage",
+            "name": "Masaje corporal relajante",
+            "duration": "60 min",
+            "price": "70 €",
+            "description": "Un masaje corporal sin prisas, con manos de décadas de práctica: la tensión cede, la respiración se calma y por fin sueltas la semana."
+          },
+          {
+            "id": "back-massage",
+            "name": "Masaje de espalda y hombros",
+            "duration": "30 min",
+            "price": "40 €",
+            "description": "Trabajo específico en espalda, cuello y hombros, donde se acumula el día — ideal entre largas horas de escritorio."
+          }
         ]
       },
       {
@@ -80,13 +134,39 @@
         "title": "Uñas",
         "blurb": "Cuidado cuidadoso de manos y pies con acabados amables y duraderos.",
         "items": [
-          { "id": "manicure", "name": "Manicura clásica", "duration": "45 min", "price": "30 €" },
-          { "id": "gel-manicure", "name": "Manicura de gel", "duration": "60 min", "price": "40 €" },
-          { "id": "pedicure", "name": "Pedicura spa", "duration": "60 min", "price": "45 €" },
-          { "id": "nail-art", "name": "Nail art (por diseño)", "duration": "20 min", "price": "12 €" }
+          {
+            "id": "manicure",
+            "name": "Manicura clásica",
+            "duration": "45 min",
+            "price": "30 €",
+            "description": "Perfilado de uñas, cuidado de cutículas y esmaltado a elegir — cuidada, precisa y sin prisas."
+          },
+          {
+            "id": "gel-manicure",
+            "name": "Manicura de gel",
+            "duration": "60 min",
+            "price": "40 €",
+            "description": "Masaje de manos y mascarilla hidratante antes de un acabado de gel de larga duración que mantiene el brillo semanas."
+          },
+          {
+            "id": "pedicure",
+            "name": "Pedicura spa",
+            "duration": "60 min",
+            "price": "45 €",
+            "description": "Un tratamiento suavizante y masaje de pies junto con cuidado completo de uñas — el ritual que tus pies recordarán."
+          },
+          {
+            "id": "nail-art",
+            "name": "Nail art (por diseño)",
+            "duration": "20 min",
+            "price": "12 €",
+            "description": "Un toque final — desde la clásica francesa hasta un diseño delicado, sobre cualquier manicura."
+          }
         ]
       }
-    ]
+    ],
+    "bookLabel": "Reservar por WhatsApp",
+    "bookMessage": "¡Hola! Me gustaría reservar \"{service}\" en Ritual."
   },
   "topServices": {
     "eyebrow": "lo que hacemos con todo lo que escuchamos",
@@ -127,8 +207,8 @@
         "image": "/services/carboxytherapy.webp"
       }
     ]
-  }, 
-  "aboutStaff":{
+  },
+  "aboutStaff": {
     "eyebrow": "nuestro equipo",
     "title": "Creando un ritual para ti"
   },
@@ -170,7 +250,7 @@
       "id": "skinderma",
       "name": "Skinderma",
       "description": "Dermocosmética médica con activos altamente concentrados y peelings profesionales, fabricada según normas farmacéuticas GMP.",
-      "image":"/cosmetics/skinderma.jpeg"
+      "image": "/cosmetics/skinderma.jpeg"
     }
   ]
 }

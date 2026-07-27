@@ -36,7 +36,7 @@ export async function FooterContactDetails({
     // get contact data from firestore
     // used function to get all collection data from firestore
     const response = await getInfo("contactData");
-    if (response.ok && response.data.length > 0) {
+    if (response.ok && response.data && response.data.length > 0) {
         const contactData = response.data as ContactDataItem[];
         const addressInfo = contactData.find(item => item.id === "address")
         addressText = addressInfo?.location ?? ""

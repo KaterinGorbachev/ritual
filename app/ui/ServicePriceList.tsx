@@ -6,10 +6,15 @@
 // rule it never imports a dictionary — every visible string arrives as a prop,
 // already translated by the server page.
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import { ServiceItemCard } from "./ServiceItemCard";
+import { serviceCategoryIcon } from "./serviceCategoryIcons";
+import { useWhatsAppStore } from "../store/whatsappStore";
 
 export type PriceItem = {
   id: string;
   name: string;
+  /** One-line description of the treatment, already localised. */
+  description: string;
   /** e.g. "60 min" — already localised by the caller. */
   duration: string;
   /** Formatted price string, e.g. "€65". */
@@ -39,6 +44,10 @@ type ServicePriceListProps = {
   noResultsText: string;
   /** Screen-reader duration prefix, e.g. "Duration". */
   durationLabel: string;
+  /** Booking button label on each card, e.g. "Book on WhatsApp". */
+  bookLabel: string;
+  /** Message template with a `{service}` slot, prefilled into the wa.me link. */
+  bookMessage: string;
 };
 
 export function ServicePriceList({
@@ -51,8 +60,13 @@ export function ServicePriceList({
   emptyText,
   noResultsText,
   durationLabel,
+  bookLabel,
+  bookMessage,
 }: ServicePriceListProps) {
   const [query, setQuery] = useState("");
+  // The salon's WhatsApp link builder, seeded once from Firestore in the layout.
+  // Each card gets a link with a message naming its own service.
+  const waLink = useWhatsAppStore((s) => s.waLink);
   // The first category (Face) is active by default; scrolling and clicks move it.
   const [activeId, setActiveId] = useState<string>(() => categories[0]?.id ?? "");
   const searchId = useId();
@@ -143,49 +157,13 @@ export function ServicePriceList({
       {/* Sticky control bar. Stacks on mobile (search full-width, filters
           below); becomes a row from md up. `top-24` clears the sticky header
           (top-2) and `z-30` sits below it (header is z-40). */}
-      <div className="flex w-full max-w-[1600px] flex-col gap-4 md:flex-row md:items-end md:justify-between bg-blush/65 rounded-pill px-4 py-3 sticky z-30 top-10">
-        {/* --- Search --- */}
-        <div className="flex w-full flex-col md:max-w-xl md:min-w-50">
-          <label htmlFor={searchId} className="mb-2 block text-start font-handwriting text-xl text-iris/90">
-            {searchLabel}
-          </label>
-          <div className="group relative flex items-center rounded-pill border border-mauve/40 bg-cream/85 shadow-sm backdrop-blur-md transition focus-within:border-blush/10 focus-within:ring-offset-2 focus-within:ring-offset-cream focus-within:ring-mint focus-within:ring-2 w-full">
-          {/* Decorative magnifier in the circle the design system asks for */}
-          <span
-            className="ml-2 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blush/40 text-iris"
-            aria-hidden="true"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round">
-              <circle cx="11" cy="11" r="7" />
-              <line x1="21" y1="21" x2="16.5" y2="16.5" />
-            </svg>
-          </span>
-          <input
-            id={searchId}
-            type="search"
-            inputMode="search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder={searchPlaceholder}
-            aria-describedby={statusId}
-            className="min-h-11 w-full bg-transparent px-3 py-2 font-body text-base text-ink placeholder:text-ink/45 focus:placeholder:text-transparent focus:outline-none"
-          />
-          </div>
-          {/* Live count for assistive tech; also visible when nothing matches. */}
-          <p
-          id={statusId}
-          role="status"
-          aria-live="polite"
-          className={`mt-3 text-center font-body text-sm ${totalMatches === 0 && q ? "text-magenta" : "sr-only"}`}
-        >
-          {totalMatches === 0 && q ? noResultsText : ""}
-          </p>
-        </div>
+      <div className="flex w-full  flex-col gap-4  items-center  sticky z-30 top-20">
+        
         {/* --- Filters --- */}
         {/* Wraps under the search on mobile; a right-aligned row from md up.
             Each button scrolls to its category and stays highlighted while
             active (aria-pressed exposes that state to assistive tech). */}
-        <div className="flex flex-wrap gap-3 md:justify-end md:gap-4 ">
+        <div className="flex flex-wrap gap-3 justify-center items-center md:gap-4 w-full max-w-[320px] px-4 py-3 bg-blush/65 rounded-pill">
           {filtered.map((cat) => {
             const isActive = activeId === cat.id;
             return (
@@ -211,8 +189,9 @@ export function ServicePriceList({
       {/* --- Three category containers --- */}
       {/* items-start (not stretch) + generous gaps leave open space between the
           frosted panels, so the fixed bubble field behind shows through them. */}
-      <ul className="grid w-full max-w-400 grid-cols-1 items-start gap-8 lg:grid-cols-3 lg:gap-10">
-        {filtered.map((cat) => (
+
+      <ul className="flex flex-col items-start justify-center gap-8 lg:gap-10 w-full">
+        {filtered.map((cat, index) => (
           <li key={cat.id}>
             <section
               ref={(el) => {
@@ -220,7 +199,10 @@ export function ServicePriceList({
               }}
               data-cat-id={cat.id}
               aria-labelledby={`${cat.id}-title`}
-              className="flex h-full flex-col gap-5 rounded-card border border-blush/20 bg-cream/80 p-6 shadow-sm backdrop-blur-md scroll-mt-46 lg:p-8"
+              className="flex w-full flex-col gap-6 scroll-mt-46 p-4 rounded-card"
+              style={{
+                backgroundColor: `color-mix(in oklab, var(--color-blush) ${Math.min((index + index + 1) * 10, 100)}%, transparent)`,
+              }}
             >
               <header className="flex flex-col gap-1">
                 <h2
@@ -235,27 +217,23 @@ export function ServicePriceList({
               {cat.items.length === 0 ? (
                 <p className="py-6 text-center font-body text-sm text-ink/60">{emptyText}</p>
               ) : (
-                <dl className="flex flex-col">
-                  {cat.items.map((item, idx) => (
-                    <div
+                // A card per service — icon, name, description, duration/price,
+                // and a WhatsApp Book button whose message names the service.
+                // Reflows 3→2→1 as the viewport narrows, per the layout rules.
+                <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {cat.items.map((item) => (
+                    <ServiceItemCard
                       key={item.id}
-                      className={`flex items-baseline justify-between gap-4 py-3 ${
-                        idx > 0 ? "border-t border-mauve/25" : ""
-                      }`}
-                    >
-                      <div className="flex min-w-0 flex-col">
-                        <dt className="font-body text-base text-ink">{item.name}</dt>
-                        <dd className="font-body text-sm text-ink/60">
-                          <span className="sr-only">{durationLabel}: </span>
-                          {item.duration}
-                        </dd>
-                      </div>
-                      <span className="shrink-0 font-display text-lg font-semibold tabular-nums text-iris">
-                        {item.price}
-                      </span>
-                    </div>
+                      name={item.name}
+                      description={item.description}
+                      duration={item.duration}
+                      price={item.price}
+                      durationLabel={durationLabel}
+                      bookLabel={bookLabel}
+                      bookHref={waLink(bookMessage.replace("{service}", item.name))}
+                    />
                   ))}
-                </dl>
+                </ul>
               )}
             </section>
           </li>

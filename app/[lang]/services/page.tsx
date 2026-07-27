@@ -26,13 +26,13 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
       >
-        <div className="sticky top-35 mx-auto flex h-screen max-w-[1600px] items-center justify-center rounded-pill overflow-hidden ">
-          <div className="h-[70vh] w-full">
+        <div className="sticky top-35 mx-auto flex h-screen items-center justify-center rounded-pill overflow-hidden ">
+          <div className="h-full w-full">
             <BubbleField />
           </div>
         </div>
       </div>
-      <div className="flex w-full flex-col items-center justify-center bg-cream rounded-pill mb-8 lg:mb-10">
+      <div className="flex w-full flex-col items-center justify-center bg-cream rounded-pill mb-8 lg:mb-10 ">
         {/* --- Page header: eyebrow, title, description, then the search bar --- */}
         <header className="flex w-full flex-col items-center gap-3 text-center  py-8 px-4 max-w-3xl">
           <p className="font-handwriting text-3xl leading-none text-magenta">{page.eyebrow}</p>
@@ -59,6 +59,8 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
           emptyText={page.emptyText}
           noResultsText={page.noResults}
           durationLabel={page.durationLabel}
+          bookLabel={page.bookLabel}
+          bookMessage={page.bookMessage}
         />
 
         {/* One primary CTA — booking always happens personally on WhatsApp. */}
