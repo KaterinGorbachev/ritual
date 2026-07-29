@@ -51,6 +51,7 @@
     "emptyText": "Nothing here matches — try another word.",
     "noResults": "No treatments match your search. Try a shorter word, or ask us on WhatsApp.",
     "durationLabel": "Duration",
+    "from": "from",
     "categories": [
       {
         "id": "face",
@@ -168,6 +169,29 @@
     "bookLabel": "Book on WhatsApp",
     "bookMessage": "Hello! I would like to book \"{service}\" at Ritual."
   },
+  "serviceCategory": {
+    "lang": "What language do you speak?",
+    "label": "Type of treatment",
+    "placeholder": "Choose a treatment…",
+    "options": [
+      {
+        "label": "Facial procedure",
+        "value": "Hello! I would like to make an appointment for a facial procedure at Ritual."
+      },
+      {
+        "label": "Body procedure",
+        "value": "Hello! I am interested in a body procedure at Ritual and would like to make an appointment."
+      },
+      {
+        "label": "Nails procedure",
+        "value": "Hello! I would like to make an appointment for a nails procedure at Ritual."
+      },
+      {
+        "label": "Not sure which — help me choose",
+        "value": "Hello! I would like to make an appointment at Ritual but I am not sure which procedure suits me. Could you help me choose?"
+      }
+    ]
+  },
   "topServices": {
     "eyebrow": "what we do with all that listening",
     "title": "High-tech, gentle hands",
@@ -233,12 +257,77 @@
     "title": "The brands we trust",
     "subtitle": "Every product on our table is chosen by hand — cold-pressed, fragrance-honest and kind to reactive skin."
   },
+  "reviews": {
+    "eyebrow": "in their words",
+    "title": "What our clients say",
+    "ratingSummary": "4.9 from 240+ rituals",
+    "ratingLabel": "Rating: {rating} out of 5",
+    "prev": "Previous reviews",
+    "next": "Next reviews",
+    "trackLabel": "Client reviews",
+    "items": [
+      {
+        "id": "marina",
+        "quote": "I arrived tense after a deadline week and left completely reset. The hands, the light, the calm — I booked my next ritual on the way out.",
+        "author": "Marina K.",
+        "meta": "returning client",
+        "rating": 5
+      },
+      {
+        "id": "daniel",
+        "quote": "The facial massage found tension I didn't know I carried. My skin looked brighter the same evening — the most thorough treatment I've had.",
+        "author": "Daniel R.",
+        "meta": "first visit",
+        "rating": 5
+      },
+      {
+        "id": "sofia",
+        "quote": "The calmest hour of my month. Gentle, unhurried, genuinely professional — I leave lighter every single time.",
+        "author": "Sofía L.",
+        "meta": "monthly member",
+        "rating": 5
+      },
+      {
+        "id": "elena",
+        "quote": "After the pressotherapy my legs felt weightless again. Warm welcome, spotless room, results I could see and feel.",
+        "author": "Elena V.",
+        "meta": "returning client",
+        "rating": 5
+      },
+      {
+        "id": "carlos",
+        "quote": "Booking on WhatsApp took a minute and they shaped the session around exactly what my back needed. I'll be back monthly.",
+        "author": "Carlos M.",
+        "meta": "first visit",
+        "rating": 4
+      }
+    ]
+  },
+  "film": {
+    "eyebrow": "a minute inside the room",
+    "title": "See the light for yourself",
+    "description": "A calm hour, filmed. Watch a minute inside the atelier — the light, the hands, the unhurried pace — then let us shape a ritual around your week.",
+    "video": {
+      "src": "/film/ritual.mp4",
+      "poster": "/services/massage.webp",
+      "type": "video/mp4",
+      "title": "A minute inside Ritual",
+      "playLabel": "Play the film about Ritual"
+    },
+    "card": {
+      "eyebrow": "come and see us",
+      "heading": "Discover Ritual for you",
+      "lead": "No forms, no phone tag. Send one message on WhatsApp and we'll find a time that fits you — and a ritual that fits your skin.",
+      "cta": "Contact us on WhatsApp"
+    },
+    "message": "Hello, I would like to book a ritual at Ritual."
+  },
   "cosmetics": [
     {
       "id": "utsukusy",
       "name": "Utsukusy",
       "description": "Professional Spanish skincare from Barcelona, blending Japanese beauty traditions with modern science.",
-      "image": "/cosmetics/utsukusy.jpg"
+      "image": "/cosmetics/utsukusy.jpeg"
     },
     {
       "id": "meder",

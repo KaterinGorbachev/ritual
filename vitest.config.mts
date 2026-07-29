@@ -11,6 +11,13 @@ export default defineConfig({
   define: {
     'process.env': '{}',
   },
+  // Pre-bundling zustand separately gives it its own React reference, which is
+  // null in the browser project's worker — `useStore` then blows up on
+  // React.useCallback. Excluding it makes zustand resolve the same React the
+  // app does. (Harmless for the jsdom project.)
+  optimizeDeps: {
+    exclude: ['zustand'],
+  },
   test: {
     reporters: [
       'default',

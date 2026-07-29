@@ -368,6 +368,14 @@ Rules:
   controls reveal their 2px `border-mint`. MUST NOT `outline: none` without one of these.
 - **MUST NOT** drop or restyle focus to a lower-contrast colour than `mint`.
 
+### Icons 
+
+- **MUST** reserve a space for each icon. Icon is inline svg uses 
+  `currentColor`,     color is given with Tailwind: `text-` 
+  class. Use minimalistic icon svg, pencil drawing effect, hand-drawn, sketchy, and artistic lines, 1px stroke. 
+  Lilac or iris color. Container for an icon **MUST** be a circle. 
+- Icons represent person, body, hand, document, clock, map point, bottle for cream. 
+
 ---
 
 ## Motion

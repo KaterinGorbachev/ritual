@@ -1,8 +1,14 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import { render } from "vitest-browser-react";
 import { WhatsAppButton } from "../../ui/WhatsAppButton";
+import { useWhatsAppStore } from "../../store/whatsappStore";
 
 describe("WhatsAppButton in the header", () => {
+    beforeEach(() => {
+        // The button reads the salon number from the Zustand store (seeded in
+        // the layout at runtime). Seed it here so the tests mirror production.
+        useWhatsAppStore.getState().setNumber("+34 611 22 33 44");
+    });
 
     it("is visible and clickable to the user", async () => {
         // Arrange — mount the button exactly how the header uses it.
@@ -51,5 +57,17 @@ describe("WhatsAppButton in the header", () => {
         await expect.element(button).toHaveAttribute("rel", "noopener noreferrer");
     });
 
-    
+    it("builds a wa.me link from the number in the store", async () => {
+        const screen = await render(
+            <WhatsAppButton message="Hello">
+                <span>WhatsApp</span>
+            </WhatsAppButton>
+        );
+
+        const button = screen.getByTestId("whatsapp-button");
+        // Digits only from the store, plus the URL-encoded prefilled message.
+        await expect
+            .element(button)
+            .toHaveAttribute("href", "https://wa.me/34611223344?text=Hello");
+    });
 });

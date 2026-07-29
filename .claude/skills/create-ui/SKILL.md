@@ -74,7 +74,4 @@ on color alone · respect `prefers-reduced-motion` (killed globally in
 
 ## Check it
 
-- `npm run lint` and `npm run build` are clean.
-- Use the **`/run`** skill to launch the app and screenshot the new UI — look at
-  the screenshot, don't assume.
-- Verify reflow at **320 / 768 / 1280 px** and with `prefers-reduced-motion: reduce`.
+use TDD approach to check, run your first tests to be green. if not - provide loggs. Do not git stash, do not remove changing. Indicate where it is broken and i will check manually. 

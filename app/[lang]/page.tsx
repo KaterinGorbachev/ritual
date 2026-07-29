@@ -6,6 +6,8 @@ import { Section } from "../ui/Section";
 import { ServiceCard } from "../ui/ServiceCard";
 import { TeamCard } from "../ui/TeamCard";
 import { BrandMarquee } from "../ui/BrandMarquee"
+import { ReviewGallery } from "../ui/ReviewGallery";
+import { FilmSection } from "../ui/FilmSection";
 
 export default async function HomePage({ params }: PageProps<"/[lang]">) {
   const { lang } = await params;
@@ -58,7 +60,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
         </ul>
 
       </div>
-      <div className="py-10 lg:py-18 flex flex-col items-center justify-center gap-6 lg:gap-12 bg-blush/70 min-h-50 w-full  sm:px-4 scroll-mt-24" id="aboutus">
+      <div className="py-10 lg:py-18 flex flex-col items-center justify-center gap-6 lg:gap-12 bg-blush/20 min-h-50 w-full  sm:px-4 scroll-mt-24" id="aboutus">
         <div className="flex flex-col gap-0.5 items-center justify-center px-4">
           <p className="font-handwriting text-magenta text-2xl leading-normal text-center">{dict.aboutStaff.eyebrow}</p>
           <h2 className="traking normal text-[clamp(1.75rem,5vw,2.25rem)] font-display font-semibold text-center">{dict.aboutStaff.title}</h2>
@@ -85,6 +87,37 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
         </div>
         <BrandMarquee items={dict.cosmetics} />
       </div>
+      <div className="py-10 lg:py-18 flex flex-col items-center justify-center gap-6 lg:gap-12 bg-blush/40 w-full scroll-mt-24" id="reviews">
+        <div className="flex flex-col gap-2 items-center justify-center px-4 text-center">
+          <p className="font-handwriting text-magenta text-2xl leading-normal text-center">{dict.reviews.eyebrow}</p>
+          <h2 className="traking normal text-[clamp(1.75rem,5vw,2.25rem)] font-display font-semibold text-center">{dict.reviews.title}</h2>
+          <p className="mt-1 inline-flex items-center gap-2 font-body text-base tracking-normal text-ink/75">
+            <span className="flex text-magenta" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 18.8 6.1 20.9l1.1-6.5L2.5 9.3l6.5-.9z" /></svg>
+            </span>
+            {dict.reviews.ratingSummary}
+          </p>
+        </div>
+        <div className="w-full max-w-400 px-4 md:px-8 lg:px-24">
+          <ReviewGallery
+            items={dict.reviews.items}
+            ratingLabel={dict.reviews.ratingLabel}
+            labels={{
+              previous: dict.reviews.prev,
+              next: dict.reviews.next,
+              track: dict.reviews.trackLabel,
+            }}
+          />
+        </div>
+      </div>
+      <FilmSection
+        eyebrow={dict.film.eyebrow}
+        title={dict.film.title}
+        description={dict.film.description}
+        video={dict.film.video}
+        card={dict.film.card}
+        message={dict.film.message}
+      />
     </Section>
   );
 }

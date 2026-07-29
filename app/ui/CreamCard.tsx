@@ -11,8 +11,8 @@ export function CreamCard({
     name, description="", image = "", className = "", "aria-hidden": ariaHidden
 }: CreamCardProps) {
     return (
-        <li aria-hidden={ariaHidden} className="shrink-0 rounded-card  border border-magenta/20 min-w-[300px] flex flex-col px-6 py-4">
-            <div className="card flex h-full flex-col items-center justify-start text-center w-full">
+        <li aria-hidden={ariaHidden} className="shrink-0 rounded-full  border border-blush/40 min-w-[200px] min-h-[200px] flex flex-col px-3 py-2">
+            <div className="card flex h-full flex-col items-center justify-center text-center w-full">
                 {image.length > 0 ? <div className="max-w-[100px] rounded-[5px] overflow-hidden bg-cream">
                     <img src={image} alt={name} className="object-cover object-center w-full " />
                 </div> :
@@ -21,7 +21,7 @@ export function CreamCard({
 
                     </span>
                 }
-                <h3 className="mt-4 font-display text-lg tracking-normal text-center w-full">{name}</h3>
+                <h3 className="mt-4 font-handwriting text-2xl tracking-normal text-center w-full text-ink/70">{name}</h3>
                 <p className="mt-1 text-sm leading-relaxed tracking-normal text-ink/70 text-start"></p>
             </div>
         </li>

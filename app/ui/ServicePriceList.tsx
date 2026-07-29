@@ -8,7 +8,6 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { ServiceItemCard } from "./ServiceItemCard";
 import { serviceCategoryIcon } from "./serviceCategoryIcons";
-import { useWhatsAppStore } from "../store/whatsappStore";
 
 export type PriceItem = {
   id: string;
@@ -34,6 +33,7 @@ type ServicePriceListProps = {
   categories: ServiceCategory[];
   /** Page header content, rendered above the search bar. */
   eyebrow: string;
+  from: string;
   title: string;
   description: string;
   searchLabel: string;
@@ -52,6 +52,7 @@ type ServicePriceListProps = {
 
 export function ServicePriceList({
   categories,
+  from,
   eyebrow,
   title,
   description,
@@ -64,9 +65,9 @@ export function ServicePriceList({
   bookMessage,
 }: ServicePriceListProps) {
   const [query, setQuery] = useState("");
-  // The salon's WhatsApp link builder, seeded once from Firestore in the layout.
-  // Each card gets a link with a message naming its own service.
-  const waLink = useWhatsAppStore((s) => s.waLink);
+  // Each card gets a WhatsApp booking message naming its own service; the
+  // <WhatsAppButton> inside the card reads the salon number from the store and
+  // builds the wa.me link itself.
   // The first category (Face) is active by default; scrolling and clicks move it.
   const [activeId, setActiveId] = useState<string>(() => categories[0]?.id ?? "");
   const searchId = useId();
@@ -163,7 +164,7 @@ export function ServicePriceList({
         {/* Wraps under the search on mobile; a right-aligned row from md up.
             Each button scrolls to its category and stays highlighted while
             active (aria-pressed exposes that state to assistive tech). */}
-        <div className="flex flex-wrap gap-3 justify-center items-center md:gap-4 w-full max-w-[320px] px-4 py-3 bg-blush/65 rounded-pill">
+        <div className="flex flex-wrap gap-3 justify-between items-center md:gap-4 w-full max-w-[320px] px-2 py-1 bg-blush-45 rounded-pill shadow-sm">
           {filtered.map((cat) => {
             const isActive = activeId === cat.id;
             return (
@@ -172,10 +173,10 @@ export function ServicePriceList({
                 key={cat.id}
                 onClick={() => handleFilter(cat.id)}
                 aria-pressed={isActive}
-                className={`cursor-pointer rounded-pill py-3 px-4 shadow-sm font-display text-sm font-semibold border-2 transition hover:border-magenta focus-visible:border-mint focus-visible:outline-none ${
+                className={`cursor-pointer rounded-pill py-2 px-4  font-display text-sm font-semibold border-2 transition hover:border-magenta focus-visible:border-mint focus-visible:outline-none ${
                   isActive
-                    ? "border-mauve/40 bg-cream/85 text-ink/85" 
-                    : "border-iris/10 bg-lilac/5 text-iris"
+                    ? "border-mauve/40 bg-cream/85 text-ink/85 shadow-sm" 
+                    : "border-iris/10 bg-lilac/5 text-ink/70"
                 }`}
               >
                 {cat.title}
@@ -204,14 +205,25 @@ export function ServicePriceList({
                 backgroundColor: `color-mix(in oklab, var(--color-blush) ${Math.min((index + index + 1) * 10, 100)}%, transparent)`,
               }}
             >
-              <header className="flex flex-col gap-1">
-                <h2
-                  id={`${cat.id}-title`}
-                  className="font-display text-2xl font-semibold tracking-normal text-ink"
+              <header className="flex items-center gap-3">
+                {/* Category glyph in its mandated circle. Decorative (the
+                    heading carries the meaning), so the SVG is aria-hidden and
+                    the circle takes iris colour via currentColor. */}
+                <span
+                  aria-hidden="true"
+                  className="flex size-12 shrink-0 items-center justify-center rounded-full border-2 border-iris/15 bg-lilac/10 text-iris"
                 >
-                  {cat.title}
-                </h2>
-                <p className="font-body text-sm leading-relaxed text-ink/70">{cat.blurb}</p>
+                  {serviceCategoryIcon(cat.id)}
+                </span>
+                <div className="flex flex-col gap-1">
+                  <h2
+                    id={`${cat.id}-title`}
+                    className="font-display text-2xl font-semibold tracking-normal text-ink"
+                  >
+                    {cat.title}
+                  </h2>
+                  <p className="font-body text-sm leading-relaxed text-ink/70">{cat.blurb}</p>
+                </div>
               </header>
 
               {cat.items.length === 0 ? (
@@ -227,10 +239,11 @@ export function ServicePriceList({
                       name={item.name}
                       description={item.description}
                       duration={item.duration}
+                      from={from}
                       price={item.price}
                       durationLabel={durationLabel}
                       bookLabel={bookLabel}
-                      bookHref={waLink(bookMessage.replace("{service}", item.name))}
+                      bookMessage={bookMessage.replace("{service}", item.name)}
                     />
                   ))}
                 </ul>

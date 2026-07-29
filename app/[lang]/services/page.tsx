@@ -3,6 +3,7 @@ import { Section } from "../../ui/Section";
 import { BubbleField } from "../../ui/BubbleField";
 import { ServicePriceList } from "../../ui/ServicePriceList";
 import { WhatsAppButton } from "../../ui/WhatsAppButton";
+import { BookingSelectForm } from "@/app/ui/BookingSelectForm";
 
 // Services & Prices. Reuses app/[lang]/layout.tsx (header + footer) via the
 // App Router's nested layouts — this page only renders <main>'s children.
@@ -26,13 +27,13 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
       >
-        <div className="sticky top-35 mx-auto flex h-screen items-center justify-center rounded-pill overflow-hidden ">
+        <div className="sticky top-0 mx-auto flex h-screen items-center justify-center rounded-pill overflow-hidden ">
           <div className="h-full w-full">
             <BubbleField />
           </div>
         </div>
       </div>
-      <div className="flex w-full flex-col items-center justify-center bg-cream rounded-pill mb-8 lg:mb-10 ">
+      <div className="flex w-full flex-col items-center justify-center bg-cream/85 rounded-pill mb-8 lg:mb-10 max-w-[1400px]">
         {/* --- Page header: eyebrow, title, description, then the search bar --- */}
         <header className="flex w-full flex-col items-center gap-3 text-center  py-8 px-4 max-w-3xl">
           <p className="font-handwriting text-3xl leading-none text-magenta">{page.eyebrow}</p>
@@ -48,8 +49,9 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
       </div>
 
       {/* --- Page header (with the search bar) + the category lists --- */}
-      <div className="flex w-full max-w-400 flex-col items-center gap-10 px-4 md:px-8 lg:gap-14 ">
+      <div className="flex w-full max-w-400 flex-col items-center gap-10 px-4 md:px-8 lg:gap-14 py-12 ">
         <ServicePriceList
+          from={page.from}
           categories={JSON.parse(JSON.stringify(page.categories))}
           eyebrow={page.eyebrow}
           title={page.title}
@@ -63,14 +65,31 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
           bookMessage={page.bookMessage}
         />
 
-        {/* One primary CTA — booking always happens personally on WhatsApp. */}
-        <div className="flex flex-col items-center gap-3 rounded-pill bg-cream/70 px-6 py-6 text-center shadow-sm backdrop-blur-md">
-          <p className="max-w-md font-body text-base text-ink/80">{dict.topServices.ctaComment}</p>
-          <WhatsAppButton message={dict.topServices.message}>
-            <span className="font-body text-lg text-ink">{dict.topServices.cta}</span>
-          </WhatsAppButton>
-        </div>
+        
       </div>
+
+      {/* One primary CTA — booking always happens personally on WhatsApp. */}
+      <div className="flex w-full bg-blush/60 py-12 px-4 items-center justify-center ">
+        <div className="flex flex-col items-center md:flex-row md:items-start gap-3 rounded-pill bg-cream/95 px-6 py-6 text-start shadow-sm backdrop-blur-md max-w-[1024px]gap-4 md:gap-8 lg:gap-10">
+          <div className="rounded-pill overflow-hidden flex items-center justify-center">
+            <img src="/gepard.jpg" alt="gepard"  />
+
+          </div>
+
+          <BookingSelectForm defaultLang={lang} categoryLabel={dict.serviceCategory.label} categoryPlaceholder={dict.serviceCategory.placeholder} languageLabel={dict.serviceCategory.lang}bookLabel={dict.topServices.cta} formTitle={dict.topServices.ctaQuestion}
+          >
+
+          </BookingSelectForm>
+
+          
+          
+          
+        </div>
+        
+      
+
+      </div>
+      
     </Section>
   );
 }

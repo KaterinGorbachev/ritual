@@ -1,26 +1,25 @@
-import { getDocById } from "../lib/handleData"
+"use client";
 
-export async function WhatsAppButton({
-    message, children, className = ""
-}: { message: string, children: React.ReactNode, className?: string }) {
-    // Source the WhatsApp number from the "messanger" document in the
-    // "ContactData" collection (field: telephone).
-    let number = "";
-    const response = await getDocById("contactData", "messanger");
-    console.log("WhatsAppButton: full response from Firestore:", JSON.stringify(response));
-    {/** use a default number for firebase error */}
-    if (response.ok) {
-        const contact = response.data as { telephone?: string } | undefined;
-        number = contact?.telephone ?? "";
-        
-    }
+// Booking button that opens a wa.me chat with the salon, message prefilled.
+//
+// The number is NOT fetched here. There is one salon number for the whole
+// site; the server reads it once in layout.tsx and seeds the client-side
+// Zustand store (via <WhatsAppStoreProvider>). This button just reads the
+// store's `waLink()` builder — so every button on a page shares that one
+// hydrated number with no extra Firestore round-trip.
+import { useWhatsAppStore } from "../store/whatsappStore"
 
-    // Build a wa.me link: digits only, plus the prefilled message.
-    const digits = number.replace(/\D/g, "");
-    const href = `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
+export function WhatsAppButton({
+    message, children, className = "", ariaLabel
+}: { message: string, children: React.ReactNode, className?: string, ariaLabel?: string }) {
+    // waLink builds `https://wa.me/<digits>?text=<encoded message>` from the
+    // number already in the store. Selecting the function (not the number)
+    // keeps this component subscribed only to the builder identity.
+    const waLink = useWhatsAppStore((s) => s.waLink)
+    const href = waLink(message)
 
     return (
-        <a href={href} target="_blank" rel="noopener noreferrer" className={`inline-flex items-center justify-center gap-2 rounded-pill font-body font-bold text-base tracking-wider px-6 py-3 min-h-11 min-w-9 transition duration-500 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-cream focus:ring-mint bg-mint text-ink active:ring-magenta active:bg-magenta active:scale-95 hover:brightness-105 shadow-sm ${className}`} data-testid="whatsapp-button">
+        <a href={href} target="_blank" rel="noopener noreferrer" aria-label={ariaLabel} className={`inline-flex items-center justify-center gap-2 rounded-pill font-body font-bold text-base tracking-wider px-6 py-3 min-h-11 min-w-9 transition duration-500 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-cream focus:ring-mint bg-mint text-ink active:ring-magenta active:bg-magenta active:scale-95 hover:brightness-105 shadow-sm ${className}`} data-testid="whatsapp-button">
             {children}
         </a>
 

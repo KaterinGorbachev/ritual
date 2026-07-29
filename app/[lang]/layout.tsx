@@ -7,10 +7,10 @@ import { Dropdown } from "../ui/Dropdown";
 import { LangButton } from "../ui/LangButton";
 import { WhatsAppButton } from "../ui/WhatsAppButton";
 import { WhatsAppStoreProvider } from "../ui/WhatsAppStoreProvider";
-import { FooterContactDetails } from "../ui/FooterContactDetails";
+import { FooterContactDetails, type ContactDataItem } from "../ui/FooterContactDetails";
 import { MotionProvider } from "../ui/MotionContext";
 import { StopAnimationsButton } from "../ui/StopAnimationsButton";
-import { getDocById } from "../lib/handleData";
+import { getInfo } from "../lib/handleData";
 
 const playfair = Playfair_Display({
   variable: "--font-display",
@@ -48,15 +48,16 @@ export default async function RootLayout({
   const { lang } = await params;
   const dict = await getDictionary(toLocale(lang));
 
-  // One salon WhatsApp number for the whole site: fetch it once here and seed
-  // the Zustand store so every client component (e.g. the per-service booking
-  // buttons) can build wa.me links without its own Firestore read. Degrades to
-  // an empty number if the doc is missing — links still render, just unnumbered.
-  const messanger = await getDocById("contactData", "messanger");
+  // Single read of the whole contactData collection for the entire page. From it
+  // we (1) derive the site-wide WhatsApp number and seed the Zustand store so
+  // client booking buttons can build wa.me links without their own Firestore read,
+  // and (2) pass the docs to the footer so it doesn't read the same collection
+  // again. Degrades to empty docs/number if the read fails — everything still
+  // renders (links just unnumbered, footer fields blank).
+  const contact = await getInfo("contactData");
+  const contactDocs = contact.ok ? (contact.data as ContactDataItem[]) : [];
   const whatsAppNumber =
-    messanger.ok && messanger.data
-      ? ((messanger.data as { telephone?: string }).telephone ?? "")
-      : "";
+    contactDocs.find((d) => d.id === "messanger")?.telephone ?? "";
 
   return (
     <html
@@ -216,9 +217,9 @@ export default async function RootLayout({
         </main>
 
         <footer className="flex flex-col items-center justify-center w-full ">
-          <section id="visit" className="flex  items-center justify-center  w-full bg-gradient-to-b from-blush/20 via-blush/90 to-blush pt-16 lg:pt-32 pb-8 px-2" >
+          <section id="visit" className="flex  items-center justify-center  w-full bg-gradient-to-b from-blush/60 via-blush/90 to-blush pt-16 lg:pt-32 pb-8 px-2" >
             <div className="flex flex-col items-center justify-center gap-4 text-center rounded-pill bg-cream/80 py-6 px-4 min-h-40 shadow-[inset_0_0_0_1px_rgba(26,26,26,0.06),0_1px_0_rgba(255,255,255,0.7)] max-w-400 scroll-mt-24" id="contact">
-              <FooterContactDetails address={dict.footer.address} hours={dict.footer.workingHours} commentAboutAppointments={dict.footer.commentAboutAppointments} daysOfWeek={JSON.parse(JSON.stringify(dict.daysOfWeek))} ariaLabelMapBox={dict.ariaLabels.map} ariaLabelGoogleMapButton={dict.ariaLabels.googleMapButton} />
+              <FooterContactDetails contactDocs={contactDocs} address={dict.footer.address} hours={dict.footer.workingHours} commentAboutAppointments={dict.footer.commentAboutAppointments} daysOfWeek={JSON.parse(JSON.stringify(dict.daysOfWeek))} ariaLabelMapBox={dict.ariaLabels.map} ariaLabelGoogleMapButton={dict.ariaLabels.googleMapButton} />
             
               
             </div>

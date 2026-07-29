@@ -51,6 +51,7 @@
     "emptyText": "Nada coincide aquí — prueba otra palabra.",
     "noResults": "Ningún tratamiento coincide con tu búsqueda. Prueba una palabra más corta o escríbenos por WhatsApp.",
     "durationLabel": "Duración",
+    "from": "desde",
     "categories": [
       {
         "id": "face",
@@ -168,6 +169,29 @@
     "bookLabel": "Reservar por WhatsApp",
     "bookMessage": "¡Hola! Me gustaría reservar \"{service}\" en Ritual."
   },
+  "serviceCategory": {
+    "lang": "Que idioma hablas?",
+    "label": "Tipo de tratamiento",
+    "placeholder": "Elige un tratamiento…",
+    "options": [
+      {
+        "label": "Tratamiento facial",
+        "value": "¡Hola! Me gustaría pedir una cita para un tratamiento facial en Ritual."
+      },
+      {
+        "label": "Tratamiento corporal",
+        "value": "¡Hola! Estoy interesada en un tratamiento corporal en Ritual y me gustaría pedir una cita."
+      },
+      {
+        "label": "Tratamiento de uñas",
+        "value": "¡Hola! Me gustaría pedir una cita para un tratamiento de uñas en Ritual."
+      },
+      {
+        "label": "No sé cuál — ayúdame a elegir",
+        "value": "¡Hola! Me gustaría pedir una cita en Ritual, pero no sé qué tratamiento me conviene. ¿Me podéis ayudar a elegir?"
+      }
+    ]
+  },
   "topServices": {
     "eyebrow": "lo que hacemos con todo lo que escuchamos",
     "title": "Alta tecnología, manos suaves",
@@ -233,12 +257,77 @@
     "title": "Las marcas en las que confiamos",
     "subtitle": "Cada producto de nuestra mesa está elegido a mano — prensado en frío, delicado en su fragancia y amable con las pieles reactivas."
   },
+  "reviews": {
+    "eyebrow": "en sus palabras",
+    "title": "Lo que dicen nuestras clientas",
+    "ratingSummary": "4,9 de más de 240 rituales",
+    "ratingLabel": "Valoración: {rating} sobre 5",
+    "prev": "Reseñas anteriores",
+    "next": "Reseñas siguientes",
+    "trackLabel": "Reseñas de clientas",
+    "items": [
+      {
+        "id": "marina",
+        "quote": "Llegué tensa tras una semana de entregas y salí completamente renovada. Las manos, la luz, la calma — reservé mi siguiente ritual antes de irme.",
+        "author": "Marina K.",
+        "meta": "clienta habitual",
+        "rating": 5
+      },
+      {
+        "id": "daniel",
+        "quote": "El masaje facial encontró tensiones que ni sabía que tenía. Esa misma tarde mi piel se veía más luminosa — el tratamiento más completo que he recibido.",
+        "author": "Daniel R.",
+        "meta": "primera visita",
+        "rating": 5
+      },
+      {
+        "id": "sofia",
+        "quote": "La hora más tranquila de mi mes. Suave, sin prisas y de verdad profesional — salgo más ligera cada vez.",
+        "author": "Sofía L.",
+        "meta": "socia mensual",
+        "rating": 5
+      },
+      {
+        "id": "elena",
+        "quote": "Después de la presoterapia sentí las piernas ligeras otra vez. Trato cercano, sala impecable y resultados que se ven y se notan.",
+        "author": "Elena V.",
+        "meta": "clienta habitual",
+        "rating": 5
+      },
+      {
+        "id": "carlos",
+        "quote": "Reservar por WhatsApp me llevó un minuto y adaptaron la sesión justo a lo que mi espalda necesitaba. Volveré cada mes.",
+        "author": "Carlos M.",
+        "meta": "primera visita",
+        "rating": 4
+      }
+    ]
+  },
+  "film": {
+    "eyebrow": "un minuto dentro de la sala",
+    "title": "Descubre la luz por ti misma",
+    "description": "Una hora de calma, en vídeo. Mira un minuto dentro del atelier — la luz, las manos, el ritmo sin prisa — y deja que demos forma a un ritual a la medida de tu semana.",
+    "video": {
+      "src": "/film/ritual.mp4",
+      "poster": "/services/massage.webp",
+      "type": "video/mp4",
+      "title": "Un minuto dentro de Ritual",
+      "playLabel": "Reproducir el vídeo sobre Ritual"
+    },
+    "card": {
+      "eyebrow": "ven a vernos",
+      "heading": "Descubre Ritual para ti",
+      "lead": "Sin formularios ni llamadas. Envíanos un mensaje por WhatsApp y encontraremos una hora que te venga bien — y un ritual a la medida de tu piel.",
+      "cta": "Contáctanos por WhatsApp"
+    },
+    "message": "Hola, quiero reservar un ritual en Ritual."
+  },
   "cosmetics": [
     {
       "id": "utsukusy",
       "name": "Utsukusy",
       "description": "Cosmética profesional española de Barcelona que une la tradición japonesa de la belleza con la ciencia actual.",
-      "image": "/cosmetics/logo-utsukusy-cosmetics.jpg"
+      "image": "/cosmetics/logo-utsukusy-cosmetics.jpeg"
     },
     {
       "id": "meder",
