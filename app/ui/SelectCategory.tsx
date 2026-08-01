@@ -5,13 +5,14 @@ import Select from "react-select";
 export type SelectOption = { value: string; label: string }
 
 export function SelectCategory({
-    inputId, placeholder, options, value, onChange, ariaLabel, className }: { inputId: string; 
-        placeholder: string; 
+    inputId, placeholder, options, value, onChange, ariaLabel, className,  }: { inputId: string; 
+        placeholder?: string; 
         options: SelectOption[]; 
         value: SelectOption | null; 
         onChange: (opt: SelectOption | null) => void; 
         ariaLabel?: string; 
         className?: string;
+        
 
     }) {
 
@@ -29,6 +30,7 @@ export function SelectCategory({
             classNamePrefix="react-select"
             className={`select-style ${className}`}
             menuPlacement="auto"
+            
         />        
 
     )

@@ -45,7 +45,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
               <ServiceCard key={item.id} title={item.name} description={item.description} image={item.image} />)
           }
 
-          <li className="flex items-start justify-center flex-col py-2 px-4 relative h-full min-h-72 w-full max-w-[350px] overflow-hidden rounded-card border border-blush/20 bg-blush/70 text-start transition hover:shadow-[0_0_0_1px_rgba(218,24,132,.12),0_18px_50px_-24px_rgba(218,24,132,.45)] ">
+          <li className="flex items-start justify-center flex-col py-2 px-4 relative h-full min-h-72 w-full max-w-[350px] overflow-hidden rounded-card border border-blush/20 bg-blush/60 text-start shadow-[0_0_0_1px_rgba(218,24,132,.12),0_18px_50px_-24px_rgba(218,24,132,.25)] ">
             <div className="flex w-full flex-col items-start justify-center py-8 gap-2">
               <h3 className="font-display tracking-normal text-ink text-2xl text-start">{dict.topServices.ctaQuestion}</h3>
               <p className=" text-base leading-relaxed tracking-normal text-ink/85 text-start">{dict.topServices.ctaComment}</p>

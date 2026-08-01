@@ -13,7 +13,7 @@
     "eyebrow": "Aesthetics & Wellness",
     "title": "Your time deserves the Ritual",
     "subtitle": "At Ritual we listen and take care of your skin with state-of-the-art equipment and expert hands: visible results, in the time you have. Relax — the rest is our ritual.",
-    "cta": "Book with Whatsapp",
+    "cta": "Book",
     "stopWord": "Stop animations",
     "resumeWord": "Resume animations"
   },
@@ -172,7 +172,7 @@
   "serviceCategory": {
     "lang": "What language do you speak?",
     "label": "Type of treatment",
-    "placeholder": "Choose a treatment…",
+    "placeholder": "Choose…",
     "options": [
       {
         "label": "Facial procedure",
@@ -305,8 +305,8 @@
   },
   "film": {
     "eyebrow": "a minute inside the room",
-    "title": "See the light for yourself",
-    "description": "A calm hour, filmed. Watch a minute inside the atelier — the light, the hands, the unhurried pace — then let us shape a ritual around your week.",
+    "title": "See the Ritual for yourself",
+    "description": "Watch a minute inside the atelier.",
     "video": {
       "src": "/film/ritual.mp4",
       "poster": "/services/massage.webp",

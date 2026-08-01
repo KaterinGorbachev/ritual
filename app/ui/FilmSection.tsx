@@ -58,19 +58,20 @@ export function FilmSection({
   return (
     <div
       data-testid="film-section"
-      className={`flex w-full max-w-400 flex-col items-center justify-center gap-6 py-10 lg:gap-12 lg:py-18 ${className}`}
+      className={`flex w-full max-w-270 flex-col items-center justify-center md:flex-row md:items-end  gap-12 md:gap-4 pt-10 md:py-12 lg:gap-2 lg:py-18 ${className}`}
     >
-      {/* Section opener: Caveat eyebrow + heading + lead. */}
-      <div className="flex max-w-2xl flex-col items-center justify-center gap-2 px-4 text-center">
-        <p className="font-handwriting text-2xl leading-normal text-magenta">{eyebrow}</p>
-        <h2 className="text-[clamp(1.75rem,5vw,2.25rem)] font-display font-semibold tracking-normal">
-          {title}
-        </h2>
-        <p className="mt-1 font-body text-base leading-relaxed text-ink/75">{description}</p>
-      </div>
+
 
       {/* Film + card. Film leads on the left from lg; the card sits beside it. */}
-      <div className="flex w-full flex-col items-center justify-center gap-8 px-4 md:px-8 lg:flex-row lg:items-center lg:justify-center lg:gap-12 lg:px-24">
+      <div className="flex w-full flex-col items-start justify-start gap-4 px-4 ">
+        {/* Section opener: Caveat eyebrow + heading + lead. */}
+        <div className="flex max-w-2xl flex-col items-start justify-start gap-2 text-center">
+          <p className="font-handwriting text-2xl leading-normal text-magenta text-start">{eyebrow}</p>
+          <h2 className="text-[clamp(1.75rem,5vw,2.25rem)] font-display font-semibold tracking-normal text-start">
+            {title}
+          </h2>
+          
+        </div>
         <VideoFrame
           src={video.src}
           poster={video.poster}
@@ -80,15 +81,17 @@ export function FilmSection({
           className="lg:shrink-0"
         />
 
-        {/* Marketing / booking card. */}
-        <div className="flex w-full max-w-md flex-col items-start justify-center gap-4 rounded-card border border-blush/10 bg-cream/80 p-6 text-start md:p-8">
-          <p className="font-handwriting text-2xl leading-normal text-magenta">{card.eyebrow}</p>
-          <h3 className="font-display text-2xl tracking-normal text-ink">{card.heading}</h3>
-          <p className="font-body text-base leading-relaxed text-ink/80">{card.lead}</p>
-          <WhatsAppButton message={message} className="mt-2 w-full sm:w-auto">
-            <span className="font-body text-lg text-ink">{card.cta}</span>
-          </WhatsAppButton>
-        </div>
+
+      </div>
+
+      {/* Marketing / booking card. */}
+      <div className="flex w-full md:max-w-md flex-col items-start justify-center gap-4 md:rounded-card border border-blush/10 bg-blush/60 p-6 text-start md:p-8 shadow-[0_0_0_1px_rgba(218,24,132,.12),0_18px_50px_-24px_rgba(218,24,132,.25)]">
+        <p className="font-handwriting text-2xl leading-normal text-magenta">{card.eyebrow}</p>
+        <h3 className="font-display text-2xl tracking-normal text-ink">{card.heading}</h3>
+        <p className="font-body text-base leading-relaxed text-ink/80">{card.lead}</p>
+        <WhatsAppButton message={message} className="mt-2 w-full sm:w-auto">
+          <span className="font-body text-lg text-ink">{card.cta}</span>
+        </WhatsAppButton>
       </div>
     </div>
   );

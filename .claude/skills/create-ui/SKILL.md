@@ -63,6 +63,7 @@ the code, **the code wins**.
 - **Auto-playing bubbles / waves / marquee** on CRM/CMS working surfaces — those
   belong to the marketing landing page.
 - **Generic AI-generated aesthetics** that makes a UI seems to be AI generated without personal style of a project
+- **Use margins for spacing**. Use padding and gap instead.
 
 ## Accessibility (WCAG 2.2 AA — non-negotiable)
 

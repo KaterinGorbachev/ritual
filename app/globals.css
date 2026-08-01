@@ -35,6 +35,10 @@
 
 }
 
+.select-style {
+  width: 100%;
+}
+
 .select-style .react-select__control {
   background: var(--color-cream);
   border: 2px solid color-mix(in srgb, var(--color-mauve) 30%, transparent);
@@ -43,12 +47,21 @@
   /* 44px WCAG target */
   box-shadow: none;
   font-family: var(--font-body);
-}
+  cursor: pointer;
+  min-width: 100%;
+  display: flex;
+} 
 
 .select-style .react-select__control--is-focused {
   border-color: var(--color-mint);
   outline: 2px solid var(--color-mint);
   outline-offset: 2px;
+}
+
+
+.select-style .react-select__control:hover {
+  border-color: var(--color-magenta) !important;
+  outline: none;  
 }
 
 .select-style .react-select__menu {

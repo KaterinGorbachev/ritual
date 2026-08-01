@@ -54,7 +54,7 @@ export function VideoFrame({
   return (
     <div
       data-testid="video-frame"
-      className={`relative isolate mx-auto aspect-[9/16] w-full max-w-[360px] overflow-hidden rounded-card border border-blush/10 bg-cream/80 shadow-[0_0_0_1px_rgba(218,24,132,.12),0_18px_50px_-24px_rgba(218,24,132,.25)] ${className}`}
+      className={`relative isolate aspect-[9/16] w-full max-w-[360px] overflow-hidden rounded-card border border-blush/10 bg-cream/80  ${className}`}
     >
       {playing ? (
         <video

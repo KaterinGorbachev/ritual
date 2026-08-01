@@ -468,6 +468,11 @@ renders two halves and translates `-50%` for a seamless loop; only the first rea
 to assistive tech (`aria-hidden` on the duplicates). Pauses on hover; degrades to a scroll container
 under reduced motion.
 
+### Horizontal gallery
+
+Hide scrollbar, use `overflow-x-auto` with `scroll-snap-x mandatory` and `scroll-snap-align: start` on each card. The marquee is a special case of this pattern.
+Each gallery **MUST** have a button to scroll to the next card (or the next 2–3 cards on a wide screen) and a button to scroll to the previous card. The button is a `GostButton` ghost with an arrow icon. The button **MUST** be a circle with a lilac or iris background. The button **MUST** have an `aria-label` describing the action (e.g., "Scroll to next card"). Navigation buttons must be on mobile, tablet and desktop. The gallery **MUST** be keyboard navigable, allowing users to tab through the cards and use arrow keys to scroll.
+
 ---
 
 ## Voice & tone

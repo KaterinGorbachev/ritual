@@ -166,29 +166,29 @@
         ]
       }
     ],
-    "bookLabel": "Reservar por WhatsApp",
+    "bookLabel": "Reservar",
     "bookMessage": "¡Hola! Me gustaría reservar \"{service}\" en Ritual."
   },
   "serviceCategory": {
     "lang": "Que idioma hablas?",
     "label": "Tipo de tratamiento",
-    "placeholder": "Elige un tratamiento…",
+    "placeholder": "Elige…",
     "options": [
       {
-        "label": "Tratamiento facial",
+        "label": "Facial",
         "value": "¡Hola! Me gustaría pedir una cita para un tratamiento facial en Ritual."
       },
       {
-        "label": "Tratamiento corporal",
+        "label": "Corporal",
         "value": "¡Hola! Estoy interesada en un tratamiento corporal en Ritual y me gustaría pedir una cita."
       },
       {
-        "label": "Tratamiento de uñas",
+        "label": "De uñas",
         "value": "¡Hola! Me gustaría pedir una cita para un tratamiento de uñas en Ritual."
       },
       {
-        "label": "No sé cuál — ayúdame a elegir",
-        "value": "¡Hola! Me gustaría pedir una cita en Ritual, pero no sé qué tratamiento me conviene. ¿Me podéis ayudar a elegir?"
+        "label": "Otra pregunta",
+        "value": "¡Hola! Me gustaría pedir una cita en Ritual"
       }
     ]
   },
@@ -305,7 +305,7 @@
   },
   "film": {
     "eyebrow": "un minuto dentro de la sala",
-    "title": "Descubre la luz por ti misma",
+    "title": "Descubre Ritual por ti misma",
     "description": "Una hora de calma, en vídeo. Mira un minuto dentro del atelier — la luz, las manos, el ritmo sin prisa — y deja que demos forma a un ritual a la medida de tu semana.",
     "video": {
       "src": "/film/ritual.mp4",
