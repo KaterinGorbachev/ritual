@@ -2,6 +2,8 @@
 
 import { useRouter, usePathname } from "next/navigation";
 import { Dropdown } from "./Dropdown";
+import { useLocaleStore } from "../store/localeStore";
+import { toLocale, type Locale } from "../lib/locales";
 
 const languages = [
   { locale: "en", label: "English", code: "EN" },
@@ -18,9 +20,11 @@ export function LangButton() {
   const active =
     languages.find((l) => l.locale === current) ?? languages[0];
 
-  function switchTo(locale: string) {
-    // Replace the first segment with the chosen locale, keep the rest.
-    // "/en/about" -> ["", "en", "about"] -> "/es/about"
+  function switchTo(locale: Locale) {
+    // Persist first, navigate second. The cookie is what makes the choice survive
+    // a cold visit to the bare domain — proxy.js reads it before any JS runs and
+    // redirects straight to the right locale, with no flash.
+    useLocaleStore.getState().chooseLocale(locale);
     const segments = pathname.split("/");
     segments[1] = locale;
     // replace (not push): switching language isn't a new history entry, so Back

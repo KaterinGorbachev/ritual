@@ -7,6 +7,7 @@ import { Dropdown } from "../ui/Dropdown";
 import { LangButton } from "../ui/LangButton";
 import { WhatsAppButton } from "../ui/WhatsAppButton";
 import { WhatsAppStoreProvider } from "../ui/WhatsAppStoreProvider";
+import { LocaleStoreProvider } from "../ui/LocaleStoreProvider";
 import { FooterContactDetails, type ContactDataItem } from "../ui/FooterContactDetails";
 import { MotionProvider } from "../ui/MotionContext";
 import { StopAnimationsButton } from "../ui/StopAnimationsButton";
@@ -46,6 +47,7 @@ export default async function RootLayout({
   params,
 }: LayoutProps<"/[lang]">) {
   const { lang } = await params;
+  const locale = toLocale(lang);
   const dict = await getDictionary(toLocale(lang));
 
   // Single read of the whole contactData collection for the entire page. From it
@@ -61,12 +63,13 @@ export default async function RootLayout({
 
   return (
     <html
-      lang={lang}
+      lang={locale}
       className={`${playfair.variable} ${nunito.variable} ${caveat.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col items-center scroll-smooth bg-cream text-ink font-body">
         <MotionProvider>
         <WhatsAppStoreProvider number={whatsAppNumber} />
+        <LocaleStoreProvider locale={locale} />
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:z-50 focus:left-4 focus:top-4 btn-primary"

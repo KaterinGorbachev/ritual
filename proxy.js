@@ -2,25 +2,44 @@
 import { NextResponse } from "next/server";
 import { match } from "@formatjs/intl-localematcher";
 import Negotiator from "negotiator";
+import { LOCALES, DEFAULT_LOCALE, LOCALE_COOKIE, hasLocale } from "./app/lib/locales";
 
-let locales = ["en", "ru", "es"];
-let defaultLocale = "es";
+function getSavedLocale(request) {
+  const cookie = request.cookies.get(LOCALE_COOKIE);
 
+  if (!cookie) return null;
+
+  if (hasLocale(cookie.value)) {
+    return cookie.value;
+  }
+
+  return null;
+}
 // Get the preferred locale, similar to the above or using a library
 function getLocale(request) {
+  const saved = getSavedLocale(request);
+  if (saved) return saved;
   let headers = { "accept-language": request.headers.get("accept-language") ?? "" };
   let languages = new Negotiator({ headers }).languages();
-  return match(languages, locales, defaultLocale);
+  return match(languages, [...LOCALES], DEFAULT_LOCALE);
+}
+
+function pathnameHasLocale(pathname) {
+  for (const locale of LOCALES) {
+    if (pathname === `/${locale}` || pathname.startsWith(`/${locale}/`)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 export function proxy(request) {
   // Check if there is any supported locale in the pathname
   const { pathname } = request.nextUrl;
-  const pathnameHasLocale = locales.some(
-    (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
-  );
-
-  if (pathnameHasLocale) return;
+  // Already on a locale path — nothing to do.
+  if (pathnameHasLocale(pathname)) {
+    return;
+  }  
 
   // Redirect if there is no locale
   const locale = getLocale(request);
