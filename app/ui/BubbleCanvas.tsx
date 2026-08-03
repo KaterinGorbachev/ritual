@@ -8,7 +8,7 @@ import { useEffect, useRef } from "react";
 import { useMotion } from "./MotionContext";
 
 // Images are served from /public at the site root.
-const MONET_SRC = "/mone.jpg";
+const MONET_SRC = "/mone.webp";
 
 type Bubble = {
   x: number;

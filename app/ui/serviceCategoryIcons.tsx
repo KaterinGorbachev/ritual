@@ -1,79 +1,107 @@
 import type { ReactNode } from "react";
 
 // Decorative, category-specific glyphs for the service cards and headers.
-// Stroke colour is inherited (currentColor) from the surrounding circle, so
-// these carry no colour of their own — the caller sets it with a `text-` class
-// (lilac / iris per the design system). Traced as clean single-weight salon
-// line-art from a spa icon set: an elegant profile with flowing hair (face), a
-// lotus / bloom yoga figure (body), and an open hand catching a droplet
-// (nails). Drawn on the source 512-unit canvas so the linework keeps its true
-// proportions; the caller renders them at ~22px. Keyed by the dictionary
-// category id (face / body / hand a.k.a. nails); an unknown id falls back to a
-// soft petal bloom so a new category never renders an empty circle. The stroke
-// is scaled up (~14) so it stays visible when shrunk to icon size.
-const stroke = {
-  fill: "none" as const,
-  stroke: "currentColor",
-  strokeWidth: 14,
-  strokeLinecap: "round" as const,
-  strokeLinejoin: "round" as const,
-};
+// Each icon is the same standing-figure silhouette (drawn in magenta) with a
+// soft blush highlight marking the area the category treats: the head (face),
+// the torso (body), and the hands + feet (nails). The caller renders them at
+// ~22px inside a `text-iris` circle and already sets `aria-hidden`, so these
+// are purely presentational. Keyed by the dictionary category id; an unknown id
+// falls back to a soft petal bloom so a new category never renders an empty
+// circle.
+
+// The figure is traced on a 48-unit canvas — the viewBox must match it or the
+// linework lands outside the visible area.
+const VIEW_BOX = "0 0 48 48";
+const SIZE = 22;
+
+const FIGURE_FILL = "#ffadae";
+const HIGHLIGHT_FILL = "#bc1571";
+const HIGHLIGHT_OPACITY = 0.24;
+
+// Head, then torso + limbs. Both are solid fills, not strokes.
+const HEAD_PATH =
+  "m 24,12 a 3,3 0 1 0 0,-6 3,3 0 0 0 0,6 m 0,2 a 5,5 0 1 0 0,-10 5,5 0 0 0 0,10";
+const BODY_PATH =
+  "M 17.374,18.314 A 2,2 0 0 1 19,20.28 V 41 a 1,1 0 0 0 1,1 h 0.087 a 1,1 0 0 0 0.996,-0.91 L 22,31 a 2,2 0 0 1 4,0 l 0.917,10.09 A 1,1 0 0 0 27.913,42 H 28 a 1,1 0 0 0 1,-1 V 20.317 a 2,2 0 0 1 1.626,-1.965 c 1.756,-0.334 3.613,-0.797 5.654,-1.392 a 1,1 0 1 0 -0.56,-1.92 c -4.634,1.35 -8.19,1.976 -11.716,1.96 -3.53,-0.016 -7.09,-0.674 -11.737,-1.963 a 1,1 0 1 0 -0.534,1.927 c 2.033,0.564 3.886,1.016 5.641,1.35 m 5.604,23.489 A 3,3 0 0 1 20.087,44 H 20 A 3,3 0 0 1 17,41 V 20.28 c -1.826,-0.348 -3.735,-0.816 -5.802,-1.39 a 3,3 0 1 1 1.604,-5.78 c 4.57,1.267 7.935,1.875 11.211,1.89 3.266,0.014 6.618,-0.56 11.148,-1.88 a 3,3 0 1 1 1.678,5.76 C 34.755,19.488 32.835,19.968 31,20.317 V 41 a 3,3 0 0 1 -3,3 H 27.913 A 3,3 0 0 1 24.925,41.272 L 24.008,31.182 A 2,2 0 0 1 24,31.005 q 0,0.088 -0.008,0.176 l -0.918,10.09 a 3,3 0 0 1 -0.096,0.532";
+
+type Highlight = { cx: number; cy: number; rx: number; ry: number };
+
+// The shared silhouette plus whichever highlights the category calls for. No
+// `id` attributes: the same icon can appear more than once on a page and
+// duplicate ids are invalid HTML.
+function FigureIcon({ highlights }: { highlights: Highlight[] }) {
+  return (
+    <svg
+      width={SIZE}
+      height={SIZE}
+      viewBox={VIEW_BOX}
+      xmlns="http://www.w3.org/2000/svg"
+      fillRule="evenodd"
+      clipRule="evenodd"
+      aria-hidden="true"
+      focusable="false"
+      className="object-center object-cover w-full h-full"
+    >
+      <path d={HEAD_PATH} fill={FIGURE_FILL} />
+      <path d={BODY_PATH} fill={FIGURE_FILL} />
+      {highlights.map((h) => (
+        <ellipse
+          key={`${h.cx}-${h.cy}`}
+          cx={h.cx}
+          cy={h.cy}
+          rx={h.rx}
+          ry={h.ry}
+          fill={HIGHLIGHT_FILL}
+          fillOpacity={HIGHLIGHT_OPACITY}
+        />
+      ))}
+    </svg>
+  );
+}
 
 const ICONS: Record<string, ReactNode> = {
-  // Face — elegant right-facing profile with long flowing hair cascading down
-  // the left. Forehead → nose → lips → chin → neck on the right; the hair falls
-  // in three sweeping strands past the shoulder.
+  // Head.
   face: (
-    <svg width="22" height="22" viewBox="0 0 512 512" {...stroke} aria-hidden="true">
-      {/* profile contour: crown, forehead, nose, lips, chin, jaw */}
-      <path d="M347 40c14 26 8 52 3 78-4 22-6 44 5 64 9 17 22 32 34 47 7 9 4 20-6 24-9 4-19 6-15 18 3 9 9 18 2 27-5 6-13 6-13 15 0 8 7 14 4 23-4 13-18 18-31 19-21 2-42-3-63 0" />
-      {/* jaw / neck to shoulder */}
-      <path d="M203 400c8 24 6 50-6 73-6 12-15 22-26 30" />
-      {/* long flowing hair, three strands sweeping from crown down the back */}
-      <path d="M347 40c-40 6-77 30-100 65-27 41-38 90-33 138 3 32 13 63 12 95" />
-      <path d="M270 82C214 106 172 155 158 214c-11 47-4 96 10 141" />
-      <path d="M175 452c14-22 20-49 15-75" />
-    </svg>
+    <FigureIcon
+      highlights={[{ cx: 24.1487, cy: 9.33829, rx: 8.32714, ry: 8.50558 }]}
+    />
   ),
-  // Body — a lotus / bloom yoga figure: a head at the centre, arms lifted into
-  // upper petals, and lower petals fanning out, forming a symmetric flower.
+
+  // Torso.
   body: (
-    <svg width="22" height="22" viewBox="0 0 512 512" {...stroke} aria-hidden="true">
-      {/* head */}
-      <circle cx="256" cy="176" r="46" />
-      {/* upper centre petal, rising between the arms */}
-      <path d="M256 130c-16-24-22-52-22-80 0-14 8-26 22-38 14 12 22 24 22 38 0 28-6 56-22 80Z" />
-      {/* raised arms sweeping out to the upper side petals */}
-      <path d="M214 196c-30-4-58-16-84-34-11-8-11-20 2-26 26 4 52 14 74 30" />
-      <path d="M298 196c30-4 58-16 84-34 11-8 11-20-2-26-26 4-52 14-74 30" />
-      {/* upper side petals */}
-      <path d="M132 136c30 6 56 22 74 46-28 8-58 6-84-8-13-8-13-30 10-38Z" />
-      <path d="M380 136c-30 6-56 22-74 46 28 8 58 6 84-8 13-8 13-30-10-38Z" />
-      {/* lower side petals */}
-      <path d="M156 250c34 14 60 40 74 76-30 2-60-10-80-36-11-14-8-34 6-40Z" />
-      <path d="M356 250c-34 14-60 40-74 76 30 2 60-10 80-36 11-14 8-34-6-40Z" />
-      {/* body / lower centre petal tapering down */}
-      <path d="M214 210c-16 76-6 154 42 220 48-66 58-144 42-220" />
-    </svg>
+    <FigureIcon
+      highlights={[{ cx: 24, cy: 27.776953, rx: 8.773235, ry: 13.442379 }]}
+    />
   ),
-  // Hand (dictionary id "nails") — an open upturned palm catching a water
-  // droplet above it. The hand-care / cleanse scene.
+
+  // Feet, then each hand.
   nails: (
-    <svg width="22" height="22" viewBox="0 0 512 512" {...stroke} aria-hidden="true">
-      {/* droplet above the palm */}
-      <path d="M300 60c34 44 66 88 66 128a66 66 0 0 1-132 0c0-14 4-28 10-42" />
-      {/* fingertips / thumb tucked in */}
-      <path d="M150 300c40 6 78 24 110 52l40-4c30-24 62-46 96-64 14-8 30-8 42 4-30 40-66 74-108 100l-64 14" />
-      {/* palm and forearm, sweeping to the wrist */}
-      <path d="M40 320h60l160 90h60c50-28 100-54 152-76 16-8 34-2 42 14-40 24-82 44-126 60" />
-      {/* lower wrist line back to the palm */}
-      <path d="M290 460c40-14 82-22 118-4 16 8 22 28 14 44" />
-    </svg>
+    <FigureIcon
+      highlights={[
+        { cx: 24, cy: 42.111523, rx: 8.773235, ry: 4.223048 },
+        { cx: 37.267662, cy: 15.895911, rx: 4.282529, ry: 4.223048 },
+        { cx: 11.059481, cy: 15.806692, rx: 4.282529, ry: 4.223048 },
+      ]}
+    />
   ),
 };
 
+// Unlike the figures above, the fallback bloom is single-weight line-art that
+// inherits its colour from the surrounding circle.
 const FALLBACK: ReactNode = (
-  <svg width="22" height="22" viewBox="0 0 512 512" {...stroke} aria-hidden="true">
+  <svg
+    width={SIZE}
+    height={SIZE}
+    viewBox="0 0 512 512"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={14}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+    focusable="false"
+  >
     <path d="M256 70c16 44 42 70 86 86-44 16-70 42-86 86-16-44-42-70-86-86 44-16 70-42 86-86Z" />
     <path d="M256 270c12 34 32 54 66 66-34 12-54 32-66 66-12-34-32-54-66-66 34-12 54-32 66-66Z" />
   </svg>

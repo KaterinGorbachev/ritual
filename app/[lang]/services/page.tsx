@@ -49,7 +49,7 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
       </div>
 
       {/* --- Page header (with the search bar) + the category lists --- */}
-      <div className="flex w-full max-w-400 flex-col items-center gap-10 px-4 md:px-8 lg:gap-14 py-12 ">
+      <div className="flex w-full flex-col items-center gap-10 lg:gap-14 py-12 ">
         <ServicePriceList
           from={page.from}
           categories={JSON.parse(JSON.stringify(page.categories))}

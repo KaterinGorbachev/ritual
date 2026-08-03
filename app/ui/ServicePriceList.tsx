@@ -154,7 +154,7 @@ export function ServicePriceList({
   const totalMatches = filtered.reduce((n, c) => n + c.items.length, 0);
 
   return (
-    <div className="flex w-full flex-col items-center gap-10 lg:gap-14 isolate relative">
+    <div className="flex w-full flex-col items-center gap-10 lg:gap-14 isolate relative max-w-400">
       {/* Sticky control bar. Stacks on mobile (search full-width, filters
           below); becomes a row from md up. `top-24` clears the sticky header
           (top-2) and `z-30` sits below it (header is z-40). */}
@@ -164,7 +164,7 @@ export function ServicePriceList({
         {/* Wraps under the search on mobile; a right-aligned row from md up.
             Each button scrolls to its category and stays highlighted while
             active (aria-pressed exposes that state to assistive tech). */}
-        <div className="flex flex-wrap gap-3 justify-between items-center md:gap-4 w-full max-w-[320px] px-2 py-1 bg-blush-45 rounded-pill shadow-sm">
+        <div className="flex flex-wrap gap-3 justify-between items-center md:gap-4 w-full max-w-[320px] px-2 py-1 bg-cream/90 rounded-pill shadow-sm">
           {filtered.map((cat) => {
             const isActive = activeId === cat.id;
             return (
@@ -175,8 +175,8 @@ export function ServicePriceList({
                 aria-pressed={isActive}
                 className={`cursor-pointer rounded-pill py-2 px-4  font-display text-sm font-semibold border-2 transition hover:border-magenta focus-visible:border-mint focus-visible:outline-none ${
                   isActive
-                    ? "border-mauve/40 bg-cream/85 text-ink/85 shadow-sm" 
-                    : "border-iris/10 bg-lilac/5 text-ink/70"
+                    ? " border-mauve/40 bg-cream text-magenta/89 shadow-sm" 
+                    : " bg-cream text-ink/85 border-blush/10"
                 }`}
               >
                 {cat.title}
@@ -191,7 +191,7 @@ export function ServicePriceList({
       {/* items-start (not stretch) + generous gaps leave open space between the
           frosted panels, so the fixed bubble field behind shows through them. */}
 
-      <ul className="flex flex-col items-start justify-center gap-8 lg:gap-10 w-full">
+      <ul className="flex flex-col items-start justify-center gap-8 lg:gap-10 w-full ">
         {filtered.map((cat, index) => (
           <li key={cat.id}>
             <section
@@ -200,7 +200,7 @@ export function ServicePriceList({
               }}
               data-cat-id={cat.id}
               aria-labelledby={`${cat.id}-title`}
-              className="flex w-full flex-col gap-6 scroll-mt-46 p-4 rounded-card"
+              className="flex w-full flex-col gap-6 scroll-mt-46 p-4 rounded-pill"
               style={{
                 backgroundColor: `color-mix(in oklab, var(--color-blush) ${Math.min((index + index + 1) * 10, 100)}%, transparent)`,
               }}
@@ -211,7 +211,7 @@ export function ServicePriceList({
                     the circle takes iris colour via currentColor. */}
                 <span
                   aria-hidden="true"
-                  className="flex size-12 shrink-0 items-center justify-center rounded-full border-2 border-iris/15 bg-lilac/10 text-iris"
+                  className="flex size-12 shrink-0 items-center justify-center rounded-full border-2 border-blush/10 bg-cream "
                 >
                   {serviceCategoryIcon(cat.id)}
                 </span>
