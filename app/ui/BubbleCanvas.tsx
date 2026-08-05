@@ -38,8 +38,13 @@ export function BubbleCanvas({ className = "" }: BubbleCanvasProps) {
 
   // Mirror `off` into a ref so the loop-owning effect (which must not re-run on
   // toggle) can read the current value inside its start/visibility handlers.
+  // Seeded from the first render, then kept in step from an effect — writing a
+  // ref during render is not allowed, and this effect is declared before the
+  // loop's so it commits first on every update.
   const offRef = useRef(off);
-  offRef.current = off;
+  useEffect(() => {
+    offRef.current = off;
+  }, [off]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -56,6 +61,18 @@ export function BubbleCanvas({ className = "" }: BubbleCanvasProps) {
     let raf = 0;
     let running = false;
     let imgReady = false;
+
+    // --- reveal ramp ---
+    // The painting must not appear as-is: it fades from transparent to full over
+    // REVEAL_MS once the image is ready, and the bubbles only start drawing part
+    // way through, so the garden reads first and they arrive on top of it. The
+    // ramp lives here rather than in CSS because the canvas paints the painting
+    // and the bubbles into the same layer — a CSS opacity animation on the
+    // element would reveal both together and couldn't stagger them.
+    const REVEAL_MS = 900;
+    const BUBBLES_AT = 0.55; // fraction of the ramp elapsed before bubbles begin
+    let revealStart = 0;
+    let revealT = 0; // 0 → 1
 
     const img = new Image();
 
@@ -101,19 +118,26 @@ export function BubbleCanvas({ className = "" }: BubbleCanvasProps) {
     }
 
     /** Paint the Monet as the background (cover fit), or a lilac fallback,
-     * then wash a magenta tint over it. */
+     * then wash a magenta tint over it. Both are scaled by the reveal ramp, so
+     * the garden fades up instead of appearing fully formed. At revealT === 1
+     * the alpha is a no-op and the frame is identical to an unramped one. */
     function drawBackground() {
       if (!ctx) return;
+      ctx.save();
+      ctx.globalAlpha = revealT;
       if (imgReady && bg) ctx.drawImage(img, bg.dx, bg.dy, bg.dw, bg.dh);
       else {
         ctx.fillStyle = "#FCAEC2";
         ctx.fillRect(0, 0, w, h);
       }
+      ctx.restore();
       // Magenta tint over the whole background. `multiply` keeps the painting's
       // shadows and detail while pulling everything toward magenta; drop it to
-      // "source-over" for a flatter, more opaque wash.
+      // "source-over" for a flatter, more opaque wash. Ramped alongside the
+      // painting so the wash arrives with it rather than ahead of it.
       ctx.save();
       ctx.globalCompositeOperation = "multiply";
+      ctx.globalAlpha = revealT;
       ctx.fillStyle = "rgba(255,173,174,0.17)";
       ctx.fillRect(0, 0, w, h);
       ctx.restore();
@@ -242,7 +266,11 @@ export function BubbleCanvas({ className = "" }: BubbleCanvasProps) {
       return `hsla(${deg}, 95%, 70%, ${alpha})`;
     }
 
-    /** Render one static frame (background + bubbles). */
+    /** Render one static frame (background + bubbles) at the current ramp.
+     * Deliberately does NOT force the ramp to its end: resize() calls this on
+     * every start (before play()), so doing so here would skip the reveal
+     * entirely. Settling the ramp is pause()'s job — that is the point which
+     * actually means "this user is not getting an animation". */
     function draw() {
       if (!ctx) return;
       ctx.clearRect(0, 0, w, h);
@@ -253,15 +281,39 @@ export function BubbleCanvas({ className = "" }: BubbleCanvasProps) {
     /** Advance positions, then render one animated frame. */
     function tick() {
       if (!ctx) return;
+
+      // Ease-out ramp, matching the feel of the site's CSS transitions. The
+      // revealStart check matters: the loop can be started by the global toggle
+      // before the image has loaded, and measuring against 0 would make the
+      // elapsed time enormous and snap the painting straight to full opacity.
+      if (revealT < 1 && revealStart) {
+        const raw = Math.min(1, (performance.now() - revealStart) / REVEAL_MS);
+        revealT = 1 - Math.pow(1 - raw, 3);
+      }
+
       ctx.clearRect(0, 0, w, h);
       drawBackground();
+
+      // Bubbles fade in over the tail of the ramp, once the garden has read.
+      const bubbleA = Math.max(0, (revealT - BUBBLES_AT) / (1 - BUBBLES_AT));
+
       for (const b of bubbles) {
         b.y -= b.speed;
         b.phase += b.wobble;
         b.x += Math.sin(b.phase) * b.drift;
         b.hue += 0.012; // rotate the rainbow so the film shimmers as it rises
         if (b.y + b.r < 0) Object.assign(b, makeBubble(false)); // respawn below
-        drawBubble(b);
+        if (bubbleA >= 1) drawBubble(b);
+        else if (bubbleA > 0) {
+          // save/restore is required, not cosmetic: drawBubble sets its own
+          // globalAlpha for the rim ring, which would clobber a bare assignment
+          // here. Wrapping lets the two alphas multiply, which is what a fade
+          // should do.
+          ctx.save();
+          ctx.globalAlpha = bubbleA;
+          drawBubble(b);
+          ctx.restore();
+        }
       }
       raf = requestAnimationFrame(tick);
     }
@@ -272,10 +324,19 @@ export function BubbleCanvas({ className = "" }: BubbleCanvasProps) {
       raf = requestAnimationFrame(tick);
     }
 
+    // No `if (!running) return` guard here: on a reduced-motion start, start()
+    // calls pause() while running is already false, and that call is exactly
+    // the one that has to settle the ramp — bailing early would leave those
+    // users with a permanently transparent canvas.
     function pause() {
-      if (!running) return;
       running = false;
       cancelAnimationFrame(raf);
+      // Stopping mid-reveal must not strand the canvas half-transparent: the
+      // ramp is animation, and this is the path for users who are not getting
+      // one (reduced motion, the global stop button, a hidden tab). Jump to the
+      // finished picture. A tab hidden mid-fade therefore comes back to the
+      // completed painting rather than resuming a fade nobody watched.
+      revealT = 1;
       draw(); // hold the current frame rather than leaving a half-cleared canvas
     }
 
@@ -313,15 +374,40 @@ export function BubbleCanvas({ className = "" }: BubbleCanvasProps) {
 
     // Load the painting, then start. On error we still start — bubbles just
     // drift over the lilac fallback wash instead of the Monet.
-    img.onload = () => {
-      imgReady = true;
+    //
+    // Assigning onload *after* src is deliberate and safe: the load task is
+    // queued on the event loop even for a memory-cache hit, so it cannot fire
+    // synchronously during the assignment.
+    let cancelled = false;
+
+    /** Begin the reveal and the loop. Idempotent — onload and the decode() fast
+     * path can both reach here, and restarting the ramp would visibly rewind
+     * the fade, hence the revealStart guard. */
+    function onReady(loaded: boolean) {
+      if (cancelled) return;
+      if (loaded) imgReady = true;
+      if (!revealStart) revealStart = performance.now();
       start();
-    };
-    img.onerror = () => start();
+    }
+
+    img.decoding = "async";
+    img.onload = () => onReady(true);
+    img.onerror = () => onReady(false);
     img.src = MONET_SRC;
+
+    // Fast path: a cached image can already be `complete` the moment src is
+    // assigned. decode() then guarantees the bitmap is ready before the first
+    // drawImage, keeping a decode stall out of the opening animation frame.
+    if (img.complete && img.naturalWidth > 0) {
+      img.decode().then(
+        () => onReady(true),
+        () => onReady(false),
+      );
+    }
 
     // Cleanup on unmount / locale change: stop the loop and drop listeners.
     return () => {
+      cancelled = true;
       pause();
       controlsRef.current = null;
       document.removeEventListener("visibilitychange", onVisibility);

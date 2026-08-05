@@ -246,7 +246,7 @@
     },
     {
       "id": "body",
-      "name": "Alena",
+      "name": "Margarita",
       "service": "Terapeuta corporal · 18 años de experiencia",
       "image": "/services/Alena.jpeg",
       "description": "Ayuda a aliviar la tensión muscular, recuperar la fuerza y mejorar el bienestar. Las técnicas profesionales favorecen la relajación, mejoran la circulación y devuelven ligereza al cuerpo. Cada tratamiento se adapta a tus necesidades, para que te sientas cómodo y notes resultados desde la primera sesión."
@@ -300,6 +300,102 @@
         "author": "Carlos M.",
         "meta": "primera visita",
         "rating": 4
+      }
+    ]
+  },
+  "booking": {
+    "eyebrow": "elige tu momento",
+    "title": "Horas libres esta semana",
+    "description": "Elige la hora que mejor te venga y cuéntanos quién eres. Confirmamos cada ritual personalmente por WhatsApp.",
+    "durationLabel": "Duración",
+    "dateLabel": "Fecha y hora",
+    "priceLabel": "Precio",
+    "book": "Reservar",
+    "taken": "Ocupado",
+    "prev": "Horas anteriores",
+    "next": "Horas siguientes",
+    "trackLabel": "Horas disponibles para cita",
+    "formTitle": "Reserva tu ritual",
+    "close": "Cerrar",
+    "form": {
+      "heading": "Tu cita",
+      "name": "Tu nombre",
+      "phone": "Número de teléfono",
+      "phoneHint": "Incluye el prefijo del país, p. ej. +34 600 000 000",
+      "language": "Idioma preferido",
+      "consent": "Tengo 18 años y acepto la Política de Privacidad",
+      "marketing": "Quiero recibir información sobre servicios y descuentos",
+      "confirm": "Confirmar",
+      "sending": "Enviando…",
+      "later": "Quizás más tarde",
+      "errors": {
+        "name": "Dinos a nombre de quién hacemos la reserva.",
+        "phone": "Añade un teléfono con prefijo del país, p. ej. +34 600 000 000.",
+        "consent": "Confirma que tienes 18 años y aceptas la Política de Privacidad para continuar.",
+        "submit": "No hemos podido enviar tu reserva ahora mismo. Revisa tu conexión e inténtalo de nuevo."
+      }
+    },
+    "success": {
+      "title": "¡Gracias!",
+      "message": "Nos pondremos en contacto contigo por WhatsApp para confirmar el servicio. Hasta entonces la reserva no está completada.",
+      "done": "Entendido"
+    },
+    "languages": [
+      {
+        "value": "es",
+        "label": "Español"
+      },
+      {
+        "value": "en",
+        "label": "English"
+      },
+      {
+        "value": "ru",
+        "label": "Русский"
+      }
+    ],
+    "slots": [
+      {
+        "id": "slot-1",
+        "service": "Masaje facial lifting",
+        "duration": "60 min",
+        "date": "Lun 10 ago · 10:00",
+        "price": "65 €"
+      },
+      {
+        "id": "slot-2",
+        "service": "Terapia de microcorrientes",
+        "duration": "60 min",
+        "date": "Lun 10 ago · 12:30",
+        "price": "75 €"
+      },
+      {
+        "id": "slot-3",
+        "service": "Drenaje con presoterapia",
+        "duration": "45 min",
+        "date": "Mar 11 ago · 09:30",
+        "price": "55 €"
+      },
+      {
+        "id": "slot-4",
+        "service": "Lifting por radiofrecuencia",
+        "duration": "50 min",
+        "date": "Mar 11 ago · 16:00",
+        "price": "80 €"
+      },
+      {
+        "id": "slot-5",
+        "service": "Manicura de gel",
+        "duration": "60 min",
+        "date": "Mié 12 ago · 11:00",
+        "price": "40 €"
+      },
+      {
+        "id": "slot-6",
+        "service": "Masaje relajante de cuerpo entero",
+        "duration": "60 min",
+        "date": "Jue 13 ago · 18:00",
+        "price": "70 €"
       }
     ]
   },

@@ -85,7 +85,7 @@ export function FilmSection({
       </div>
 
       {/* Marketing / booking card. */}
-      <div className="flex w-full md:max-w-md flex-col items-start justify-center gap-4 md:rounded-card border border-blush/10 bg-blush/60 p-6 text-start md:p-8 shadow-[0_0_0_1px_rgba(218,24,132,.12),0_18px_50px_-24px_rgba(218,24,132,.25)]">
+      <div className="flex w-full md:max-w-md flex-col items-start justify-center gap-4 md:rounded-card border border-blush/10 bg-blush/60 p-6 text-start md:p-8 md:shadow-[0_0_0_1px_rgba(218,24,132,.12),0_18px_50px_-24px_rgba(218,24,132,.25)]">
         <p className="font-handwriting text-2xl leading-normal text-magenta">{card.eyebrow}</p>
         <h3 className="font-display text-2xl tracking-normal text-ink">{card.heading}</h3>
         <p className="font-body text-base leading-relaxed text-ink/80">{card.lead}</p>

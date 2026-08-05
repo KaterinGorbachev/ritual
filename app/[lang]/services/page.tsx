@@ -25,7 +25,7 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
           the bubbles centred in view as the section scrolls past. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+        className="pointer-events-none absolute inset-0 -z-10 overflow-hidden px-4"
       >
         <div className="sticky top-0 mx-auto flex h-screen items-center justify-center rounded-pill overflow-hidden ">
           <div className="h-full w-full">
@@ -33,7 +33,7 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
           </div>
         </div>
       </div>
-      <div className="flex w-full flex-col items-center justify-center bg-cream/85 rounded-pill mb-8 lg:mb-10 max-w-[1400px]">
+      <div className="flex w-full flex-col items-center justify-center bg-cream/89 rounded-pill mb-8 lg:mb-10 ">
         {/* --- Page header: eyebrow, title, description, then the search bar --- */}
         <header className="flex w-full flex-col items-center gap-3 text-center  py-8 px-4 max-w-3xl">
           <p className="font-handwriting text-3xl leading-none text-magenta">{page.eyebrow}</p>
@@ -49,7 +49,7 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
       </div>
 
       {/* --- Page header (with the search bar) + the category lists --- */}
-      <div className="flex w-full flex-col items-center gap-10 lg:gap-14 py-12 ">
+      <div className="flex w-full flex-col items-center gap-10 lg:gap-14 py-12 px-2">
         <ServicePriceList
           from={page.from}
           categories={JSON.parse(JSON.stringify(page.categories))}

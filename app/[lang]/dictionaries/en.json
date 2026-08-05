@@ -246,7 +246,7 @@
     },
     {
       "id": "body",
-      "name": "Alena",
+      "name": "Margarita",
       "service": "Bodyworker · 18 years of hands",
       "image": "/services/Alena.jpeg",
       "description": "Helps relieve muscle tension, restore strength, and improve well-being. Professional techniques promote relaxation, improve circulation, and restore lightness to the body. Each treatment is tailored to your needs, ensuring you feel comfortable and notice results after just one session."
@@ -300,6 +300,102 @@
         "author": "Carlos M.",
         "meta": "first visit",
         "rating": 4
+      }
+    ]
+  },
+  "booking": {
+    "eyebrow": "pick your moment",
+    "title": "Open times this week",
+    "description": "Choose a time that suits you and tell us who you are. We confirm every ritual personally on WhatsApp.",
+    "durationLabel": "Duration",
+    "dateLabel": "Date and time",
+    "priceLabel": "Price",
+    "book": "Book",
+    "taken": "Taken",
+    "prev": "Previous slots",
+    "next": "Next slots",
+    "trackLabel": "Available appointment slots",
+    "formTitle": "Book your ritual",
+    "close": "Close",
+    "form": {
+      "heading": "Your appointment",
+      "name": "Your name",
+      "phone": "Phone number",
+      "phoneHint": "Include your country code, e.g. +34 600 000 000",
+      "language": "Preferred language",
+      "consent": "I am 18 years old and agree with the Privacy Policy",
+      "marketing": "I would like to receive information about services and discounts",
+      "confirm": "Confirm",
+      "sending": "Sending…",
+      "later": "Maybe later",
+      "errors": {
+        "name": "Please tell us the name we should book under.",
+        "phone": "Please add a phone number with a country code, e.g. +34 600 000 000.",
+        "consent": "Please confirm you are 18 and agree with the Privacy Policy to continue.",
+        "submit": "We could not send your booking just now. Please check your connection and try again."
+      }
+    },
+    "success": {
+      "title": "Thank you!",
+      "message": "We will connect with you by WhatsApp for service confirmation. Before that the reservation is not completed.",
+      "done": "Done"
+    },
+    "languages": [
+      {
+        "value": "es",
+        "label": "Español"
+      },
+      {
+        "value": "en",
+        "label": "English"
+      },
+      {
+        "value": "ru",
+        "label": "Русский"
+      }
+    ],
+    "slots": [
+      {
+        "id": "slot-1",
+        "service": "Lifting facial massage",
+        "duration": "60 min",
+        "date": "Mon 10 Aug · 10:00",
+        "price": "€65"
+      },
+      {
+        "id": "slot-2",
+        "service": "Microcurrent therapy",
+        "duration": "60 min",
+        "date": "Mon 10 Aug · 12:30",
+        "price": "€75"
+      },
+      {
+        "id": "slot-3",
+        "service": "Pressotherapy drainage",
+        "duration": "45 min",
+        "date": "Tue 11 Aug · 09:30",
+        "price": "€55"
+      },
+      {
+        "id": "slot-4",
+        "service": "RF lifting",
+        "duration": "50 min",
+        "date": "Tue 11 Aug · 16:00",
+        "price": "€80"
+      },
+      {
+        "id": "slot-5",
+        "service": "Gel manicure",
+        "duration": "60 min",
+        "date": "Wed 12 Aug · 11:00",
+        "price": "€40"
+      },
+      {
+        "id": "slot-6",
+        "service": "Full-body relaxing massage",
+        "duration": "60 min",
+        "date": "Thu 13 Aug · 18:00",
+        "price": "€70"
       }
     ]
   },

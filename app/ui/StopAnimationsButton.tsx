@@ -36,31 +36,45 @@ export function StopAnimationsButton({
       title={label}
       style={style}
       data-testid="stop-animations-toggle"
-      className={`sticky top-16 self-end grid place-items-center w-11 h-11 shadow-sm ${className}`}
+      // `border-2 border-transparent` + `box-border` reserve the 2px ring that
+      // GostButton's `hover:border-2` would otherwise add on hover, so the icon
+      // and label stay put instead of shifting under the cursor.
+      className={`sticky top-16 box-border flex items-center justify-center border-2 border-transparent min-w-11 h-11 px-2 shadow-sm ${className}`}
     >
-      {off ? (
-        // Play triangle — resume animations.
-        <svg
-          width="21"
-          height="21"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          aria-hidden="true"
-        >
+      <svg
+        width="21"
+        height="21"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        aria-hidden="true"
+      >
+        {off ? (
+          // Play triangle — resume animations.
           <path d="M8 5v14l11-7z" />
-        </svg>
-      ) : (
-        // Stop square — stop animations.
-        <svg
-          width="21"
-          height="21"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          aria-hidden="true"
-        >
+        ) : (
+          // Stop square — stop animations.
           <rect x="6" y="6" width="12" height="12" rx="2" />
-        </svg>
-      )}
+        )}
+      </svg>
+      {/* Both words are stacked in one grid cell, so the label box is always as
+          wide as the longer of the two and the button keeps its width when the
+          state flips. Only the active word is visible; the other one holds the
+          space with `invisible` (still laid out, but hidden from AT — the
+          accessible name comes from aria-label anyway). */}
+      <span className="font-handwriting text-base text-iris/89 hidden md:grid">
+        <span
+          className={`col-start-1 row-start-1 ${off ? "" : "invisible"}`}
+          aria-hidden={!off}
+        >
+          {resumeWord}
+        </span>
+        <span
+          className={`col-start-1 row-start-1 ${off ? "invisible" : ""}`}
+          aria-hidden={off}
+        >
+          {stopWord}
+        </span>
+      </span>
     </GostButton>
   );
 }

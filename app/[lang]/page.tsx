@@ -8,6 +8,7 @@ import { TeamCard } from "../ui/TeamCard";
 import { BrandMarquee } from "../ui/BrandMarquee"
 import { ReviewGallery } from "../ui/ReviewGallery";
 import { FilmSection } from "../ui/FilmSection";
+import { BookingSlots } from "../ui/BookingSlots";
 
 export default async function HomePage({ params }: PageProps<"/[lang]">) {
   const { lang } = await params;
@@ -17,8 +18,9 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
     <Section>
       <div
         data-testid="hero-section"
-        className="flex flex-col items-center justify-center w-full max-w-400 relative isolate min-h-165 overflow-hidden lg:rounded-pill lg:relative lg:top-0 px-4 lg:px-32 py-12 lg:py-10 shadow-[0_0_0_1px_rgba(218,24,132,.12),0_18px_50px_-24px_rgba(218,24,132,.25)] fixed -top-24"
+        className="flex flex-col items-center justify-center w-full max-w-290 relative isolate min-h-165 overflow-hidden lg:rounded-pill lg:relative lg:top-0 px-4 lg:px-32 py-12 lg:py-10 shadow-[0_0_0_1px_rgba(218,24,132,.12),0_18px_50px_-24px_rgba(218,24,132,.25)] fixed -top-24"
       >
+        
         {/* Client-only canvas: Monet garden + liquid-glass soap bubbles. */}
         <BubbleCanvas />
 
@@ -68,14 +70,14 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
 
         <ul className="flex flex-col items-center justify-center gap-4 lg:gap-4 lg:flex-row lg:flex-wrap w-full px-2 ">
           {dict.staff.map((member, i) => (
-            <TeamCard 
-            key={member.id}
-            name={member.name}
-            profession={member.service} 
-            description={member.description}
-            image={member.image}
-            className={i % 2 == 1 ? "team-card--from-right" : "team-card--from-left"}/>
-            
+            <TeamCard
+              key={member.id}
+              name={member.name}
+              profession={member.service}
+              description={member.description}
+              image={member.image}
+              className={i % 2 == 1 ? "team-card--from-right" : "team-card--from-left"} />
+
           ))}
         </ul>
 
@@ -106,6 +108,60 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
               previous: dict.reviews.prev,
               next: dict.reviews.next,
               track: dict.reviews.trackLabel,
+            }}
+          />
+        </div>
+      </div>
+      <div className="py-10 lg:py-18 flex flex-col items-center justify-center gap-6 lg:gap-12 w-full scroll-mt-24 " id="booking">
+        <div className="flex flex-col gap-2 items-center justify-center px-4 text-center">
+          <p className="font-handwriting text-magenta text-2xl leading-normal text-center">{dict.booking.eyebrow}</p>
+          <h2 className="traking normal text-[clamp(1.75rem,5vw,2.25rem)] font-display font-semibold text-center">{dict.booking.title}</h2>
+          <p className="font-body text-base tracking-normal text-ink/75 max-w-2xl">
+            {dict.booking.description}
+          </p>
+        </div>
+        <div className="w-full max-w-400 px-4 md:px-8 lg:px-24 py-10">
+          <BookingSlots
+            items={dict.booking.slots}
+            labels={{
+              card: {
+                duration: dict.booking.durationLabel,
+                date: dict.booking.dateLabel,
+                price: dict.booking.priceLabel,
+                book: dict.booking.book,
+              },
+              nav: {
+                previous: dict.booking.prev,
+                next: dict.booking.next,
+                track: dict.booking.trackLabel,
+              },
+              formTitle: dict.booking.formTitle,
+              close: dict.booking.close,
+              form: {
+                heading: dict.booking.form.heading,
+                duration: dict.booking.durationLabel,
+                date: dict.booking.dateLabel,
+                price: dict.booking.priceLabel,
+                name: dict.booking.form.name,
+                phone: dict.booking.form.phone,
+                phoneHint: dict.booking.form.phoneHint,
+                language: dict.booking.form.language,
+                // Each language is named in its own tongue, so it stays
+                // recognisable whichever locale the page is in.
+                languageOptions: dict.booking.languages,
+                consent: dict.booking.form.consent,
+                marketing: dict.booking.form.marketing,
+                confirm: dict.booking.form.confirm,
+                sending: dict.booking.form.sending,
+                later: dict.booking.form.later,
+                errors: dict.booking.form.errors,
+              },
+              success: {
+                title: dict.booking.success.title,
+                message: dict.booking.success.message,
+                done: dict.booking.success.done,
+                close: dict.booking.close,
+              },
             }}
           />
         </div>
