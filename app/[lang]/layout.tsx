@@ -110,12 +110,12 @@ export default async function RootLayout({
                     <li>
                       <NavLink href="/#aboutus">{dict.nav.about}</NavLink>
                     </li>
-                    <li>
+                    {/*<li>
                       <NavLink href="/services">{dict.nav.services}</NavLink>
                     </li>
                     <li>
                       <NavLink href="#faqs">{dict.nav.faqs}</NavLink>
-                    </li>
+                    </li>*/}
                     <li>
                       <NavLink href="/#contact">{dict.nav.contact}</NavLink>
                     </li>
@@ -175,12 +175,12 @@ export default async function RootLayout({
                     <li>
                       <NavLink href="/#aboutus">{dict.nav.about}</NavLink>
                     </li>
-                    <li>
+                    {/*<li>
                       <NavLink href="/services">{dict.nav.services}</NavLink>
                     </li>
                     <li>
                       <NavLink href="#faqs">{dict.nav.faqs}</NavLink>
-                    </li>
+                    </li>*/}
                     <li>
                       <NavLink href="/#contact">{dict.nav.contact}</NavLink>
                     </li>
@@ -229,9 +229,9 @@ export default async function RootLayout({
           </section>
           <section className="flex flex-col gap-12 items-center justify-center  w-full bg-gradient-to-b from-blush to-blush pt-10 pb-6 px-4">
             <div className="flex flex-row flex-wrap items-center justify-center gap-4 max-w-400">
-              <NavLink href="">{dict.nav.blog}</NavLink>
+              {/*<NavLink href="">{dict.nav.blog}</NavLink>*/}
               <NavLink href="">{dict.footer.privacyPolicy}</NavLink>
-              <NavLink href="">{dict.footer.contactUs}</NavLink>
+              {/*<NavLink href="">{dict.footer.contactUs}</NavLink>*/}
             </div>
             <p className="text-sm text-ink/70 text-center">
               &copy; 2026 Ritual. {dict.footer.rightsReserved} - {dict.footer.designedBy} <a href="https://www.linkedin.com/in/katerina-gorbacheva-93717324a/" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline text-iris">

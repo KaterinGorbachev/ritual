@@ -239,16 +239,18 @@
   "staff": [
     {
       "id": "facial",
-      "name": "Alena",
+      "name": "Alena Drazdova",
       "service": "Facebeauty · 14 years of hands",
       "image": "/services/Alena.jpeg",
+      "defaultImage": "/back-massage-copilote-draw.jpg",
       "description": "Helps preserve youth and natural beauty without radical treatments. Thanks to a personalized approach and professional techniques, skin tone is improved, puffiness is reduced, facial muscles are relaxed, and contours are defined. Each treatment combines care, aesthetics, and visible results."
     },
     {
       "id": "body",
-      "name": "Margarita",
+      "name": "Margarita Sofronova",
       "service": "Bodyworker · 18 years of hands",
-      "image": "/services/Alena.jpeg",
+      "image": "",
+      "defaultImage": "/back-massage-copilote-draw.jpg",
       "description": "Helps relieve muscle tension, restore strength, and improve well-being. Professional techniques promote relaxation, improve circulation, and restore lightness to the body. Each treatment is tailored to your needs, ensuring you feel comfortable and notice results after just one session."
     }
   ],

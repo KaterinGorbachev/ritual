@@ -239,16 +239,18 @@
   "staff": [
     {
       "id": "facial",
-      "name": "Alena",
+      "name": "Alena Drazdova",
       "service": "Belleza facial · 14 años de experiencia",
       "image": "/services/Alena.jpeg",
+      "defaultImage": "/back-massage-copilote-draw.jpg",
       "description": "Ayuda a preservar la juventud y la belleza natural sin tratamientos radicales. Gracias a un enfoque personalizado y a técnicas profesionales, se mejora el tono de la piel, se reduce la hinchazón, se relajan los músculos faciales y se definen los contornos. Cada tratamiento combina cuidado, estética y resultados visibles."
     },
     {
       "id": "body",
-      "name": "Margarita",
+      "name": "Margarita Sofronova",
       "service": "Terapeuta corporal · 18 años de experiencia",
-      "image": "/services/Alena.jpeg",
+      "image": "",
+      "defaultImage": "/back-massage-copilote-draw.jpg",
       "description": "Ayuda a aliviar la tensión muscular, recuperar la fuerza y mejorar el bienestar. Las técnicas profesionales favorecen la relajación, mejoran la circulación y devuelven ligereza al cuerpo. Cada tratamiento se adapta a tus necesidades, para que te sientas cómodo y notes resultados desde la primera sesión."
     }
   ],
@@ -423,13 +425,13 @@
       "id": "utsukusy",
       "name": "Utsukusy",
       "description": "Cosmética profesional española de Barcelona que une la tradición japonesa de la belleza con la ciencia actual.",
-      "image": "/cosmetics/logo-utsukusy-cosmetics.jpeg"
+      "image": "/cosmetics/utsukusy.jpeg"
     },
     {
       "id": "meder",
       "name": "Meder Beauty",
       "description": "Cuidado suizo respetuoso con el microbioma, creado por la dermatóloga Dra. Tiina Meder: péptidos biotecnológicos, pre y probióticos.",
-      "image": "/cosmetics/Meder_Main_Logo_Red_2023_ab3d8fa8-51f0-4695-be61-654f54fddc60_large.jpg"
+      "image": "/cosmetics/meder.jpg"
     },
     {
       "id": "skinderma",
