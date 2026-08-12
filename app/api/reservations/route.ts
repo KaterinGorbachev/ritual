@@ -14,7 +14,11 @@ type ReservationBody = {
     phone?: unknown;
     language?: unknown;
     marketingOptIn?: unknown;
+    consent?: unknown;
 };
+
+/** The locales the policy exists in; anything else is not a version we served. */
+const KNOWN_LOCALES = ["es", "en", "ru"];
 
 /**
  * Collections this route touches.
@@ -92,6 +96,33 @@ export async function POST(request: Request) {
         );
     }
 
+    // The privacy policy promises that acceptance is recorded with the policy
+    // version and the language it was read in — art. 7.1 puts the burden of
+    // proving consent on the salon, and a bare boolean proves nothing. So the
+    // record is validated here rather than trusted: a booking that cannot be
+    // evidenced is refused instead of being written unprovable.
+    const consentInput =
+        typeof body.consent === "object" && body.consent !== null
+            ? (body.consent as Record<string, unknown>)
+            : null;
+
+    const policyVersion =
+        typeof consentInput?.policyVersion === "string" ? consentInput.policyVersion : "";
+    const consentLocale =
+        typeof consentInput?.locale === "string" ? consentInput.locale : "";
+
+    if (
+        consentInput?.policyAccepted !== true ||
+        // ISO 8601 date, matching `privacy.meta.dateLastModification`.
+        !/^\d{4}-\d{2}-\d{2}$/.test(policyVersion) ||
+        !KNOWN_LOCALES.includes(consentLocale)
+    ) {
+        return NextResponse.json(
+            { error: "Please confirm you are 18 and accept the Privacy Policy to continue." },
+            { status: 400 }
+        );
+    }
+
     let reservationId: string;
     try {
         // A transaction is what stops two clients taking the same slot: the
@@ -125,7 +156,26 @@ export async function POST(request: Request) {
             name,
             phone,
             language,
-            marketingOptIn,
+            // Evidence of the required privacy-policy acceptance. `acceptedAt`
+            // is the SERVER's clock, not the browser's — a timestamp the client
+            // could set would prove nothing about when consent was given.
+            consent: {
+                policyAccepted: true,
+                policyVersion,
+                locale: consentLocale,
+                source: "booking-form",
+                acceptedAt: serverTimestamp(),
+            },
+            // Marketing is a separate, independently withdrawable permission
+            // (art. 7.2/7.3), so it carries its own timestamps rather than
+            // riding on the consent record. `withdrawnAt` starts null and is
+            // stamped when the client sends PARAR/STOP/СТОП or emails us.
+            marketingOptIn: {
+                value: marketingOptIn,
+                changedAt: serverTimestamp(),
+                source: "booking-form",
+                withdrawnAt: null,
+            },
             // always send reserved and to reactivate the slot - add it manually again
             status: "reserved",
             createdAt: serverTimestamp(),

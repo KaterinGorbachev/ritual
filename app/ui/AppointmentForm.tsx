@@ -25,6 +25,8 @@ export type AppointmentFormLabels = {
   languageOptions: LanguageOption[];
   /** Required consent checkbox copy (18+ and privacy policy). */
   consent: string;
+  /** Link text under the consent box, pointing at the privacy policy. */
+  privacyLink: string;
   /** Optional marketing checkbox copy. */
   marketing: string;
   confirm: string;
@@ -40,6 +42,24 @@ export type AppointmentFormLabels = {
   };
 };
 
+/**
+ * Evidence that the client accepted the privacy policy.
+ *
+ * Art. 7.1 of the GDPR puts the burden of proof on the salon, and proving
+ * consent means proving *which text* was accepted, in *which language*, and
+ * *when*. A bare `true` proves none of that, which is why this is an object
+ * rather than a boolean.
+ */
+export type ConsentRecord = {
+  policyAccepted: true;
+  /** `privacy.meta.dateLastModification` of the policy that was on screen. */
+  policyVersion: string;
+  /** The language the client actually read the policy in. */
+  locale: string;
+  /** Where the tick happened, so a WhatsApp opt-in is distinguishable. */
+  source: "booking-form";
+};
+
 /** What a completed form hands back to the parent. */
 export type AppointmentDetails = {
   slotId: string;
@@ -47,11 +67,16 @@ export type AppointmentDetails = {
   phone: string;
   language: string;
   marketingOptIn: boolean;
+  consent: ConsentRecord;
 };
 
 type AppointmentFormProps = {
   slot: Slot;
   labels: AppointmentFormLabels;
+  /** Version of the privacy policy this form is showing a link to. */
+  policyVersion: string;
+  /** Locale of the policy text the client was shown. */
+  locale: string;
   /**
    * Receives the validated details. May be async — the form shows a pending
    * state until it settles, and surfaces a human message if it rejects. A
@@ -114,6 +139,8 @@ const checkboxClass =
 export function AppointmentForm({
   slot,
   labels,
+  policyVersion,
+  locale,
   onConfirm,
   onCancel,
 }: AppointmentFormProps) {
@@ -173,6 +200,16 @@ export function AppointmentForm({
         phone: phone.trim(),
         language,
         marketingOptIn,
+        // Only reachable once `consent` is true — the guard above returns
+        // early otherwise — so this can never claim an acceptance that did
+        // not happen. The timestamp is added server-side, where the clock is
+        // not the client's to set.
+        consent: {
+          policyAccepted: true,
+          policyVersion,
+          locale,
+          source: "booking-form",
+        },
       });
     } catch (error) {
       // Prefer a message the caller already translated; never show a raw
@@ -337,6 +374,18 @@ export function AppointmentForm({
             {labels.consent}*
           </label>
         </div>
+        {/* Consent is only valid if it is informed (art. 4.11), so the policy
+            has to be one click away from the box that accepts it. Outside the
+            <label> on purpose: a link nested in a label swallows the click
+            that should toggle the checkbox. */}
+        <a
+          href={`/${locale}/privacy`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex min-h-11 w-fit items-center rounded-pill font-body text-sm text-iris underline transition duration-500 ease-in-out hover:text-magenta focus:outline-none focus:ring-2 focus:ring-mint focus:ring-offset-2 focus:ring-offset-cream"
+        >
+          {labels.privacyLink}
+        </a>
         {errors.consent ? (
           <p id={consentErrorId} className="font-body text-sm text-magenta">
             {errors.consent}

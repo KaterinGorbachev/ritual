@@ -3,10 +3,14 @@ import { useState } from "react";
 import { SelectCategory, type SelectOption } from "./SelectCategory";
 import { WhatsAppButton } from "./WhatsAppButton";
 
-type Lang = "en" | "es" | "ru";
+import type { Locale } from "../lib/locales";
+
+type Lang = Locale;
 
 type Props = {
-    defaultLang: string;
+    // A validated locale, not a raw URL segment — callers pass it through
+    // toLocale() so it can safely index the `options` map below.
+    defaultLang: Lang;
     categoryLabel: string;
     categoryPlaceholder: string;
     languageLabel: string;

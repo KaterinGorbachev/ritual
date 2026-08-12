@@ -17,6 +17,24 @@
     "stopWord": "Detener animaciones",
     "resumeWord": "Reanudar animaciones"
   },
+  "seo": {
+    "home": {
+      "title": "Ritual — centro de estética y masaje en Valencia",
+      "description": "Estética facial y corporal en Valencia: lifting RF, microcorrientes, carboxiterapia y presoterapia. Hablamos español, inglés y ruso. Reserva por WhatsApp.",
+      "keywords": [
+        "estética Valencia",
+        "masaje facial Valencia",
+        "lifting RF Valencia",
+        "microcorrientes",
+        "carboxiterapia facial",
+        "presoterapia Valencia",
+        "masaje relajante Valencia",
+        "centro de estética que habla ruso Valencia",
+        "salón de belleza inglés Valencia"
+      ]
+    },
+    "languagesSpoken": "Te atendemos en español, inglés y ruso"
+  },
   "footer": {
     "address": "Dirección",
     "workingHours": "Horario de trabajo",
@@ -229,6 +247,24 @@
         "name": "Carboxiterapia facial",
         "description": "El tratamiento se realiza con un aparato específico y cosmética especializada; es muy agradable y ofrece un resultado extraordinario. Unifica el tono y el color del rostro, mejora la calidad y la firmeza de la piel y refuerza sus propias defensas naturales.",
         "image": "/services/carboxytherapy.webp"
+      },
+      {
+        "id": "bodySculpture",
+        "name": "Body Sculpture: 1,5 h de belleza y ligereza",
+        "description": "No es solo un masaje, sino un programa pensado en el que se unen la aparatología, la lipoplastia manual y la maderoterapia en una sola sesión. En hora y media se reduce la retención de líquidos, bajan los volúmenes, la piel se tensa y el cuerpo pone en marcha su propio detox. La combinación se elige según tu cuerpo y tu ritmo de vida, así que el resultado se nota desde la primera visita y se sostiene sesión tras sesión.",
+        "image": "/services/body-sculpture.jpg"
+      },
+      {
+        "id": "bodyVShaping",
+        "name": "V-Shaping: corrección corporal con aparatología",
+        "description": "Corrección de la figura con equipos de gama premium (VelaShape, Endospheres y estimulación EMS) para trabajar la celulitis y las zonas que no responden a la dieta ni al gimnasio. El vacío y las vibraciones mejoran la circulación, rompen la piel de naranja y devuelven densidad a los tejidos, mientras la estimulación muscular esculpe la silueta sin esfuerzo. Un programa cómodo, sin agujas ni tiempo de recuperación, con un contorno más definido visita tras visita.",
+        "image": "/services/body-v-shaping.webp"
+      },
+      {
+        "id": "bodyDetoxWrap",
+        "name": "Drenaje linfático, presoterapia y envoltura de algas",
+        "description": "El ritual corporal más suave y el favorito de quienes llegan con las piernas pesadas. El masaje de drenaje linfático manual y la presoterapia ayudan al cuerpo a eliminar el exceso de líquido, y la envoltura de algas nutre la piel con minerales, la deja lisa y firme y prolonga el efecto. Alivia la hinchazón y la sensación de pesadez, mejora el descanso y devuelve la ligereza al cuerpo: ideal después de un vuelo, del embarazo o de una semana larga de pie.",
+        "image": "/services/body-vs.webp"
       }
     ]
   },
@@ -241,7 +277,7 @@
       "id": "facial",
       "name": "Alena Drazdova",
       "service": "Belleza facial · 14 años de experiencia",
-      "image": "/services/Alena.jpeg",
+      "image": "/services/Alena.webp",
       "defaultImage": "/back-massage-copilote-draw.jpg",
       "description": "Ayuda a preservar la juventud y la belleza natural sin tratamientos radicales. Gracias a un enfoque personalizado y a técnicas profesionales, se mejora el tono de la piel, se reduce la hinchazón, se relajan los músculos faciales y se definen los contornos. Cada tratamiento combina cuidado, estética y resultados visibles."
     },
@@ -249,7 +285,7 @@
       "id": "body",
       "name": "Margarita Sofronova",
       "service": "Terapeuta corporal · 18 años de experiencia",
-      "image": "",
+      "image": "/services/Margarita.webp",
       "defaultImage": "/back-massage-copilote-draw.jpg",
       "description": "Ayuda a aliviar la tensión muscular, recuperar la fuerza y mejorar el bienestar. Las técnicas profesionales favorecen la relajación, mejoran la circulación y devuelven ligereza al cuerpo. Cada tratamiento se adapta a tus necesidades, para que te sientas cómodo y notes resultados desde la primera sesión."
     }
@@ -326,6 +362,7 @@
       "phoneHint": "Incluye el prefijo del país, p. ej. +34 600 000 000",
       "language": "Idioma preferido",
       "consent": "Tengo 18 años y acepto la Política de Privacidad",
+      "privacyLink": "Leer la Política de Privacidad",
       "marketing": "Quiero recibir información sobre servicios y descuentos",
       "confirm": "Confirmar",
       "sending": "Enviando…",
@@ -419,6 +456,398 @@
       "cta": "Contáctanos por WhatsApp"
     },
     "message": "Hola, quiero reservar un ritual en Ritual."
+  },
+  "privacy": {
+    "meta": {
+      "title": "Política de Privacidad",
+      "description": "Qué datos tratamos en Ritual, para qué, con quién los compartimos, cuánto los guardamos y cómo ejercer tus derechos.",
+      "eyebrow": "claro y sin letra pequeña",
+      "intro": "Aquí tienes qué datos tuyos tratamos, para qué y durante cuánto tiempo.",
+      "dateLastModification": "2026-08-11",
+      "authoritativeLanguage": "es",
+      "tocLabel": "Índice",
+      "summaryLabel": "En resumen",
+      "updatedLabel": "Última actualización",
+      "authoritativeNote": "La versión en español es la jurídicamente vinculante.",
+      "printLabel": "Imprimir"
+    },
+    "sections": [
+      {
+        "number": 1,
+        "id": "responsible-person",
+        "icon": "person",
+        "heading": "Responsable",
+        "summary": "Ritual, el centro de estética de Valencia donde reservas, decide para qué se usan tus datos.",
+        "body": [
+          "El responsable del tratamiento es [[PENDING: nombre legal registrado]], NIF/CIF [[PENDING: NIF/CIF]], con domicilio en [[PENDING: dirección postal del salón en Valencia]]. Para cualquier asunto de privacidad, escríbenos a [[PENDING: email de privacidad]]."
+        ],
+        "list": [
+          {
+            "term": "Responsable",
+            "detail": "[[PENDING: nombre legal registrado]] — NIF/CIF [[PENDING: NIF/CIF]]"
+          },
+          {
+            "term": "Dirección",
+            "detail": "[[PENDING: dirección postal del salón en Valencia]]"
+          },
+          {
+            "term": "Email",
+            "detail": "[[PENDING: email de privacidad]]"
+          }
+        ]
+      },
+      {
+        "number": 2,
+        "id": "data-collection",
+        "icon": "document",
+        "heading": "Qué datos recogemos",
+        "summary": "Tu nombre, tu teléfono, tu idioma, la hora que eliges y lo que nos escribes por WhatsApp.",
+        "body": [
+          "El formulario de reserva pide cuatro cosas: nombre, teléfono, idioma preferido y la confirmación de que tienes 18 años y aceptas esta política. Guardamos además la hora elegida y el momento de la reserva.",
+          "Si nos escribes por WhatsApp tratamos tu número, el nombre de tu perfil y el contenido de tus mensajes. Si la cita genera factura, tratamos los datos de facturación exigidos por la normativa."
+        ],
+        "list": [
+          {
+            "term": "Formulario de reserva",
+            "detail": "Nombre, teléfono, idioma, aceptación de esta política y la casilla opcional de ofertas."
+          },
+          {
+            "term": "Cita",
+            "detail": "Tratamiento y hora elegidos, y fecha de la reserva."
+          },
+          {
+            "term": "WhatsApp",
+            "detail": "Tu número, el nombre público de tu perfil y tus mensajes."
+          },
+          {
+            "term": "Facturación",
+            "detail": "Solo cuando la cita genera factura."
+          }
+        ]
+      },
+      {
+        "number": 3,
+        "id": "data-usage",
+        "icon": "clock",
+        "heading": "Para qué y con qué base legal",
+        "summary": "Cada finalidad tiene su base legal, y todo lo que depende de tu consentimiento es opcional.",
+        "body": [
+          "Cuando nos escribes por WhatsApp, la base no es tu consentimiento sino el artículo 6.1.b del RGPD: actuaciones a petición tuya previas al contrato. Tu mensaje es esa petición, y por eso no te pedimos aceptar nada para responderte.",
+          "No tomamos decisiones automatizadas ni elaboramos perfiles: cada cita la confirma una persona."
+        ],
+        "table": {
+          "columns": [
+            "Para qué",
+            "Base legal",
+            "¿Puedes negarte?"
+          ],
+          "rows": [
+            [
+              "Responder tu consulta y acordar la cita",
+              "Art. 6.1.b — petición tuya previa al contrato",
+              "No hay nada que marcar; tu mensaje es la petición."
+            ],
+            [
+              "Gestionar la reserva y prestarte el tratamiento",
+              "Art. 6.1.b — ejecución del contrato",
+              "Imprescindible para reservar."
+            ],
+            [
+              "Recordarte la cita",
+              "Art. 6.1.b — ejecución del contrato",
+              "Sí, pídelo y dejamos de hacerlo."
+            ],
+            [
+              "Enviarte ofertas y novedades",
+              "Art. 6.1.a consentimiento + art. 21 LSSI-CE",
+              "Sí. Casilla aparte, desmarcada; no afecta a tu reserva."
+            ],
+            [
+              "Emitir y conservar facturas",
+              "Art. 6.1.c — obligación legal",
+              "No, cuando la cita genera factura."
+            ]
+          ]
+        }
+      },
+      {
+        "number": 4,
+        "id": "health-data",
+        "icon": "hand",
+        "heading": "Datos de salud",
+        "summary": "No los recogemos por la web ni por WhatsApp: cuéntanos en el salón lo que sea relevante.",
+        "body": [
+          "Una nota sobre embarazo, lesiones, alergias o afecciones de la piel es dato de categoría especial (art. 9 RGPD) y exigiría tu consentimiento explícito (art. 9.2.a). El formulario no tiene ningún campo de salud.",
+          "Si en el salón surge algo que convenga anotar para tu próxima visita, te lo pedimos entonces de forma expresa y puedes negarte sin perder el tratamiento."
+        ]
+      },
+      {
+        "number": 5,
+        "id": "data-sharing",
+        "icon": "share",
+        "heading": "Con quién los compartimos",
+        "summary": "Solo con los proveedores que hacen funcionar el salón, con contrato de encargo firmado.",
+        "body": [
+          "Los proveedores siguientes actúan como encargados del tratamiento con el contrato que exige el artículo 28 del RGPD.",
+          "Meta y Google son filiales irlandesas, pero sus matrices en EE. UU. pueden acceder a los datos. Esas transferencias se amparan en el Marco de Privacidad de Datos UE-EE. UU., vigente y con ambas empresas certificadas, y en las Cláusulas Contractuales Tipo como respaldo.",
+          "También podemos comunicar datos a la Administración o a los tribunales cuando la ley lo exija."
+        ],
+        "table": {
+          "columns": [
+            "Quién",
+            "Qué recibe",
+            "Contrato y transferencia"
+          ],
+          "rows": [
+            [
+              "Meta Platforms Ireland Ltd. (WhatsApp)",
+              "Tu número y tus mensajes, para acordar y confirmar las citas.",
+              "Art. 28 sí; matriz en EE. UU. certificada en el Marco UE-EE. UU."
+            ],
+            [
+              "Google Ireland Ltd. (Firebase)",
+              "Tu reserva y tus preferencias de consentimiento.",
+              "Art. 28 sí; matriz en EE. UU. certificada en el Marco UE-EE. UU."
+            ]
+          ]
+        }
+      },
+      {
+        "number": 6,
+        "id": "data-whatsapp-usage",
+        "icon": "chat",
+        "heading": "WhatsApp",
+        "summary": "Escribirnos es pedir hora, no firmar un consentimiento: respondemos, pero no te mandamos publicidad.",
+        "body": [
+          "Usamos tu número, tu nombre de perfil y tus mensajes para responderte y organizar la cita, sobre la base del artículo 6.1.b. Tu mensaje cubre esa consulta y el servicio que la rodea: no autoriza publicidad, ni listas de difusión, ni grupos.",
+          "Usamos la WhatsApp Business Platform (Cloud API) de Meta. Los mensajes van cifrados de extremo a extremo, pero quedan copias en la infraestructura de Meta y en ambos teléfonos: podemos borrar los datos de nuestro sistema, no la copia del tuyo.",
+          "La publicidad es una casilla aparte, desmarcada por defecto (arts. 7.2 y 7.4): negarte no afecta a tu reserva. Cuando la marcas guardamos la fecha, la versión de esta política y el idioma en que la leíste, porque el artículo 7.1 nos obliga a poder demostrar qué aceptaste.",
+          "Escribe PARAR en el chat o mandanos un email y dejamos de enviarte publicidad a ese número, gratis y de inmediato. Retirar el consentimiento no cancela ninguna cita."
+        ],
+        "list": [
+          {
+            "term": "Mensajes del servicio",
+            "detail": "Responder, confirmar, cambiar o recordar tu cita. Art. 6.1.b: no requiere casilla."
+          },
+          {
+            "term": "Publicidad",
+            "detail": "Casilla aparte, desmarcada, opcional. Art. 6.1.a y art. 21 LSSI-CE."
+          },
+          {
+            "term": "Para dejar de recibirla",
+            "detail": "Escribe PARAR en el chat o un email a la dirección del apartado 1."
+          }
+        ]
+      },
+      {
+        "number": 7,
+        "id": "data-retention",
+        "icon": "clock",
+        "heading": "Cuánto los guardamos",
+        "summary": "Lo necesario para atenderte, y seis años las facturas porque lo exige la ley.",
+        "body": [
+          "El artículo 30 del Código de Comercio obliga a conservar la documentación del negocio seis años, y la Ley General Tributaria fija cuatro años de prescripción fiscal: aplicamos el plazo más largo.",
+          "Cuando vence un plazo borramos el dato. Si pides el borrado antes, lo hacemos salvo lo que estemos obligados a conservar, y te decimos qué queda."
+        ],
+        "table": {
+          "columns": [
+            "Qué",
+            "Cuánto",
+            "Desde cuándo"
+          ],
+          "rows": [
+            [
+              "Consulta que no acaba en cita",
+              "Máximo 12 meses",
+              "Desde tu último mensaje"
+            ],
+            [
+              "Datos de la reserva",
+              "Mientras seas cliente, y 1 año más",
+              "Desde tu última cita"
+            ],
+            [
+              "Conversación de WhatsApp",
+              "12 meses",
+              "Desde el último mensaje"
+            ],
+            [
+              "Facturas y contabilidad",
+              "6 años",
+              "Desde el cierre del ejercicio"
+            ],
+            [
+              "Consentimiento de publicidad",
+              "Hasta que lo retires",
+              "Queda solo constancia de la retirada"
+            ],
+            [
+              "Prueba del consentimiento y de tus solicitudes",
+              "3 años",
+              "Desde que lo diste o te respondimos"
+            ]
+          ]
+        }
+      },
+      {
+        "number": 8,
+        "id": "cookies",
+        "icon": "cookie",
+        "heading": "Cookies",
+        "summary": "Solo almacenamiento técnico propio: sin analítica, sin publicidad y sin cookies de terceros.",
+        "body": [
+          "Una cookie es un pequeño archivo de texto que un sitio web guarda en tu navegador para recordar algo entre visitas. Se clasifican según quién las gestiona (propias o de terceros), cuánto duran (de sesión, que se borran al cerrar el navegador, o persistentes, que tienen fecha de caducidad) y para qué sirven.",
+          "Las nuestras son propias y persistentes, y todas son estrictamente necesarias: hacen funcionar el sitio y recuerdan lo que tú has elegido. No instalamos cookies de analítica, de personalización ni de publicidad comportamental, y ningún tercero instala cookies a través de esta web.",
+          "La base jurídica del almacenamiento estrictamente necesario es el artículo 22.2 de la Ley 34/2002 (LSSI-CE), que lo exime de consentimiento previo por ser imprescindible para prestarte el servicio que pides. Si algún día añadiéramos cookies de analítica o publicidad, te pediríamos antes tu consentimiento (art. 6.1.a del RGPD) y podrías retirarlo cuando quisieras.",
+          "Conservamos esta información mientras siga siendo necesaria para el fin descrito o hasta que la borres. Una cookie persistente puede permanecer instalada durante años si no la eliminas: puedes limitar su duración borrándola desde el navegador cuando quieras.",
+          "Puedes bloquear o eliminar las cookies desde los ajustes de tu navegador, normalmente en el menú «Opciones», «Preferencias» o «Configuración». Si las bloqueas seguirás pudiendo usar la web: solo se olvidarán el idioma y tu preferencia de animaciones, y tendrás que volver a elegirlos en cada visita."
+        ],
+        "table": {
+          "columns": [
+            "Nombre",
+            "Tipo y finalidad",
+            "Duración"
+          ],
+          "rows": [
+            [
+              "ritual:lang",
+              "Cookie propia, persistente, estrictamente necesaria. Recuerda el idioma que eliges (español, inglés o ruso).",
+              "1 año"
+            ],
+            [
+              "ritual:motion-off",
+              "Almacenamiento local propio, persistente, estrictamente necesario. Recuerda si has desactivado las animaciones.",
+              "Hasta que borres los datos del navegador"
+            ]
+          ]
+        },
+        "list": [
+          {
+            "term": "Google Chrome",
+            "detail": "Configuración → Privacidad y seguridad → Cookies y otros datos de sitios. Guía: support.google.com/chrome/answer/95647"
+          },
+          {
+            "term": "Mozilla Firefox",
+            "detail": "Ajustes → Privacidad & Seguridad → Cookies y datos del sitio. Guía: support.mozilla.org/es/kb/Borrar cookies"
+          },
+          {
+            "term": "Safari",
+            "detail": "Preferencias → Privacidad → Gestionar datos de sitios web. Guía: support.apple.com/guide/safari/sfri11471"
+          },
+          {
+            "term": "Microsoft Edge",
+            "detail": "Configuración → Cookies y permisos del sitio. Guía: support.microsoft.com/microsoft-edge, busca «eliminar cookies»"
+          },
+          {
+            "term": "Opera",
+            "detail": "Ajustes → Privacidad y seguridad → Cookies. Guía: help.opera.com/latest/web-preferences"
+          },
+          {
+            "term": "En el móvil",
+            "detail": "La misma opción está dentro de los ajustes de la aplicación del navegador, en el apartado de privacidad."
+          }
+        ],
+        "note": "Si borras las cookies de este sitio no pierdes ninguna reserva: tus citas se guardan en nuestra base de datos, no en tu navegador."
+      },
+      {
+        "number": 9,
+        "id": "user-rights",
+        "icon": "hand",
+        "heading": "Tus derechos",
+        "summary": "Acceso, rectificación, supresión, limitación, portabilidad, oposición y retirada del consentimiento.",
+        "body": [
+          "Para ejercer cualquiera de ellos basta un email a [[PENDING: email de privacidad]]: sin formularios, sin justificar el motivo y sin coste. Respondemos en el plazo de un mes que fija el artículo 12.3 del RGPD.",
+          "Puede que te pidamos escribir desde el mismo número con el que reservaste, para confirmar que eres tú."
+        ],
+        "list": [
+          {
+            "term": "Acceso",
+            "detail": "Saber qué datos tuyos tenemos y obtener una copia."
+          },
+          {
+            "term": "Rectificación",
+            "detail": "Corregir lo que esté mal o incompleto."
+          },
+          {
+            "term": "Supresión",
+            "detail": "Borrar tus datos, salvo lo que la ley obliga a conservar."
+          },
+          {
+            "term": "Limitación",
+            "detail": "Conservarlos pero dejar de usarlos mientras se resuelve una discrepancia."
+          },
+          {
+            "term": "Portabilidad",
+            "detail": "Recibir en un archivo legible los datos que nos diste."
+          },
+          {
+            "term": "Oposición",
+            "detail": "Oponerte al tratamiento, incluida cualquier comunicación comercial (art. 21)."
+          },
+          {
+            "term": "Retirada del consentimiento",
+            "detail": "Escribe PARAR o un email: tan fácil como darlo y sin cancelar tu cita."
+          }
+        ]
+      },
+      {
+        "number": 10,
+        "id": "security",
+        "icon": "lock",
+        "heading": "Seguridad",
+        "summary": "Conexión cifrada, base de datos cerrada al público y acceso solo para quien te atiende.",
+        "body": [
+          "Si ocurriera una brecha con riesgo alto para tus derechos, te lo comunicaríamos y lo notificaríamos a la AEPD en 72 horas (arts. 33 y 34 RGPD)."
+        ]
+      },
+      {
+        "number": 11,
+        "id": "minors",
+        "icon": "person",
+        "heading": "Menores",
+        "summary": "Los tratamientos son para mayores de 18 años y lo confirmas al reservar.",
+        "body": [
+          "Un menor de 18 años solo puede recibir un tratamiento acompañado de su padre, madre o tutor, que es quien contrata y facilita los datos.",
+          "El artículo 7 de la LOPDGDD sitúa en 14 años la edad para consentir por sí mismo; por debajo, consiente el titular de la patria potestad."
+        ]
+      },
+      {
+        "number": 12,
+        "id": "changes",
+        "icon": "document",
+        "heading": "Cambios",
+        "summary": "Manda la fecha del encabezado, y los cambios importantes te los comunicamos.",
+        "body": [
+          "La fecha de última actualización indica desde cuándo está en vigor el texto que lees.",
+          "Si el cambio es sustancial te lo comunicamos por WhatsApp antes de aplicarlo, y si requiere tu consentimiento te lo pedimos de nuevo."
+        ]
+      },
+      {
+        "number": 13,
+        "id": "contact-information",
+        "icon": "mail",
+        "heading": "Contacto",
+        "summary": "Escríbenos a nuestro email de privacidad, o reclama ante la AEPD.",
+        "body": [
+          "Para cualquier duda o para ejercer tus derechos, escribe a [[PENDING: email de privacidad]] o ven a [[PENDING: dirección postal del salón en Valencia]].",
+          "Si consideras que hemos vulnerado tus derechos, puedes reclamar ante la Agencia Española de Protección de Datos, C/ Jorge Juan 6, 28001 Madrid, o en aepd.es."
+        ],
+        "list": [
+          {
+            "term": "Email",
+            "detail": "[[PENDING: email de privacidad]]"
+          },
+          {
+            "term": "Dirección",
+            "detail": "[[PENDING: dirección postal del salón en Valencia]]"
+          },
+          {
+            "term": "Autoridad de control",
+            "detail": "AEPD — C/ Jorge Juan 6, 28001 Madrid — aepd.es"
+          }
+        ]
+      }
+    ]
   },
   "cosmetics": [
     {

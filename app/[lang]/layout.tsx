@@ -12,6 +12,9 @@ import { FooterContactDetails, type ContactDataItem } from "../ui/FooterContactD
 import { MotionProvider } from "../ui/MotionContext";
 import { StopAnimationsButton } from "../ui/StopAnimationsButton";
 import { getInfo } from "../lib/handleData";
+import { JsonLd, buildBusinessLd, buildWebsiteLd } from "../lib/jsonLd";
+import { SITE_URL } from "../lib/site";
+import { LOCALES, DEFAULT_LOCALE } from "../lib/locales";
 
 const playfair = Playfair_Display({
   variable: "--font-display",
@@ -28,19 +31,69 @@ const caveat = Caveat({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Ritual",
-  description: "Ritual massage salon",
-  alternates: {
-    // hreflang alternates so search engines know these are language variants.
-    languages: {
-      en: "/en",
-      ru: "/ru",
-      es: "/es",
-      "x-default": "/es",
+// Prerender all three locales as static HTML at build time.
+export function generateStaticParams() {
+  return LOCALES.map((lang) => ({ lang }));
+}
+
+// Without this, toLocale() falls back to "es" for any unrecognised segment, so
+// /xx, /foo and /pizza each returned 200 with the full Spanish homepage —
+// unbounded duplicate URLs. Now they 404.
+export const dynamicParams = false;
+
+// hreflang alternates so search engines treat the locales as variants of one page
+// rather than competitors. Takes a suffix so /services can reuse it later —
+// otherwise every page would advertise the locale roots as its siblings.
+function languageAlternates(suffix = "") {
+  const map: Record<string, string> = {};
+  for (const l of LOCALES) map[l] = `/${l}${suffix}`;
+  map["x-default"] = `/${DEFAULT_LOCALE}${suffix}`;
+  return map;
+}
+
+export async function generateMetadata({
+  params,
+}: LayoutProps<"/[lang]">): Promise<Metadata> {
+  const { lang } = await params;
+  const locale = toLocale(lang);
+  const dict = await getDictionary(locale);
+
+  return {
+    // Required for the hreflang/canonical URLs below to resolve as absolute.
+    // Google silently discards relative hreflang hrefs, so without this the
+    // whole multilingual setup does nothing.
+    metadataBase: new URL(SITE_URL),
+    title: { default: dict.seo.home.title, template: "%s · Ritual" },
+    description: dict.seo.home.description,
+    keywords: dict.seo.home.keywords,
+    alternates: {
+      canonical: `/${locale}`,
+      languages: languageAlternates(),
     },
-  },
-};
+    openGraph: {
+      type: "website",
+      siteName: "Ritual",
+      locale,
+      alternateLocale: LOCALES.filter((l) => l !== locale),
+      url: `/${locale}`,
+      title: dict.seo.home.title,
+      description: dict.seo.home.description,
+    },
+    twitter: { card: "summary_large_image" },
+    robots: {
+      index: true,
+      follow: true,
+      // max-snippet: -1 lifts the cap on how much text may be quoted, which is
+      // what lets AI Overviews use more than a truncated fragment.
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
+  };
+}
 
 export default async function RootLayout({
   children,
@@ -67,6 +120,18 @@ export default async function RootLayout({
       className={`${playfair.variable} ${nunito.variable} ${caveat.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col items-center scroll-smooth bg-cream text-ink font-body">
+        {/* Structured data for search engines and AI assistants. Built from the
+            contactDocs already read above, so no extra Firestore calls. */}
+        <JsonLd
+          data={buildBusinessLd({
+            locale,
+            contactDocs,
+            description: dict.seo.home.description,
+            bookLabel: dict.hero.cta,
+            staff: dict.staff,
+          })}
+        />
+        <JsonLd data={buildWebsiteLd()} />
         <MotionProvider>
         <WhatsAppStoreProvider number={whatsAppNumber} />
         <LocaleStoreProvider locale={locale} />
@@ -223,14 +288,18 @@ export default async function RootLayout({
           <section id="visit" className="flex  items-center justify-center  w-full bg-gradient-to-b from-blush/60 via-blush/90 to-blush pt-16 lg:pt-32 pb-8 px-2" >
             <div className="flex flex-col items-center justify-center gap-4 text-center rounded-pill bg-cream/80 py-6 px-4 min-h-40 shadow-[inset_0_0_0_1px_rgba(26,26,26,0.06),0_1px_0_rgba(255,255,255,0.7)] max-w-400 scroll-mt-24" id="contact">
               <FooterContactDetails contactDocs={contactDocs} address={dict.footer.address} hours={dict.footer.workingHours} commentAboutAppointments={dict.footer.commentAboutAppointments} daysOfWeek={JSON.parse(JSON.stringify(dict.daysOfWeek))} ariaLabelMapBox={dict.ariaLabels.map} ariaLabelGoogleMapButton={dict.ariaLabels.googleMapButton} />
-            
-              
+
+              {/* Visible counterpart to availableLanguage in the JSON-LD — schema
+                  describing content a user can't see gets discounted. */}
+              <p className="font-handwriting text-magenta text-2xl leading-normal text-center" data-testid="languages-spoken">
+                {dict.seo.languagesSpoken}
+              </p>
             </div>
           </section>
           <section className="flex flex-col gap-12 items-center justify-center  w-full bg-gradient-to-b from-blush to-blush pt-10 pb-6 px-4">
             <div className="flex flex-row flex-wrap items-center justify-center gap-4 max-w-400">
               {/*<NavLink href="">{dict.nav.blog}</NavLink>*/}
-              <NavLink href="">{dict.footer.privacyPolicy}</NavLink>
+              <NavLink href={`/${locale}/privacy`}>{dict.footer.privacyPolicy}</NavLink>
               {/*<NavLink href="">{dict.footer.contactUs}</NavLink>*/}
             </div>
             <p className="text-sm text-ink/70 text-center">

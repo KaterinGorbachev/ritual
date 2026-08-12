@@ -33,12 +33,16 @@ npx vitest run -t "gets number from database"            # by test name
 
 There is no root `.env` checked in — Firebase config reads `NEXT_PUBLIC_FIREBASE_*` env vars (see `app/database/firebase.config.js`). The app needs these set to talk to Firestore.
 
+`NEXT_PUBLIC_SITE_URL` sets the public origin used for canonical URLs, hreflang, the sitemap and JSON-LD `@id`s (see `app/lib/site.ts`). It falls back to the Vercel preview domain, so builds work without it — but production must set it, or every absolute URL in the metadata points at the wrong host.
+
 ## Architecture
 
 Single-page, multilingual marketing site for the "Ritual" massage salon. Server Components fetch content from Firestore; translated UI chrome comes from static JSON dictionaries. Everything lives under `app/` (App Router).
 
 ### Routing & i18n
-- The only route is `app/[lang]/` — `layout.tsx` (header/footer chrome) and `page.tsx` (the landing page). There is **no** `middleware.ts`; the `[lang]` param is taken as-is from the URL.
+- Routes are `app/[lang]/` — `layout.tsx` (header/footer chrome) and `page.tsx` (the landing page) — plus `app/[lang]/services/`.
+- `proxy.js` at the repo root (Next 16's replacement for `middleware.ts`) negotiates the locale: a path with no locale prefix is redirected to `/{locale}/…`, preferring the `ritual:lang` cookie, then `Accept-Language`, then `es`. Its matcher skips anything ending in a file extension, so `/robots.txt` and `/sitemap.xml` are served directly rather than redirected.
+- `layout.tsx` exports `generateStaticParams` for all three locales plus `dynamicParams = false`, so an unknown segment 404s instead of silently rendering as Spanish.
 - `app/[lang]/dictionaries.ts` maps a URL locale (e.g. `es-ES`) to a dictionary key via `toLocale()` (falls back to `en`) and lazy-imports `dictionaries/{en,es,ru}.json`. Dictionaries are `server-only`.
 - Pattern: server components `await params` → `getDictionary(toLocale(lang))` → pass strings down as props. **Client components never import dictionaries**; they receive translated strings as props (see `MapLeaflet`, `FooterContactDetails`).
 
@@ -47,6 +51,13 @@ Single-page, multilingual marketing site for the "Ritual" massage salon. Server 
 - `app/lib/handleData.js` is the only module that touches Firestore. All functions return a **result object** `{ ok: true, data } | { ok: false, error: { message, code } }` — callers branch on `.ok`, they don't try/catch. `getDocById(table, id)` fetches one doc; `getInfo(table)` fetches a whole collection.
 - `app/lib/firebaseErrors.js` maps Firestore error codes to Spanish user-facing messages.
 - Content collection is `contactData`, keyed by well-known doc ids: `address` (has `location` + a `"lat, lng"` `coordinates` string), `workingHours`, `messanger` (WhatsApp `telephone`), `instagram` (`url`). Fetching/parsing is defensive — a missing doc or malformed field logs and degrades, it doesn't throw (see `FooterContactDetails.tsx`).
+
+### SEO / AI discoverability
+- `app/lib/site.ts` is the single source of truth for the public origin: `SITE_URL`, the stable JSON-LD node ids `ORG_ID`/`WEBSITE_ID`, and `absUrl()`. Never hardcode a domain anywhere else.
+- `app/[lang]/layout.tsx` exports `generateMetadata` (not a static `metadata` object) so title/description/keywords come per-locale from the `seo` block in each dictionary. `metadataBase` is required — without it Next emits relative hreflang hrefs, which Google discards.
+- `app/lib/jsonLd.tsx` holds the `<JsonLd>` component and the schema builders. It is server-rendered on purpose: AI crawlers read the HTML they are served and many never execute JS. `buildBusinessLd` derives everything from the `contactData` docs the layout **already** fetches for the footer, so structured data costs no extra Firestore reads. It parses defensively (bare `"10"` hours, `"lat, lng"` strings) — a missing or malformed field drops that property rather than emitting an invalid one.
+- `app/robots.ts` and `app/sitemap.ts` use the Next 16 metadata file conventions. Next has no built-in AI-crawler rules, so the allowlist in `robots.ts` is explicit; the sitemap's `ROUTES` array is where new pages get added.
+- Two standing rules: **any claim in JSON-LD must also be visible on the page** (hence the languages-spoken line in the footer), and **`aggregateRating` stays out until the review figures are real** — `dict.reviews.ratingSummary` is display copy with a comma decimal in es/ru and must never be machine-parsed.
 
 ### Server vs client boundary
 - Data-fetching components (`WhatsAppButton`, `FooterContactDetails`) are **async Server Components** that call the data layer directly.

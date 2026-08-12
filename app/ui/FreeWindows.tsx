@@ -9,6 +9,8 @@
         <div className="w-full max-w-400 px-4 md:px-8 lg:px-24 py-10">
           <BookingSlots
             items={dict.booking.slots}
+            policyVersion={dict.privacy.meta.dateLastModification}
+            locale={locale}
             labels={{
               card: {
                 duration: dict.booking.durationLabel,
@@ -36,6 +38,7 @@
                 // recognisable whichever locale the page is in.
                 languageOptions: dict.booking.languages,
                 consent: dict.booking.form.consent,
+                privacyLink: dict.booking.form.privacyLink,
                 marketing: dict.booking.form.marketing,
                 confirm: dict.booking.form.confirm,
                 sending: dict.booking.form.sending,

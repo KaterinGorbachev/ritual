@@ -22,6 +22,14 @@ type BookingSlotsProps = {
     items: GallerySlot[];
     labels: BookingSlotsLabels;
     /**
+     * `privacy.meta.dateLastModification` — the version of the policy the
+     * client is being asked to accept. Stored with the consent record so the
+     * salon can prove *which text* was accepted (art. 7.1).
+     */
+    policyVersion: string;
+    /** The locale the policy is being shown in, stored alongside the consent. */
+    locale: string;
+    /**
      * Where the confirmed reservation is sent. Defaults to the booking route.
      * Pass `null` to skip the request entirely and go straight to the success
      * dialog — for previewing the flow before the backend exists.
@@ -49,6 +57,8 @@ type BookingSlotsProps = {
 export function BookingSlots({
     items,
     labels,
+    policyVersion,
+    locale,
     endpoint = "/api/reservations",
     className = "",
 }: BookingSlotsProps) {
@@ -100,6 +110,8 @@ export function BookingSlots({
                     <AppointmentForm
                         slot={selected}
                         labels={labels.form}
+                        policyVersion={policyVersion}
+                        locale={locale}
                         onConfirm={handleConfirm}
                         onCancel={() => setSelected(null)}
                     />

@@ -17,6 +17,24 @@
     "stopWord": "Stop animations",
     "resumeWord": "Resume animations"
   },
+  "seo": {
+    "home": {
+      "title": "Ritual — massage & facial salon in Valencia",
+      "description": "Facials and body rituals in Valencia: RF lifting, microcurrent, carboxytherapy, pressotherapy. We speak Spanish, English and Russian. Book on WhatsApp.",
+      "keywords": [
+        "massage Valencia",
+        "facial massage Valencia",
+        "RF lifting Valencia",
+        "microcurrent therapy",
+        "facial carboxytherapy",
+        "pressotherapy Valencia",
+        "relaxing massage Valencia",
+        "Russian speaking beauty salon Valencia",
+        "English speaking salon Valencia"
+      ]
+    },
+    "languagesSpoken": "We speak Spanish, English and Russian"
+  },
   "footer": {
     "address": "Address",
     "workingHours": "Working Hours",
@@ -229,6 +247,24 @@
         "name": "Facial carboxytherapy",
         "description": "Carried out with a dedicated device and cosmetics, this treatment is a pleasure to receive and gives striking results. It evens out tone and complexion, improves the quality and firmness of the skin, and strengthens the skin's own natural defences.",
         "image": "/services/carboxytherapy.webp"
+      },
+      {
+        "id": "bodySculpture",
+        "name": "Body Sculpture: 1.5 hours of beauty and lightness",
+        "description": "This is not just a massage but a carefully built programme that brings device-assisted methods, manual lipoplasty and maderotherapy together in a single session. In an hour and a half water retention goes down, volumes shrink, the skin tightens and the body starts its own detox. The combination is chosen for your body and your way of living, so the result shows after the very first visit and keeps building session after session.",
+        "image": "/services/body-sculpture.jpg"
+      },
+      {
+        "id": "bodyVShaping",
+        "name": "V-Shaping: device-assisted body contouring",
+        "description": "Body contouring on premium-class equipment (VelaShape, Endospheres and EMS stimulation) for cellulite and for the areas that never answer to diet or the gym. Vacuum and vibration improve circulation, break down orange-peel skin and give the tissues their density back, while muscle stimulation sculpts the silhouette without any effort from you. A comfortable programme with no needles and no recovery time, and a more defined contour visit after visit.",
+        "image": "/services/body-v-shaping.webp"
+      },
+      {
+        "id": "bodyDetoxWrap",
+        "name": "Lymphatic drainage, pressotherapy and algae wrap",
+        "description": "The gentlest of our body rituals and the favourite of everyone who arrives with heavy legs. Manual lymphatic drainage massage and pressotherapy help the body release excess fluid, while the algae wrap feeds the skin with minerals, leaves it smooth and firm and makes the effect last. It eases swelling and heaviness, improves your sleep and gives the body back its lightness — ideal after a flight, after pregnancy or after a long week on your feet.",
+        "image": "/services/body-vs.webp"
       }
     ]
   },
@@ -241,7 +277,7 @@
       "id": "facial",
       "name": "Alena Drazdova",
       "service": "Facebeauty · 14 years of hands",
-      "image": "/services/Alena.jpeg",
+      "image": "/services/Alena.webp",
       "defaultImage": "/back-massage-copilote-draw.jpg",
       "description": "Helps preserve youth and natural beauty without radical treatments. Thanks to a personalized approach and professional techniques, skin tone is improved, puffiness is reduced, facial muscles are relaxed, and contours are defined. Each treatment combines care, aesthetics, and visible results."
     },
@@ -249,7 +285,7 @@
       "id": "body",
       "name": "Margarita Sofronova",
       "service": "Bodyworker · 18 years of hands",
-      "image": "",
+      "image": "/services/Margarita.webp",
       "defaultImage": "/back-massage-copilote-draw.jpg",
       "description": "Helps relieve muscle tension, restore strength, and improve well-being. Professional techniques promote relaxation, improve circulation, and restore lightness to the body. Each treatment is tailored to your needs, ensuring you feel comfortable and notice results after just one session."
     }
@@ -326,6 +362,7 @@
       "phoneHint": "Include your country code, e.g. +34 600 000 000",
       "language": "Preferred language",
       "consent": "I am 18 years old and agree with the Privacy Policy",
+      "privacyLink": "Read the Privacy Policy",
       "marketing": "I would like to receive information about services and discounts",
       "confirm": "Confirm",
       "sending": "Sending…",
@@ -419,6 +456,398 @@
       "cta": "Contact us on WhatsApp"
     },
     "message": "Hello, I would like to book a ritual at Ritual."
+  },
+  "privacy": {
+    "meta": {
+      "title": "Privacy Policy",
+      "description": "What data Ritual handles, what for, who we share it with, how long we keep it and how to exercise your rights.",
+      "eyebrow": "clear, no small print",
+      "intro": "Here is what data of yours we handle, what for, and for how long.",
+      "dateLastModification": "2026-08-11",
+      "authoritativeLanguage": "es",
+      "tocLabel": "Contents",
+      "summaryLabel": "In short",
+      "updatedLabel": "Last updated",
+      "authoritativeNote": "The Spanish version is the legally binding one.",
+      "printLabel": "Print"
+    },
+    "sections": [
+      {
+        "number": 1,
+        "id": "responsible-person",
+        "icon": "person",
+        "heading": "Controller",
+        "summary": "Ritual, the beauty salon in Valencia where you book, decides what your data is used for.",
+        "body": [
+          "The data controller is [[PENDING: nombre legal registrado]], tax number (NIF/CIF) [[PENDING: NIF/CIF]], at [[PENDING: dirección postal del salón en Valencia]]. For any privacy matter, write to us at [[PENDING: email de privacidad]]."
+        ],
+        "list": [
+          {
+            "term": "Controller",
+            "detail": "[[PENDING: nombre legal registrado]] — NIF/CIF [[PENDING: NIF/CIF]]"
+          },
+          {
+            "term": "Address",
+            "detail": "[[PENDING: dirección postal del salón en Valencia]]"
+          },
+          {
+            "term": "Email",
+            "detail": "[[PENDING: email de privacidad]]"
+          }
+        ]
+      },
+      {
+        "number": 2,
+        "id": "data-collection",
+        "icon": "document",
+        "heading": "What we collect",
+        "summary": "Your name, your phone, your language, the time you pick and what you write to us on WhatsApp.",
+        "body": [
+          "The booking form asks for four things: name, phone, preferred language, and confirmation that you are 18 and accept this policy. We also store the time you chose and when you booked.",
+          "If you write on WhatsApp we handle your number, your profile name and the content of your messages. If the appointment produces an invoice, we handle the billing data the law requires."
+        ],
+        "list": [
+          {
+            "term": "Booking form",
+            "detail": "Name, phone, language, acceptance of this policy and the optional offers box."
+          },
+          {
+            "term": "Appointment",
+            "detail": "The treatment and time you choose, and the booking date."
+          },
+          {
+            "term": "WhatsApp",
+            "detail": "Your number, your profile's public name and your messages."
+          },
+          {
+            "term": "Billing",
+            "detail": "Only when the appointment produces an invoice."
+          }
+        ]
+      },
+      {
+        "number": 3,
+        "id": "data-usage",
+        "icon": "clock",
+        "heading": "What for, and on what legal basis",
+        "summary": "Every purpose has its legal basis, and anything resting on your consent is optional.",
+        "body": [
+          "When you message us on WhatsApp the basis is not your consent but article 6.1.b of the GDPR: steps taken at your request before a contract. Your message is that request, which is why we do not ask you to accept anything for us to reply.",
+          "We make no automated decisions and build no profiles: every appointment is confirmed by a person."
+        ],
+        "table": {
+          "columns": [
+            "What for",
+            "Legal basis",
+            "Can you refuse?"
+          ],
+          "rows": [
+            [
+              "Answering your enquiry and arranging the appointment",
+              "Art. 6.1.b — your own request before a contract",
+              "Nothing to tick; your message is the request."
+            ],
+            [
+              "Managing the booking and giving you the treatment",
+              "Art. 6.1.b — performance of the contract",
+              "Required in order to book."
+            ],
+            [
+              "Reminding you of the appointment",
+              "Art. 6.1.b — performance of the contract",
+              "Yes, ask us and we stop."
+            ],
+            [
+              "Sending you offers and news",
+              "Art. 6.1.a consent + art. 21 LSSI-CE",
+              "Yes. Separate box, unticked; it does not affect your booking."
+            ],
+            [
+              "Issuing and keeping invoices",
+              "Art. 6.1.c — legal obligation",
+              "No, where the appointment produces an invoice."
+            ]
+          ]
+        }
+      },
+      {
+        "number": 4,
+        "id": "health-data",
+        "icon": "hand",
+        "heading": "Health data",
+        "summary": "We do not collect it through the website or WhatsApp: tell us anything relevant at the salon.",
+        "body": [
+          "A note about pregnancy, injuries, allergies or skin conditions is special-category data (art. 9 GDPR) and would require your explicit consent (art. 9.2.a). The booking form has no health field.",
+          "If something worth noting for your next visit comes up at the salon, we ask you then and there, and you can refuse without losing the treatment."
+        ]
+      },
+      {
+        "number": 5,
+        "id": "data-sharing",
+        "icon": "share",
+        "heading": "Who we share it with",
+        "summary": "Only the providers that keep the salon running, each under a signed processing agreement.",
+        "body": [
+          "We do not sell your data and do not pass it on for commercial purposes. The providers below act as processors under the agreement article 28 of the GDPR requires.",
+          "Meta and Google are Irish subsidiaries, but their US parents may access the data. Those transfers rely on the EU–US Data Privacy Framework, currently in force with both companies certified, backed by the Standard Contractual Clauses.",
+          "We may also disclose data to the authorities or the courts where the law requires it."
+        ],
+        "table": {
+          "columns": [
+            "Who",
+            "What it receives",
+            "Agreement and transfer"
+          ],
+          "rows": [
+            [
+              "Meta Platforms Ireland Ltd. (WhatsApp)",
+              "Your number and messages, to arrange and confirm appointments.",
+              "Art. 28 yes; US parent certified under the EU–US Framework."
+            ],
+            [
+              "Google Ireland Ltd. (Firebase)",
+              "Your booking and your consent preferences.",
+              "Art. 28 yes; US parent certified under the EU–US Framework."
+            ]
+          ]
+        }
+      },
+      {
+        "number": 6,
+        "id": "data-whatsapp-usage",
+        "icon": "chat",
+        "heading": "WhatsApp",
+        "summary": "Writing to us is asking for an appointment, not signing a consent form: we reply, but send you no ads.",
+        "body": [
+          "We use your number, profile name and messages to reply and arrange the appointment, on the basis of article 6.1.b. Your message covers that enquiry and the service around it: it does not authorise advertising, broadcast lists or groups.",
+          "We use Meta's WhatsApp Business Platform (Cloud API). Messages are end-to-end encrypted, but copies remain on Meta's infrastructure and on both phones: we can delete the data in our system, not the copy on yours.",
+          "Advertising is a separate box, unticked by default (arts. 7.2 and 7.4): refusing does not affect your booking. When you tick it we store the date, the version of this policy and the language you read it in, because article 7.1 requires us to prove what you agreed to.",
+          "Write STOP in the chat or send us an email and we stop sending advertising to that number, free and immediately. Withdrawing consent cancels no appointment."
+        ],
+        "list": [
+          {
+            "term": "Service messages",
+            "detail": "Replying, confirming, changing or reminding you of your appointment. Art. 6.1.b: no box required."
+          },
+          {
+            "term": "Advertising",
+            "detail": "Separate box, unticked, optional. Art. 6.1.a and art. 21 LSSI-CE."
+          },
+          {
+            "term": "To stop receiving it",
+            "detail": "Write STOP in the chat or email the address in section 1."
+          }
+        ]
+      },
+      {
+        "number": 7,
+        "id": "data-retention",
+        "icon": "clock",
+        "heading": "How long we keep it",
+        "summary": "As long as we need to look after you, and six years for invoices because the law says so.",
+        "body": [
+          "Article 30 of the Spanish Commercial Code requires business records to be kept for six years, and the General Tax Act sets a four-year limitation period: we apply the longer one.",
+          "When a period expires we delete the data. If you ask for deletion sooner we do it, except what we must keep by law, and we tell you what remains."
+        ],
+        "table": {
+          "columns": [
+            "What",
+            "How long",
+            "Counted from"
+          ],
+          "rows": [
+            [
+              "Enquiry that does not become an appointment",
+              "12 months maximum",
+              "From your last message"
+            ],
+            [
+              "Booking data",
+              "While you are a client, plus 1 year",
+              "From your last appointment"
+            ],
+            [
+              "WhatsApp conversation",
+              "12 months",
+              "From the last message"
+            ],
+            [
+              "Invoices and accounts",
+              "6 years",
+              "From the close of the accounting year"
+            ],
+            [
+              "Consent to advertising",
+              "Until you withdraw it",
+              "Only a record of the withdrawal remains"
+            ],
+            [
+              "Evidence of consent and of your requests",
+              "3 years",
+              "From when you gave it or we replied"
+            ]
+          ]
+        }
+      },
+      {
+        "number": 8,
+        "id": "cookies",
+        "icon": "cookie",
+        "heading": "Cookies",
+        "summary": "First-party technical storage only: no analytics, no advertising and no third-party cookies.",
+        "body": [
+          "A cookie is a small text file a website stores in your browser to remember something between visits. They are classified by who manages them (first- or third-party), how long they last (session cookies, deleted when you close the browser, or persistent ones with an expiry date) and what they are for.",
+          "Ours are first-party and persistent, and all of them are strictly necessary: they make the site work and remember what you chose. We install no analytics, personalisation or behavioural-advertising cookies, and no third party sets cookies through this site.",
+          "The legal basis for strictly necessary storage is article 22.2 of Law 34/2002 (LSSI-CE), which exempts it from prior consent because it is essential to providing the service you asked for. If we ever added analytics or advertising cookies we would ask for your consent first (art. 6.1.a GDPR), and you could withdraw it whenever you liked.",
+          "We keep this information for as long as it is needed for the purpose described, or until you delete it. A persistent cookie can stay installed for years if you never remove it: you can limit that at any time by deleting it from your browser.",
+          "You can block or delete cookies in your browser's settings, usually under the «Options», «Preferences» or «Settings» menu. If you block them you can still use the site: you will simply lose the saved language and animation preference, and have to choose them again on each visit."
+        ],
+        "table": {
+          "columns": [
+            "Name",
+            "Type and purpose",
+            "Duration"
+          ],
+          "rows": [
+            [
+              "ritual:lang",
+              "First-party, persistent, strictly necessary cookie. Remembers the language you choose (Spanish, English or Russian).",
+              "1 year"
+            ],
+            [
+              "ritual:motion-off",
+              "First-party, persistent, strictly necessary local storage. Remembers whether you turned animations off.",
+              "Until you clear your browser data"
+            ]
+          ]
+        },
+        "note": "Deleting this site's cookies loses you no booking: your appointments live in our database, not in your browser.",
+        "list": [
+          {
+            "term": "Google Chrome",
+            "detail": "Settings → Privacy and security → Cookies and other site data. Guide: support.google.com/chrome/answer/95647"
+          },
+          {
+            "term": "Mozilla Firefox",
+            "detail": "Settings → Privacy & Security → Cookies and Site Data. Guide: support.mozilla.org/kb/clear-cookies-and-site-data-firefox"
+          },
+          {
+            "term": "Safari",
+            "detail": "Preferences → Privacy → Manage Website Data. Guide: support.apple.com/guide/safari/sfri11471"
+          },
+          {
+            "term": "Microsoft Edge",
+            "detail": "Settings → Cookies and site permissions. Guide: support.microsoft.com/microsoft-edge, search «delete cookies»"
+          },
+          {
+            "term": "Opera",
+            "detail": "Settings → Privacy & security → Cookies. Guide: help.opera.com/latest/web-preferences"
+          },
+          {
+            "term": "On mobile",
+            "detail": "The same option sits inside your browser app's settings, under privacy."
+          }
+        ]
+      },
+      {
+        "number": 9,
+        "id": "user-rights",
+        "icon": "hand",
+        "heading": "Your rights",
+        "summary": "Access, rectification, erasure, restriction, portability, objection and withdrawal of consent.",
+        "body": [
+          "To exercise any of them, an email to [[PENDING: email de privacidad]] is enough: no forms, no reason to give, no cost. We reply within the one month set by article 12.3 of the GDPR.",
+          "We may ask you to write from the same number you booked with, to confirm it is you."
+        ],
+        "list": [
+          {
+            "term": "Access",
+            "detail": "Find out what data we hold and get a copy."
+          },
+          {
+            "term": "Rectification",
+            "detail": "Correct anything wrong or incomplete."
+          },
+          {
+            "term": "Erasure",
+            "detail": "Delete your data, except what the law obliges us to keep."
+          },
+          {
+            "term": "Restriction",
+            "detail": "Keep it but stop using it while a disagreement is resolved."
+          },
+          {
+            "term": "Portability",
+            "detail": "Receive the data you gave us in a machine-readable file."
+          },
+          {
+            "term": "Objection",
+            "detail": "Object to the processing, including any commercial message (art. 21)."
+          },
+          {
+            "term": "Withdrawing consent",
+            "detail": "Write STOP or an email: as easy as giving it, and it cancels no appointment."
+          }
+        ]
+      },
+      {
+        "number": 10,
+        "id": "security",
+        "icon": "lock",
+        "heading": "Security",
+        "summary": "Encrypted connection, a database closed to the public, and access only for whoever serves you.",
+        "body": [
+          "If a breach occurred posing a high risk to your rights, we would tell you and notify the AEPD within 72 hours (arts. 33 and 34 GDPR)."
+        ]
+      },
+      {
+        "number": 11,
+        "id": "minors",
+        "icon": "person",
+        "heading": "Minors",
+        "summary": "Treatments are for people aged 18 and over, and you confirm it when you book.",
+        "body": [
+          "Anyone under 18 may only receive a treatment accompanied by a parent or guardian, who contracts the service and provides the data.",
+          "Article 7 of the LOPDGDD sets 14 as the age for consenting on one's own behalf; below that, the holder of parental authority consents."
+        ]
+      },
+      {
+        "number": 12,
+        "id": "changes",
+        "icon": "document",
+        "heading": "Changes",
+        "summary": "The date at the top is what counts, and we tell you about important changes.",
+        "body": [
+          "The last-updated date shows when the text you are reading took effect.",
+          "If a change is substantial we tell you on WhatsApp before it applies, and if it needs your consent we ask again."
+        ]
+      },
+      {
+        "number": 13,
+        "id": "contact-information",
+        "icon": "mail",
+        "heading": "Contact",
+        "summary": "Write to our privacy email, or complain to the AEPD.",
+        "body": [
+          "For any question or to exercise your rights, write to [[PENDING: email de privacidad]] or come to [[PENDING: dirección postal del salón en Valencia]].",
+          "If you believe we have infringed your rights, you can complain to the Spanish Data Protection Agency, C/ Jorge Juan 6, 28001 Madrid, or at aepd.es."
+        ],
+        "list": [
+          {
+            "term": "Email",
+            "detail": "[[PENDING: email de privacidad]]"
+          },
+          {
+            "term": "Address",
+            "detail": "[[PENDING: dirección postal del salón en Valencia]]"
+          },
+          {
+            "term": "Supervisory authority",
+            "detail": "AEPD — C/ Jorge Juan 6, 28001 Madrid — aepd.es"
+          }
+        ]
+      }
+    ]
   },
   "cosmetics": [
     {

@@ -27,6 +27,7 @@ const labels = {
         { value: "ru", label: "Русский" },
     ],
     consent: "I am 18 years old and agree with the Privacy Policy",
+    privacyLink: "Read the Privacy Policy",
     marketing: "I would like to receive information about services and discounts",
     confirm: "Confirm",
     /** Replaces the confirm label while the reservation is being sent. */
@@ -45,6 +46,8 @@ const form = (over: Partial<React.ComponentProps<typeof AppointmentForm>> = {}) 
     <AppointmentForm
         slot={slot}
         labels={labels}
+        policyVersion="2026-08-11"
+        locale="es"
         onConfirm={() => { }}
         onCancel={() => { }}
         {...over}
@@ -200,6 +203,62 @@ describe("AppointmentForm", () => {
         expect(onConfirm).toHaveBeenCalledWith(
             expect.objectContaining({ marketingOptIn: true })
         );
+    });
+
+    // --- The consent record (art. 7.1: the salon must be able to PROVE it) ---
+
+    it("leaves the marketing tick unchecked by default", async () => {
+        // A pre-ticked box is void consent (Planet49, C-673/17). This is a
+        // legal requirement, not a styling preference.
+        const screen = await render(form());
+        await expect.element(screen.getByLabelText(labels.marketing)).not.toBeChecked();
+    });
+
+    it("books successfully without the marketing tick — it is optional (art. 7.4)", async () => {
+        const onConfirm = vi.fn();
+        const screen = await render(form({ onConfirm }));
+        await fillValid(screen);
+        await userEvent.click(screen.getByRole("button", { name: labels.confirm }));
+        expect(onConfirm).toHaveBeenCalledTimes(1);
+    });
+
+    it("sends a consent record carrying the policy version and locale", async () => {
+        // The policy tells clients we store what they agreed to, in which
+        // language and when. If this payload does not carry it, that prose is
+        // a lie — so the payload is asserted here.
+        const onConfirm = vi.fn();
+        const screen = await render(
+            form({ onConfirm, policyVersion: "2026-08-11", locale: "es" }),
+        );
+        await fillValid(screen);
+        await userEvent.click(screen.getByRole("button", { name: labels.confirm }));
+
+        expect(onConfirm).toHaveBeenCalledWith(
+            expect.objectContaining({
+                consent: expect.objectContaining({
+                    policyAccepted: true,
+                    policyVersion: "2026-08-11",
+                    locale: "es",
+                    source: "booking-form",
+                }),
+            }),
+        );
+    });
+
+    it("never reports consent as accepted when the box was not ticked", async () => {
+        const onConfirm = vi.fn();
+        const screen = await render(form({ onConfirm }));
+        await fillValid(screen, "consent");
+        await userEvent.click(screen.getByRole("button", { name: labels.confirm }));
+        // Submission is blocked, so nothing claiming acceptance is ever sent.
+        expect(onConfirm).not.toHaveBeenCalled();
+    });
+
+    it("moves focus to the consent box when it is the only thing missing", async () => {
+        const screen = await render(form());
+        await fillValid(screen, "consent");
+        await userEvent.click(screen.getByRole("button", { name: labels.confirm }));
+        await expect.element(screen.getByLabelText(labels.consent)).toHaveFocus();
     });
 
     it("submits the preferred language, defaulting to the first option", async () => {

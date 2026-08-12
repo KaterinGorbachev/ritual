@@ -13,7 +13,8 @@ import { BookingSelectForm } from "@/app/ui/BookingSelectForm";
 // through the gaps between the three price containers.
 export default async function ServicesPage({ params }: PageProps<"/[lang]/services">) {
   const { lang } = await params;
-  const dict = await getDictionary(toLocale(lang));
+  const locale = toLocale(lang);
+  const dict = await getDictionary(locale);
   const page = dict.servicesPage;
 
   return (
@@ -76,7 +77,7 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
 
           </div>
 
-          <BookingSelectForm defaultLang={lang} categoryLabel={dict.serviceCategory.label} categoryPlaceholder={dict.serviceCategory.placeholder} languageLabel={dict.serviceCategory.lang}bookLabel={dict.topServices.cta} formTitle={dict.topServices.ctaQuestion}
+          <BookingSelectForm defaultLang={locale} categoryLabel={dict.serviceCategory.label} categoryPlaceholder={dict.serviceCategory.placeholder} languageLabel={dict.serviceCategory.lang}bookLabel={dict.topServices.cta} formTitle={dict.topServices.ctaQuestion}
           >
 
           </BookingSelectForm>

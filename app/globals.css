@@ -289,3 +289,267 @@
   background-color: var(--color-blush);
   color: var(--color-ink);
 }
+
+/* --- Legal table of contents ----------------------------------------------
+
+   Below `lg` the contents is a collapsed bar stuck to the top of the viewport;
+   from `lg` up it is an open list in the sticky sidebar. `details[open]` cannot
+   be toggled per-breakpoint from the attribute, so the desktop state is forced
+   here instead. */
+.legal-toc summary::-webkit-details-marker,
+.legal-toc summary::marker {
+  display: none;
+  content: "";
+}
+
+@media (min-width: 64rem) {
+
+  /* Always expanded on desktop, whatever the user last did on a phone. A closed
+     <details> hides its children through ::details-content, so overriding that
+     — not the child's own `display` — is what actually reveals the list. */
+  .legal-toc-details::details-content {
+    content-visibility: visible;
+    block-size: auto;
+  }
+
+  .legal-toc-details>ol {
+    display: flex !important;
+  }
+
+  /* Nothing to toggle at this width; keep it out of the tab order. */
+  .legal-toc-details>summary {
+    pointer-events: none;
+  }
+}
+
+/* --- Legal tables on phones and tablets ------------------------------------
+
+   A three-column legal table (purpose / legal basis / can you refuse?) cannot
+   be read at 320px, and even at 768px the columns are too narrow for prose — a
+   horizontal scroller just makes the reader pan back and forth pairing each
+   value with its heading.
+
+   So up to and including tablet the table becomes ONE CARD PER ROW: the header
+   row is hidden and every cell prints its own column name, taken from the
+   `data-label` attribute that LegalTable.tsx puts on each <td>. The element
+   stays a real <table> — only its `display` changes — so the accessible
+   semantics are untouched. The real table returns at `lg` (1024px), which is
+   the first width with room for three prose columns. */
+@media (max-width: 63.99rem) {
+
+  .legal-table,
+  .legal-table caption,
+  .legal-table tbody,
+  .legal-table tr,
+  .legal-table td {
+    display: block;
+    width: 100%;
+  }
+
+  /* The visible header row is redundant once each cell carries its own label,
+     and `display: none` on a <thead> does not remove the <th> from the
+     accessibility tree's column associations. */
+  .legal-table thead {
+    display: none;
+  }
+
+  /* One card per row. */
+  .legal-table tr {
+    border: 1px solid color-mix(in srgb, var(--color-blush) 40%, transparent);
+    border-radius: var(--radius-card);
+    padding: 0.25rem 0;
+    margin-bottom: 0.75rem;
+    background: color-mix(in srgb, var(--color-cream) 60%, transparent);
+  }
+
+  .legal-table tr:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Label above value: at this width a side-by-side pair leaves too little
+     room for the value, which is prose rather than a number. */
+  .legal-table td {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    overflow-wrap: anywhere;
+    min-width: 0;
+  }
+
+  .legal-table td::before {
+    content: attr(data-label);
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-magenta);
+  }
+
+  /* An empty cell would otherwise render a label pointing at nothing. */
+  .legal-table td:empty {
+    display: none;
+  }
+}
+
+/* --- Print ----------------------------------------------------------------
+
+   People print privacy policies, and the Print button on the policy page uses
+   the browser's own dialog — so these rules ARE the paper document.
+
+   The policy text itself is never collapsed on screen, so nothing has to be
+   forced open here. What matters on paper is losing the cream/blush washes:
+   they eat toner and lower contrast, so the brand survives only in the heading
+   rules. Any remaining <details> (the mobile contents bar) is hidden outright
+   rather than expanded. */
+@media print {
+  @page {
+    size: A4;
+    margin: 18mm 16mm;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    font-size: 10.5pt;
+  }
+
+  /* Site chrome is not part of the document. */
+  header[data-testid="header"],
+  footer,
+  canvas,
+  [data-testid="legal-toc"],
+  [data-testid="print-button"],
+  [data-testid="skip-to-content"] {
+    display: none !important;
+  }
+
+  /* Flatten every decorative surface. */
+  *,
+  *::before,
+  *::after {
+    background-image: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    text-shadow: none !important;
+  }
+
+  section,
+  details,
+  summary {
+    background-color: transparent !important;
+  }
+
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+    page-break-after: avoid;
+    color: #1A1A1A !important;
+  }
+
+  h1 {
+    font-size: 22pt !important;
+  }
+
+  h2 {
+    font-size: 14pt !important;
+    border-bottom: .4mm solid #BC1571;
+    padding-bottom: 1.5mm;
+  }
+
+  p,
+  li,
+  dd,
+  dt,
+  td,
+  th {
+    color: #1A1A1A !important;
+    line-height: 1.45 !important;
+  }
+
+  /* Keep the layer-1 summary as one unbroken, outlined block. */
+  [data-testid^="legal-section-"] > div:first-of-type {
+    border: .3mm solid #BC1571 !important;
+    border-radius: 2mm;
+    padding: 3mm 4mm !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  [data-testid^="legal-section-"] {
+    border-bottom: none !important;
+  }
+
+  /* Tables need real rules on paper, repeating headers, and unsplit rows. */
+  [data-testid="legal-table-scroll"] {
+    overflow: visible !important;
+    border: none !important;
+  }
+
+  /* Paper is always wide enough for the real table, so undo the small-screen
+     card view — otherwise printing from a narrow window yields stacked cards
+     with duplicated labels. */
+  .legal-table,
+  .legal-table tbody,
+  .legal-table thead,
+  .legal-table tr,
+  .legal-table td {
+    display: revert !important;
+    width: auto !important;
+    border-radius: 0 !important;
+    margin-bottom: 0 !important;
+    background: none !important;
+  }
+
+  .legal-table td::before {
+    content: none !important;
+  }
+
+  table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    font-size: 9pt !important;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  th,
+  td {
+    border: .25mm solid #999 !important;
+    padding: 2mm !important;
+    vertical-align: top;
+  }
+
+  th {
+    background: #f2f2f2 !important;
+    font-weight: 700;
+  }
+
+  caption {
+    font-size: 10pt !important;
+    text-align: left;
+    font-weight: 700;
+    padding: 2mm 0 !important;
+  }
+
+  /* The page margin sets the measure on paper. */
+  .max-w-prose {
+    max-width: none !important;
+  }
+
+  a {
+    color: #1A1A1A !important;
+    text-decoration: none !important;
+  }
+}
