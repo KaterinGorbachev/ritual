@@ -2,7 +2,7 @@
 // production; the fallback keeps builds working before a custom domain is wired
 // up. It only ever affects absolute URLs in metadata/JSON-LD, never rendering.
 export const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://ritualstudio.vercel.app"
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://ritualestudio.vercel.app"
 ).replace(/\/$/, "");
 
 // Stable JSON-LD node ids. Using @id lets blocks on different pages point at the
