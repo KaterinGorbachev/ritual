@@ -205,6 +205,40 @@
   animation: team-slide-in-right 1.1s cubic-bezier(.22, .61, .36, 1) both;
 }
 
+/* --- Service cards --------------------------------------------------------
+
+   A much quieter entrance than the team cards above: a fade plus a short rise,
+   no horizontal travel. Deliberately NOT the 60vw team slide — on a phone that
+   is a card crossing most of the screen, and a transform that wide near the
+   viewport edge is the classic way to cause an accidental horizontal scroll.
+
+   Mobile only. The grid is `sm:grid-cols-2 lg:grid-cols-3`, so this media query
+   matches the width at which the grid is a single column and the reader meets
+   each card on its own — the one case where marking the arrival helps. From
+   `sm` up the cards arrive two or three at a time and the class is inert. */
+@keyframes service-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 39.99rem) {
+  .service-card {
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+
+  .service-card--in-view {
+    animation: service-rise-in .45s cubic-bezier(.22, .61, .36, 1) both;
+  }
+}
+
 /* Respect users who prefer reduced motion. The marquee styling lives inline on
    the component (see BrandMarquee.tsx); here we only kill the animation and let
    the track become a normal scroll container so all brands stay reachable. */
@@ -224,7 +258,8 @@
   /* With animation killed, a team card that hasn't gained --in-view (never
      scrolled to) would keep the base .team-card opacity:0 forever. Force the
      reveal end-state so all cards stay visible. */
-  .team-card {
+  .team-card,
+  .service-card {
     opacity: 1 !important;
     transform: none !important;
   }
@@ -245,7 +280,8 @@
   overflow-x: auto !important;
 }
 
-.motion-off .team-card {
+.motion-off .team-card,
+.motion-off .service-card {
   opacity: 1 !important;
   transform: none !important;
 }

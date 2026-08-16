@@ -71,7 +71,7 @@ export function BubbleCanvas({
 
   // The loop lives in the effect closure below; it publishes its play/pause
   // handles here so the global flag can drive it without remounting.
-  const controlsRef = useRef<{ play: () => void; pause: () => void } | null>(null);
+  const controlsRef = useRef<{ resume: () => void; pause: () => void } | null>(null);
 
   // Mirror `off` into a ref so the loop-owning effect (which must not re-run on
   // toggle) can read the current value inside its start/visibility handlers.
@@ -442,20 +442,62 @@ export function BubbleCanvas({
       draw(); // hold the current frame rather than leaving a half-cleared canvas
     }
 
-    controlsRef.current = { play, pause };
+    // `resume` rather than a bare `play`: the global toggle must not restart a
+    // canvas that is scrolled offscreen or in a hidden tab. sync() re-checks
+    // every condition, so pressing "resume animations" while the hero is out of
+    // view arms the loop and lets it start when it scrolls back.
+    controlsRef.current = {
+      pause,
+      resume: () => {
+        wantsToRun = true;
+        sync();
+      },
+    };
 
-    // Save battery: pause while the tab is hidden, resume if it was playing.
-    // A tab hidden while globally stopped stays stopped, because `wasRunning`
-    // is false. Coming back never overrides the global "off" flag.
-    let wasRunning = false;
-    function onVisibility() {
-      if (document.hidden) {
-        wasRunning = running;
-        pause();
-      } else if (wasRunning && !offRef.current && !still) {
-        play();
-      }
+    // --- when the loop is allowed to run ---
+    // Two independent conditions can suspend it: the tab being hidden, and the
+    // canvas being scrolled out of the viewport. They are tracked separately and
+    // combined here, because either one alone must be enough to stop the loop —
+    // a single shared "was running" flag would let whichever condition cleared
+    // first restart the animation while the other still wanted it stopped (come
+    // back to a background tab whose canvas is scrolled away, and the bubbles
+    // would animate offscreen).
+    //
+    // `wantsToRun` is what the *page* wants; the user-level vetoes (the global
+    // stop flag, `still`) are checked on top of it, so resuming can never
+    // override them.
+    let tabVisible = !document.hidden;
+    let onScreen = true; // until the observer says otherwise
+    let wantsToRun = false; // set true once the loop has actually been started
+
+    /** Apply the current conditions to the loop. Idempotent — play()/pause()
+     *  are no-ops when already in the target state. */
+    function sync() {
+      if (!wantsToRun) return;
+      if (tabVisible && onScreen && !offRef.current && !still) play();
+      else pause();
     }
+
+    // Save battery: pause while the tab is hidden. A tab hidden while globally
+    // stopped stays stopped, because sync() re-checks the global flag.
+    function onVisibility() {
+      tabVisible = !document.hidden;
+      sync();
+    }
+
+    // Save battery and, more importantly, keep the main thread free for
+    // scrolling: the hero canvas is expensive per frame, and once it has scrolled
+    // past there is nothing to look at. `rootMargin` keeps it running just off
+    // the edge so it is already animating by the time it scrolls back into view
+    // rather than starting from a frozen frame.
+    const onScreenObserver = new IntersectionObserver(
+      ([entry]) => {
+        onScreen = entry.isIntersecting;
+        sync();
+      },
+      { rootMargin: "100px" },
+    );
+    onScreenObserver.observe(canvas);
 
     document.addEventListener("visibilitychange", onVisibility);
     window.addEventListener("resize", resize);
@@ -474,7 +516,12 @@ export function BubbleCanvas({
         pause();
         draw();
       } else {
-        play();
+        // From here on the page wants motion; sync() decides whether the tab
+        // and viewport conditions currently allow it. Starting a canvas that is
+        // already scrolled offscreen therefore holds a still frame instead of
+        // animating where nobody can see it.
+        wantsToRun = true;
+        sync();
       }
     }
 
@@ -522,6 +569,7 @@ export function BubbleCanvas({
       cancelled = true;
       pause();
       controlsRef.current = null;
+      onScreenObserver.disconnect();
       document.removeEventListener("visibilitychange", onVisibility);
       window.removeEventListener("resize", resize);
       img.onload = null;
@@ -529,9 +577,11 @@ export function BubbleCanvas({
     };
   }, [backdrop, density, still]);
 
-  // Apply the global flag whenever it flips. `play()`/`pause()` are no-ops when
-  // already in the target state. Resuming is the user's explicit choice, so it
-  // wins over reduced-motion (which only sets the initial state in `start()`).
+  // Apply the global flag whenever it flips. `resume()`/`pause()` are no-ops
+  // when already in the target state. Resuming is the user's explicit choice, so
+  // it wins over reduced-motion (which only sets the initial state in `start()`)
+  // — but not over the tab/viewport conditions, which resume() re-checks: those
+  // only ever defer the animation to the moment it can actually be seen.
   // A still canvas has no loop to resume, so the resume half is skipped for it —
   // otherwise pressing "resume animations" would start the Services field
   // drifting, which is the one thing `still` exists to prevent.
@@ -539,7 +589,7 @@ export function BubbleCanvas({
     const controls = controlsRef.current;
     if (!controls) return;
     if (off) controls.pause();
-    else if (!still) controls.play();
+    else if (!still) controls.resume();
   }, [off, still]);
 
   return (
