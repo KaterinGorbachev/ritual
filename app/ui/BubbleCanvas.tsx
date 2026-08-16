@@ -455,26 +455,27 @@ export function BubbleCanvas({
     };
 
     // --- when the loop is allowed to run ---
-    // Two independent conditions can suspend it: the tab being hidden, and the
-    // canvas being scrolled out of the viewport. They are tracked separately and
-    // combined here, because either one alone must be enough to stop the loop —
-    // a single shared "was running" flag would let whichever condition cleared
-    // first restart the animation while the other still wanted it stopped (come
-    // back to a background tab whose canvas is scrolled away, and the bubbles
-    // would animate offscreen).
+    // Three independent conditions can suspend it: the tab being hidden, the
+    // canvas being scrolled out of the viewport, and the page currently being
+    // scrolled. They are tracked separately and combined here, because any one
+    // alone must be enough to stop the loop — a single shared "was running" flag
+    // would let whichever condition cleared first restart the animation while
+    // another still wanted it stopped (come back to a background tab whose
+    // canvas is scrolled away, and the bubbles would animate offscreen).
     //
     // `wantsToRun` is what the *page* wants; the user-level vetoes (the global
     // stop flag, `still`) are checked on top of it, so resuming can never
     // override them.
     let tabVisible = !document.hidden;
     let onScreen = true; // until the observer says otherwise
+    let scrolling = false;
     let wantsToRun = false; // set true once the loop has actually been started
 
     /** Apply the current conditions to the loop. Idempotent — play()/pause()
      *  are no-ops when already in the target state. */
     function sync() {
       if (!wantsToRun) return;
-      if (tabVisible && onScreen && !offRef.current && !still) play();
+      if (tabVisible && onScreen && !scrolling && !offRef.current && !still) play();
       else pause();
     }
 
@@ -498,6 +499,39 @@ export function BubbleCanvas({
       { rootMargin: "100px" },
     );
     onScreenObserver.observe(canvas);
+
+    // Give the scroll the main thread. This canvas is the most expensive thing
+    // on the page per frame (a blur() cast shadow and a shadowBlur rim sweep per
+    // bubble, neither GPU-accelerated), and competing with it for frames is what
+    // made scrolling feel like it was dragging rather than gliding. So the loop
+    // stops for the duration of the gesture and picks up again once the page has
+    // settled — the bubbles drift slowly enough that a still moment mid-scroll
+    // reads as the field resting, not as a stall.
+    //
+    // Two details this depends on:
+    //   • The handler must stay cheap: it fires many times a second, so the flag
+    //     is checked before doing anything. Only the first event of a gesture
+    //     reaches sync() (and therefore pause(), which repaints); the rest just
+    //     push the timer out.
+    //   • `passive: true` promises the listener never calls preventDefault, so
+    //     the browser can scroll without waiting on it. Omitting it here would
+    //     reintroduce the exact delay this is meant to remove.
+    const SCROLL_IDLE_MS = 150;
+    let scrollIdleTimer: ReturnType<typeof setTimeout> | undefined;
+
+    function onScroll() {
+      if (!scrolling) {
+        scrolling = true;
+        sync(); // pause once, on the first event of the gesture
+      }
+      clearTimeout(scrollIdleTimer);
+      scrollIdleTimer = setTimeout(() => {
+        scrolling = false;
+        sync(); // resume once the page has been still for SCROLL_IDLE_MS
+      }, SCROLL_IDLE_MS);
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
 
     document.addEventListener("visibilitychange", onVisibility);
     window.addEventListener("resize", resize);
@@ -570,6 +604,8 @@ export function BubbleCanvas({
       pause();
       controlsRef.current = null;
       onScreenObserver.disconnect();
+      clearTimeout(scrollIdleTimer); // a pending resume must not outlive the effect
+      window.removeEventListener("scroll", onScroll);
       document.removeEventListener("visibilitychange", onVisibility);
       window.removeEventListener("resize", resize);
       img.onload = null;
