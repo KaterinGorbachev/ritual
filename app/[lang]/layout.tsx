@@ -9,9 +9,12 @@ import { WhatsAppButton } from "../ui/WhatsAppButton";
 import { WhatsAppStoreProvider } from "../ui/WhatsAppStoreProvider";
 import { LocaleStoreProvider } from "../ui/LocaleStoreProvider";
 import { FooterContactDetails, type ContactDataItem } from "../ui/FooterContactDetails";
+import { ContactStoreProvider } from "../ui/ContactStoreProvider";
+import { ModelContextTools } from "../ui/ModelContextTools";
 import { MotionProvider } from "../ui/MotionContext";
 import { StopAnimationsButton } from "../ui/StopAnimationsButton";
 import { getInfo } from "../lib/handleData";
+import { toContactFacts } from "../lib/contactFacts";
 import { JsonLd, buildBusinessLd, buildWebsiteLd } from "../lib/jsonLd";
 import { SITE_URL } from "../lib/site";
 import { LOCALES, DEFAULT_LOCALE } from "../lib/locales";
@@ -114,6 +117,29 @@ export default async function RootLayout({
   const whatsAppNumber =
     contactDocs.find((d) => d.id === "messanger")?.telephone ?? "";
 
+  // Parsed once here and shared: the contact store (for the WebMCP tools) reads
+  // the same facts the footer derives, so the "lat, lng" split and the day-key
+  // lookup happen in one place.
+  const contactFacts = toContactFacts(contactDocs);
+
+  // The home-page copy the WebMCP tools answer from. JSON round-tripped for the
+  // same reason as daysOfWeek below — the imported JSON module is frozen, and a
+  // frozen object cannot cross the server/client boundary.
+  const homeDict = JSON.parse(
+    JSON.stringify({
+      hero: dict.hero,
+      aboutStaff: dict.aboutStaff,
+      topServices: dict.topServices,
+      staff: dict.staff,
+      cosmetics: dict.cosmetics,
+      reviews: dict.reviews,
+      nav: dict.nav,
+      footer: dict.footer,
+      daysOfWeek: dict.daysOfWeek,
+      languagesSpoken: dict.seo.languagesSpoken,
+    }),
+  );
+
   return (
     <html
       lang={locale}
@@ -135,6 +161,10 @@ export default async function RootLayout({
         <MotionProvider>
         <WhatsAppStoreProvider number={whatsAppNumber} />
         <LocaleStoreProvider locale={locale} />
+        <ContactStoreProvider facts={contactFacts} />
+        {/* Tools a visitor's AI agent can call to answer questions about the
+            salon and move around the site. All read-only except navigation. */}
+        <ModelContextTools home={homeDict} />
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:z-50 focus:left-4 focus:top-4 btn-primary"

@@ -1,68 +1,37 @@
 import { MapLeafletClient as MapLeaflet } from "./MapLeafletClient";
+import { toContactFacts, type ContactDataItem, type DayKey } from "../lib/contactFacts";
 
-type DayKey = "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday" | "sunday";
-
-// Shape of a document in the Firestore "contactData" collection. Fields are
-// optional because each document (address, workingHours, messanger, …) only
-// carries the ones relevant to it. Exported so the layout (which does the single
-// collection read) can type the docs it passes down.
-export type ContactDataItem = {
-    id: string;
-    location?: string;
-    coordinates?: string;
-    from?: string;
-    to?: string;
-    dayStart?: DayKey;
-    dayEnd?: DayKey;
-    telephone?: string;
-    url?: string;
-    mapLink?: string
-};
+// The document shape now lives with the parser (app/lib/contactFacts.ts) so that
+// module has no import back into the UI layer. Re-exported here because the
+// layout and the tests already import it from this file.
+export type { ContactDataItem, DayKey };
 
 export function FooterContactDetails({
     contactDocs, className = "", address,  hours, commentAboutAppointments, daysOfWeek, ariaLabelMapBox, ariaLabelGoogleMapButton
 }:{
     contactDocs: ContactDataItem[], className?: string, address: string, hours: string, commentAboutAppointments: string, daysOfWeek: Record<DayKey, string>, ariaLabelMapBox: string, ariaLabelGoogleMapButton: string
 }) {
-    let whatsappNumber = "";
-    let addressText = "";
-    let hoursFromText = "";
-    let hoursToText = "";
-    let dayStart = "";
-    let dayEnd = "";
-    let instagramUrl = "";
-    const coordinates = { lat: 0, lng: 0 };
-
-
     // Contact data is fetched once in the layout (single getInfo("contactData")
     // read) and passed down here as `contactDocs` — this component no longer hits
-    // Firestore. Parse defensively so a missing/malformed doc degrades gracefully.
-    const addressInfo = contactDocs.find(item => item.id === "address")
-    addressText = addressInfo?.location ?? ""
-    // Coordinates are stored as a "lat, lng" string, e.g. "39.4720, -0.3759".
-    // Parse defensively so a missing/malformed value doesn't break the footer.
-    if (typeof addressInfo?.coordinates === "string") {
-        const coordinatesInfo = addressInfo.coordinates.split(",").map((n) => parseFloat(n.trim()))
-        if (coordinatesInfo.length === 2 && !Number.isNaN(coordinatesInfo[0]) && !Number.isNaN(coordinatesInfo[1])) {
-            coordinates.lat = coordinatesInfo[0]
-            coordinates.lng = coordinatesInfo[1]
-        } else {
-            console.error("FooterContactDetails: could not parse coordinates:", addressInfo.coordinates)
-        }
-    } else {
-        console.error("FooterContactDetails: address doc has no 'coordinates' field")
-    }
-    const mapLink = addressInfo?.mapLink ?? `https://www.google.com/maps/search/?api=1&query=${coordinates.lat},${coordinates.lng}`;
+    // Firestore. toContactFacts() parses defensively so a missing/malformed doc
+    // degrades gracefully; it is shared with the JSON-LD builder and the WebMCP
+    // tools so the "lat, lng" split lives in exactly one place.
+    const facts = toContactFacts(contactDocs);
 
-    const hoursInfo = contactDocs.find(item => item.id === "workingHours")
-    hoursFromText = hoursInfo?.from ?? ""
-    hoursToText = hoursInfo?.to ?? ""
-    dayStart = hoursInfo?.dayStart ? daysOfWeek[hoursInfo.dayStart] : ""
-    dayEnd = hoursInfo?.dayEnd ? daysOfWeek[hoursInfo.dayEnd] : ""
-    const messangerInfo = contactDocs.find(item => item.id === "messanger")
-    whatsappNumber = messangerInfo?.telephone ?? ""
-    const instagramInfo = contactDocs.find(item => item.id === "instagram")
-    instagramUrl = instagramInfo?.url ?? ""
+    const addressText = facts.address;
+    const whatsappNumber = facts.telephone;
+    const instagramUrl = facts.instagramUrl;
+    const hoursFromText = facts.hours?.from ?? "";
+    const hoursToText = facts.hours?.to ?? "";
+    const dayStart = facts.hours?.dayStart ? daysOfWeek[facts.hours.dayStart] : "";
+    const dayEnd = facts.hours?.dayEnd ? daysOfWeek[facts.hours.dayEnd] : "";
+
+    // The map still needs concrete numbers; 0,0 is the historical fallback for a
+    // missing/unparseable coordinate pair.
+    const coordinates = facts.coordinates ?? { lat: 0, lng: 0 };
+    const mapLink =
+        facts.mapLink ||
+        `https://www.google.com/maps/search/?api=1&query=${coordinates.lat},${coordinates.lng}`;
 
 
     return (

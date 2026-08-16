@@ -24,6 +24,7 @@
     "react-leaflet": "^5.0.0",
     "react-select": "^5.10.2",
     "server-only": "^0.0.1",
+    "usewebmcp": "^4.0.0",
     "zustand": "^5.0.14"
   },
   "devDependencies": {
