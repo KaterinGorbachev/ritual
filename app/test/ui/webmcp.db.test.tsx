@@ -144,10 +144,24 @@ describe("WebMCP tool logic", () => {
     it("reads as a sentence, with localised day names", () => {
       const { hours } = t.describeWorkingHours(LOCALES.en, FACTS);
 
+      expect(hours).toContain(en.footer.workingHours);
       expect(hours).toContain(en.daysOfWeek.monday);
       expect(hours).toContain(en.daysOfWeek.saturday);
       expect(hours).toContain("10");
       expect(hours).toContain(en.footer.commentAboutAppointments);
+    });
+
+    it.each(["es", "ru"] as const)("leaves no English sentence frame in %s", (locale) => {
+      // The day names and the appointment note come from the dictionary, so an
+      // English frame around them ("Ritual is open …") would hand a Spanish or
+      // Russian speaker a half-translated answer. Caught in a real browser, not
+      // by the assertions above — hence this test.
+      const { hours } = t.describeWorkingHours(LOCALES[locale], FACTS);
+
+      expect(hours).not.toMatch(/\bis open\b/);
+      expect(hours).toContain(
+        locale === "es" ? es.footer.workingHours : ru.footer.workingHours,
+      );
     });
 
     it("degrades to a helpful sentence when Firestore gave us nothing", () => {
@@ -191,7 +205,7 @@ describe("WebMCP tool logic", () => {
 
     it("explains itself when there is no contact data at all", () => {
       expect(t.findUs(toContactFacts([])).message).toBeTruthy();
-      expect(t.getContactDetails(null).message).toBeTruthy();
+      expect(t.getContactDetails(toContactFacts([])).message).toBeTruthy();
     });
   });
 

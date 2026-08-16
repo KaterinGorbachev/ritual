@@ -164,7 +164,7 @@ export default async function RootLayout({
         <ContactStoreProvider facts={contactFacts} />
         {/* Tools a visitor's AI agent can call to answer questions about the
             salon and move around the site. All read-only except navigation. */}
-        <ModelContextTools home={homeDict} />
+        <ModelContextTools home={homeDict} locale={locale} contact={contactFacts} />
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:z-50 focus:left-4 focus:top-4 btn-primary"

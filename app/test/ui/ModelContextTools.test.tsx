@@ -35,9 +35,15 @@ vi.mock("../../store/localeStore", async (importOriginal) => {
 });
 
 import { ModelContextTools } from "../../ui/ModelContextTools";
-import { useContactStore } from "../../store/contactStore";
 import { toContactFacts } from "../../lib/contactFacts";
 import en from "../../[lang]/dictionaries/en.json";
+
+/** The facts the layout parses on the server and passes straight down. */
+const FACTS = toContactFacts([
+  { id: "address", location: "Carrer de Sant Vicent Màrtir 12", coordinates: "39.4720, -0.3759" },
+  { id: "workingHours", from: "10", to: "20", dayStart: "monday", dayEnd: "saturday" },
+  { id: "messanger", telephone: "+34643987849" },
+]);
 
 // usewebmcp wraps our execute() in an MCP envelope before registering it, so
 // what comes back is { content: [{ type: "text", text }], structuredContent }.
@@ -85,7 +91,7 @@ const registerTool = vi.fn();
  */
 async function renderTools() {
   registerTool.mockClear();
-  const result = render(<ModelContextTools home={home} />);
+  const result = render(<ModelContextTools home={home} locale="en" contact={FACTS} />);
   await vi.waitFor(() => expect(registerTool).toHaveBeenCalled());
   const tools = registerTool.mock.calls.map(([tool]) => tool as RegisteredTool);
   return { ...result, tools };
@@ -97,13 +103,6 @@ const byName = (tools: RegisteredTool[], name: string) =>
 beforeEach(() => {
   push.mockClear();
   chooseLocale.mockClear();
-  useContactStore.setState({
-    facts: toContactFacts([
-      { id: "address", location: "Carrer de Sant Vicent Màrtir 12", coordinates: "39.4720, -0.3759" },
-      { id: "workingHours", from: "10", to: "20", dayStart: "monday", dayEnd: "saturday" },
-      { id: "messanger", telephone: "+34643987849" },
-    ]),
-  });
 
   Object.defineProperty(document, "modelContext", {
     value: { registerTool },
@@ -137,6 +136,19 @@ describe("ModelContextTools", () => {
         "switchLanguage",
       ].sort(),
     );
+  });
+
+  it("registers each tool exactly once", async () => {
+    // Regression: locale and contact were read from their Zustand stores, which
+    // start empty and fill in during hydration. Every dep change re-registers,
+    // so each tool arrived twice — once carrying placeholder data. Both values
+    // are props now, correct from the first render.
+    const { tools } = await renderTools();
+
+    const counts = new Map<string, number>();
+    for (const tool of tools) counts.set(tool.name, (counts.get(tool.name) ?? 0) + 1);
+
+    expect([...counts].filter(([, count]) => count > 1)).toEqual([]);
   });
 
   it("marks the information tools read-only so an agent need not interrupt", async () => {
@@ -277,7 +289,9 @@ describe("without WebMCP support", () => {
     Reflect.deleteProperty(document, "modelContext");
     registerTool.mockClear();
 
-    expect(() => render(<ModelContextTools home={home} />)).not.toThrow();
+    expect(() =>
+      render(<ModelContextTools home={home} locale="en" contact={FACTS} />),
+    ).not.toThrow();
 
     // Registration happens in an effect; give it the chance it would have had.
     await new Promise((resolve) => setTimeout(resolve, 50));

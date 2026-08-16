@@ -61,7 +61,12 @@ export type HomeDict = {
     items: ReadonlyArray<{ id: string; quote: string; author: string; meta?: string; rating: number }>;
   };
   nav: { message: string };
-  footer: { commentAboutAppointments: string };
+  footer: {
+    /** "Working Hours" / "Horario de trabajo" — the label describeWorkingHours
+     * builds its sentence around, so the answer is localised throughout. */
+    workingHours: string;
+    commentAboutAppointments: string;
+  };
   daysOfWeek: Record<DayKey, string>;
   languagesSpoken: string;
 };
@@ -319,7 +324,7 @@ export const HOW_TO_BOOK_OUTPUT = {
  * message, which is what keeps this tool safe to expose without a confirmation
  * step.
  */
-export function howToBook(dict: HomeDict, contact: ContactFacts | null) {
+export function howToBook(dict: HomeDict, contact: ContactFacts) {
   const number = contact?.whatsAppNumber ?? "";
   const appointmentNote = dict.footer.commentAboutAppointments;
 
@@ -348,7 +353,7 @@ export const HOURS_OUTPUT = {
  * Opening hours as a sentence an agent can relay verbatim, rather than fields it
  * has to reassemble.
  */
-export function describeWorkingHours(dict: HomeDict, contact: ContactFacts | null) {
+export function describeWorkingHours(dict: HomeDict, contact: ContactFacts) {
   const hours = contact?.hours;
   const appointmentNote = dict.footer.commentAboutAppointments;
 
@@ -362,8 +367,12 @@ export function describeWorkingHours(dict: HomeDict, contact: ContactFacts | nul
   const dayEnd = hours.dayEnd ? dict.daysOfWeek[hours.dayEnd] : "";
   const days = dayStart && dayEnd ? `${dayStart}–${dayEnd}, ` : "";
 
+  // Built from the dictionary's own label rather than an English sentence
+  // frame: the day names and the appointment note are already translated, so a
+  // hardcoded "Ritual is open" would leave a stray English clause in the middle
+  // of a Spanish or Russian answer.
   return {
-    hours: `Ritual is open ${days}${hours.from}–${hours.to}. ${appointmentNote}.`,
+    hours: `${dict.footer.workingHours}: ${days}${hours.from}–${hours.to}. ${appointmentNote}.`,
   };
 }
 
@@ -378,7 +387,7 @@ export const FIND_US_OUTPUT = {
 } as const;
 
 /** Where the salon is, plus a map link. */
-export function findUs(contact: ContactFacts | null) {
+export function findUs(contact: ContactFacts) {
   if (!contact?.address) {
     return { message: "The address isn't available right now — please ask on WhatsApp." };
   }
@@ -399,7 +408,7 @@ export const CONTACT_OUTPUT = {
 } as const;
 
 /** How to reach the salon. */
-export function getContactDetails(contact: ContactFacts | null) {
+export function getContactDetails(contact: ContactFacts) {
   const whatsApp = contact?.telephone ?? "";
   const instagram = contact?.instagramUrl ?? "";
 

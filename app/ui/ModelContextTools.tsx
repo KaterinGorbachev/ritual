@@ -14,24 +14,38 @@
 // logs once and skips registration; the page is unaffected.
 import { useWebMCP } from "usewebmcp";
 import { useRouter, usePathname } from "next/navigation";
-import { useContactStore } from "../store/contactStore";
 import { useLocaleStore } from "../store/localeStore";
 import * as t from "../lib/webmcp";
 import type { HomeDict } from "../lib/webmcp";
+import type { ContactFacts } from "../lib/contactFacts";
 
 /** Read-only tools that never change state and can be called repeatedly. */
 const READ_ONLY = { readOnlyHint: true, idempotentHint: true } as const;
 
-export function ModelContextTools({ home }: { home: HomeDict }) {
+type ModelContextToolsProps = {
+  home: HomeDict;
+  locale: string;
+  contact: ContactFacts;
+};
+
+/**
+ * `locale` and `contact` arrive as props rather than being read from the stores.
+ *
+ * useWebMCP re-registers a tool whenever a dep changes, and both stores start
+ * empty and fill in during hydration — reading from them registered every tool
+ * twice, once with placeholder data. The layout already has both values on the
+ * server, so passing them down means each tool registers once, correct from the
+ * first paint. The stores remain the right tool for components further down the
+ * tree, which have no such prop.
+ */
+export function ModelContextTools({ home, locale, contact }: ModelContextToolsProps) {
   const router = useRouter();
   const pathname = usePathname();
   const chooseLocale = useLocaleStore((s) => s.chooseLocale);
-  // Seeded by <ContactStoreProvider> from the layout's single Firestore read.
-  const contact = useContactStore((s) => s.facts);
 
-  // `home` is a new object on every server render, so it cannot be a dependency
-  // — the locale is what actually decides which language the tools answer in.
-  const locale = useLocaleStore((s) => s.locale);
+  // Deps must stay primitive: `contact` is an object with a new identity each
+  // render, so the address stands in for it.
+  const contactKey = contact.address;
 
   // --- Services ---------------------------------------------------------
 
@@ -123,7 +137,7 @@ export function ModelContextTools({ home }: { home: HomeDict }) {
     outputSchema: t.HOW_TO_BOOK_OUTPUT,
     annotations: READ_ONLY,
     execute: () => t.howToBook(home, contact),
-  }, [locale, contact]);
+  }, [locale, contactKey]);
 
   useWebMCP({
     name: "getWorkingHours",
@@ -134,7 +148,7 @@ export function ModelContextTools({ home }: { home: HomeDict }) {
     outputSchema: t.HOURS_OUTPUT,
     annotations: READ_ONLY,
     execute: () => t.describeWorkingHours(home, contact),
-  }, [locale, contact]);
+  }, [locale, contactKey]);
 
   useWebMCP({
     name: "findUs",
@@ -145,7 +159,7 @@ export function ModelContextTools({ home }: { home: HomeDict }) {
     outputSchema: t.FIND_US_OUTPUT,
     annotations: READ_ONLY,
     execute: () => t.findUs(contact),
-  }, [contact]);
+  }, [contactKey]);
 
   useWebMCP({
     name: "getContactDetails",
@@ -156,7 +170,7 @@ export function ModelContextTools({ home }: { home: HomeDict }) {
     outputSchema: t.CONTACT_OUTPUT,
     annotations: READ_ONLY,
     execute: () => t.getContactDetails(contact),
-  }, [contact]);
+  }, [contactKey]);
 
   useWebMCP({
     name: "getSpokenLanguages",
