@@ -99,11 +99,11 @@ export default async function PrivacyPage({
       <div className="flex w-full max-w-400 flex-col gap-10 py-10 lg:gap-14 lg:py-18">
         {/* --- Layer 0: what the page is, and when it last changed --- */}
         <header className="flex w-full flex-col items-center justify-center gap-6 lg:gap-10">
-          <div className="flex flex-col gap-3 items-center justify-center">
+          <div className="flex flex-col gap-3 items-center justify-center px-2">
             <p className="font-handwriting text-3xl leading-none text-magenta">
               {meta.eyebrow}
             </p>
-            <h1 className="text-balance font-display text-[clamp(2.5rem,7vw,3rem)] font-semibold tracking-wider text-ink text-center">
+            <h1 className="font-display text-[clamp(2.5rem,7vw,3rem)] font-semibold tracking-wider text-ink text-center text-wrap">
               {meta.title}
             </h1>
             <p className="max-w-prose font-body text-lg leading-relaxed text-ink/80 md:text-xl text-center">

@@ -43,6 +43,15 @@ the code, **the code wins**.
 7. **DRY priciple.** if component can be repeated create a separate component. 
     Create a UI for special buttons, content cards. 
 8. **KISS principle.** Make any animations and microinteractions simple and minimalistic. 
+9. **Isolate layered components.** Anything stacking children on top of each other
+   (map + floating controls, card + badge, overlay) gets `isolate` on its outer
+   wrapper and small local z-indexes (`z-10`) inside — so it competes with the
+   page as one box. The sticky header is `z-40`; never raise chrome to out-bid a
+   component, and never wrap a dropdown panel in `isolate` (it caps the panel's
+   z-index). Third-party CSS is the usual culprit: `leaflet.css` hardcodes
+   200–1000 globally, so `.leaflet-container` is isolated in `globals.css` — but
+   that rule does **not** reach siblings of `<MapContainer>`. See
+   *Elevation & depth → Stacking order* in `DESIGN.md`.
 
    
 

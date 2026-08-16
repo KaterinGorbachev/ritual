@@ -326,6 +326,49 @@ so lifting a surface still reads as "Ritual".
   reaching for elevation.
 - **MUST NOT** stack multiple floating shadows; at most one lifted surface reads at a time.
 
+### Stacking order (z-index)
+
+Elevation is what a surface *looks* like; z-index is what it *covers*. The page owns a deliberately
+short global scale — anything larger is a symptom, not a fix:
+
+| Token  | Owner                                                          |
+| ------ | -------------------------------------------------------------- |
+| `z-40` | Sticky header bar (`app/[lang]/layout.tsx`)                     |
+| `z-50` | Skip-to-content link; panels *inside* the header                |
+| top layer | Native `<dialog>` opened with `showModal()` — above everything, no z-index reaches it (see the `.modal-dialog` note in `globals.css`) |
+
+**Isolate anything layered.** A component that positions children on top of each other (a map with
+floating controls, a card with a badge, an overlay) **MUST** carry `isolate` on its outer wrapper.
+That makes it a stacking context, so its children's z-indexes resolve *locally* and the whole
+component competes with the page as one box. Inside an isolated wrapper, use small local values
+(`z-10`, `z-20`) — never a number chosen to beat the header.
+
+- **MUST NOT** raise the header (or any chrome) to out-bid a component. If chrome is being covered,
+  the component is leaking its stack — isolate the component instead.
+- **MUST NOT** put `isolate` on a wrapper whose child needs to escape it. `isolate` **caps** a
+  descendant's z-index at the wrapper's own level: a dropdown panel that must overlay the page below
+  cannot sit inside an isolated parent. Isolate the thing being covered *by*, not the thing doing
+  the covering.
+- **SHOULD** reach for DOM order and a shared stacking context before adding any z-index at all.
+
+### Third-party CSS (Leaflet)
+
+Vendor stylesheets hardcode absolute z-indexes on the same global axis as ours. `leaflet.css` ships
+panes at 200–700, controls at 800 and the popup close button at 1000 — every one of them above the
+`z-40` header. Imported in a component (`app/ui/MapLeaflet.tsx`), those rules are still hoisted
+**global**, so an un-isolated map paints over the header and takes the open burger menu with it.
+
+`globals.css` contains the map with `.leaflet-container { isolation: isolate; z-index: 0 }`. That
+resolves Leaflet's whole internal ladder inside the map box and leaves its own layering untouched.
+
+- **MUST** keep controls that belong to the map *inside* `<MapContainer>`, where `.leaflet-container`
+  contains them. Leaflet's own scale applies there — `z-[500]` clears the popup pane (700) correctly.
+- **MUST** add `isolate` to the wrapper for anything rendered **outside** `<MapContainer>` but
+  positioned over the map (e.g. `GoogleMapButton`), then give it a small local value. The global
+  `.leaflet-container` rule does **not** reach siblings of the map.
+- **MUST** re-check the sticky header over the map after any map change: open the mobile burger menu
+  while the footer map is in view. That is the case these rules exist to protect.
+
 ---
 
 ## Shapes
