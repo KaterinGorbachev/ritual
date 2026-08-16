@@ -457,6 +457,13 @@
     },
     "message": "Hola, quiero reservar un ritual en Ritual."
   },
+  "cookies": {
+    "title": "Sobre las cookies",
+    "message": "Solo guardamos lo necesario para que la web funcione: el idioma que has elegido y si nos has pedido detener las animaciones. Sin publicidad, sin rastreo y sin compartir nada con terceros.",
+    "policyLink": "Leer la política de privacidad",
+    "accept": "Entendido",
+    "close": "Cerrar el aviso de cookies"
+  },
   "privacy": {
     "meta": {
       "title": "Política de Privacidad",
@@ -479,20 +486,20 @@
         "heading": "Responsable",
         "summary": "Ritual, el centro de estética de Valencia donde reservas, decide para qué se usan tus datos.",
         "body": [
-          "El responsable del tratamiento es [[PENDING: nombre legal registrado]], NIF/CIF [[PENDING: NIF/CIF]], con domicilio en [[PENDING: dirección postal del salón en Valencia]]. Para cualquier asunto de privacidad, escríbenos a [[PENDING: email de privacidad]]."
+          "Para cualquier asunto de privacidad, escríbenos a email o por WhatsApp."
         ],
         "list": [
           {
             "term": "Responsable",
-            "detail": "[[PENDING: nombre legal registrado]] — NIF/CIF [[PENDING: NIF/CIF]]"
+            "detail": "Alena Drazdova"
           },
           {
             "term": "Dirección",
-            "detail": "[[PENDING: dirección postal del salón en Valencia]]"
+            "detail": "Calle de Móra de Rubióls 3, Valencia 46007"
           },
           {
             "term": "Email",
-            "detail": "[[PENDING: email de privacidad]]"
+            "detail": "alenaesteticista@gmail.com"
           }
         ]
       },
@@ -756,7 +763,7 @@
         "heading": "Tus derechos",
         "summary": "Acceso, rectificación, supresión, limitación, portabilidad, oposición y retirada del consentimiento.",
         "body": [
-          "Para ejercer cualquiera de ellos basta un email a [[PENDING: email de privacidad]]: sin formularios, sin justificar el motivo y sin coste. Respondemos en el plazo de un mes que fija el artículo 12.3 del RGPD.",
+          "Para ejercer cualquiera de ellos basta un email: sin formularios, sin justificar el motivo y sin coste. Respondemos en el plazo de un mes que fija el artículo 12.3 del RGPD.",
           "Puede que te pidamos escribir desde el mismo número con el que reservaste, para confirmar que eres tú."
         ],
         "list": [
@@ -829,17 +836,17 @@
         "heading": "Contacto",
         "summary": "Escríbenos a nuestro email de privacidad, o reclama ante la AEPD.",
         "body": [
-          "Para cualquier duda o para ejercer tus derechos, escribe a [[PENDING: email de privacidad]] o ven a [[PENDING: dirección postal del salón en Valencia]].",
+          "Para cualquier duda o para ejercer tus derechos, escribe a email indicado en la politica o ven a salón en Valencia.",
           "Si consideras que hemos vulnerado tus derechos, puedes reclamar ante la Agencia Española de Protección de Datos, C/ Jorge Juan 6, 28001 Madrid, o en aepd.es."
         ],
         "list": [
           {
             "term": "Email",
-            "detail": "[[PENDING: email de privacidad]]"
+            "detail": "alenaesteticista@gmail.com"
           },
           {
             "term": "Dirección",
-            "detail": "[[PENDING: dirección postal del salón en Valencia]]"
+            "detail": "Calle de Móra de Rubióls 3, Valencia 46007"
           },
           {
             "term": "Autoridad de control",

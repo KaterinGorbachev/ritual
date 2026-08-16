@@ -63,8 +63,8 @@ export function FilmSection({
 
 
       {/* Film + card. Film leads on the left from lg; the card sits beside it. */}
-      <div className="flex w-full flex-col items-start justify-start gap-4 px-4 ">
-        {/* Section opener: Caveat eyebrow + heading + lead. */}
+      {/* <div className="flex w-full flex-col items-start justify-start gap-4 px-4 ">
+        
         <div className="flex max-w-2xl flex-col items-start justify-start gap-2 text-center">
           <p className="font-handwriting text-2xl leading-normal text-magenta text-start">{eyebrow}</p>
           <h2 className="text-[clamp(1.75rem,5vw,2.25rem)] font-display font-semibold tracking-normal text-start">
@@ -83,7 +83,7 @@ export function FilmSection({
 
 
       </div>
-
+ */}
       {/* Marketing / booking card. */}
       <div className="flex w-full md:max-w-md flex-col items-start justify-center gap-4 md:rounded-card border border-blush/10 bg-blush/60 p-6 text-start md:p-8 md:shadow-[0_0_0_1px_rgba(218,24,132,.12),0_18px_50px_-24px_rgba(218,24,132,.25)]">
         <p className="font-handwriting text-2xl leading-normal text-magenta">{card.eyebrow}</p>

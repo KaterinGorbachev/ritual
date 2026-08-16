@@ -8,7 +8,7 @@ import { TeamCard } from "../ui/TeamCard";
 import { BrandMarquee } from "../ui/BrandMarquee"
 import { ReviewGallery } from "../ui/ReviewGallery";
 import { FilmSection } from "../ui/FilmSection";
-import { BookingSlots } from "../ui/BookingSlots";
+
 
 export default async function HomePage({ params }: PageProps<"/[lang]">) {
   const { lang } = await params;
@@ -21,8 +21,10 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
         className="flex flex-col items-center justify-center w-full max-w-290 relative isolate min-h-165 overflow-hidden lg:rounded-pill lg:relative lg:top-0 px-4 lg:px-32 py-12 lg:py-10 shadow-[0_0_0_1px_rgba(218,24,132,.12),0_18px_50px_-24px_rgba(218,24,132,.25)] fixed -top-24"
       >
         
-        {/* Client-only canvas: Monet garden + liquid-glass soap bubbles. */}
-        <BubbleCanvas />
+        {/* Client-only canvas: Monet garden + the salon's signature soap
+            bubbles. Same bubble pattern as every other page — the backdrop is
+            what makes this one refract the painting. */}
+        <BubbleCanvas backdrop="/mone.webp" density="hero" className="absolute inset-0" />
 
         {/* Hero content sits above the canvas on a frosted panel. */}
         <div className="relative z-1 my-16 rounded-pill bg-cream/55 px-6 py-10 text-center backdrop-blur-md md:px-16 md:py-14 flex flex-col items-center justify-center gap-2 w-full ">
@@ -120,7 +122,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
         video={dict.film.video}
         card={dict.film.card}
         message={dict.film.message}
-      />
+      /> 
     </Section>
   );
 }

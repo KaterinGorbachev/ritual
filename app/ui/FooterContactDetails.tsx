@@ -16,6 +16,7 @@ export type ContactDataItem = {
     dayEnd?: DayKey;
     telephone?: string;
     url?: string;
+    mapLink?: string
 };
 
 export function FooterContactDetails({
@@ -51,6 +52,7 @@ export function FooterContactDetails({
     } else {
         console.error("FooterContactDetails: address doc has no 'coordinates' field")
     }
+    const mapLink = addressInfo?.mapLink ?? `https://www.google.com/maps/search/?api=1&query=${coordinates.lat},${coordinates.lng}`;
 
     const hoursInfo = contactDocs.find(item => item.id === "workingHours")
     hoursFromText = hoursInfo?.from ?? ""
@@ -68,7 +70,7 @@ export function FooterContactDetails({
         <div className="grid gap-6 rounded-card bg-transparent p-4 sm:grid-cols-2 lg:grid-cols-4" data-testid="contact-details">
           {/** address */}
           <div className="flex items-start gap-3">
-            <svg className="mt-0.5 shrink-0" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#DA1884" stroke-width="1.4" aria-hidden="true"><path d="M12 21s7-6.3 7-12a7 7 0 1 0-14 0c0 5.7 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg>
+            <svg className="mt-0.5 shrink-0" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#DA1884" strokeWidth="1.4" aria-hidden="true"><path d="M12 21s7-6.3 7-12a7 7 0 1 0-14 0c0 5.7 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg>
             <div className="flex flex-col items-start justify-start gap-1 pr-4">
               <h3 className="font-display text-lg tracking-normal text-start">{address}</h3>
               <p className="mt-1 text-sm leading-relaxed tracking-normal text-ink/70 wrap-break-word text-start">{addressText}</p>
@@ -77,7 +79,7 @@ export function FooterContactDetails({
           </div>
           {/** hours */}
           <div className="flex items-start gap-3">
-            <svg className="mt-0.5 shrink-0" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6A0DAD" stroke-width="1.4" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            <svg className="mt-0.5 shrink-0" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6A0DAD" strokeWidth="1.4" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
             <div className="flex flex-col items-start justify-start gap-1">
               <h3 className="font-display text-lg tracking-normal text-start">{hours}</h3>
               <p className="mt-1 text-sm leading-relaxed tracking-normal text-ink/70 text-start">{dayStart} – {dayEnd} · {hoursFromText} – {hoursToText}</p>
@@ -110,6 +112,7 @@ export function FooterContactDetails({
             popupTitle={address}
             ariaLabel={ariaLabelMapBox}
             googleMapLabel={ariaLabelGoogleMapButton}
+            mapLink={mapLink}
         />
       </div>
     )

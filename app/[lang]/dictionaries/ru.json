@@ -457,6 +457,13 @@
     },
     "message": "Здравствуйте, хочу записаться на ритуал в Ritual."
   },
+  "cookies": {
+    "title": "О файлах cookie",
+    "message": "Мы сохраняем только то, что нужно для работы сайта: выбранный вами язык и то, просили ли вы отключить анимацию. Без рекламы, без слежки и без передачи данных третьим лицам.",
+    "policyLink": "Читать политику конфиденциальности",
+    "accept": "Понятно",
+    "close": "Закрыть уведомление о cookie"
+  },
   "privacy": {
     "meta": {
       "title": "Политика конфиденциальности",
@@ -479,20 +486,20 @@
         "heading": "Оператор",
         "summary": "Салон Ritual в Валенсии, где вы записываетесь, решает, для чего используются ваши данные.",
         "body": [
-          "Оператор обработки — [[PENDING: nombre legal registrado]], налоговый номер (NIF/CIF) [[PENDING: NIF/CIF]], адрес: [[PENDING: dirección postal del salón en Valencia]]. По любым вопросам конфиденциальности пишите на [[PENDING: email de privacidad]]."
+          "По любым вопросам конфиденциальности пишите на email или WhatsApp."
         ],
         "list": [
           {
             "term": "Оператор",
-            "detail": "[[PENDING: nombre legal registrado]] — NIF/CIF [[PENDING: NIF/CIF]]"
+            "detail": "Alena Drazdova"
           },
           {
             "term": "Адрес",
-            "detail": "[[PENDING: dirección postal del salón en Valencia]]"
+            "detail": "Calle de Móra de Rubióls 3, Valencia 46007"
           },
           {
             "term": "Почта",
-            "detail": "[[PENDING: email de privacidad]]"
+            "detail": "alenaesteticista@gmail.com"
           }
         ]
       },
@@ -756,7 +763,7 @@
         "heading": "Ваши права",
         "summary": "Доступ, исправление, удаление, ограничение, переносимость, возражение и отзыв согласия.",
         "body": [
-          "Чтобы воспользоваться любым из них, достаточно письма на [[PENDING: email de privacidad]]: без форм, без объяснения причин и бесплатно. Мы отвечаем в течение месяца, как устанавливает статья 12.3 GDPR.",
+          "Чтобы воспользоваться любым из них, достаточно письма на email: без форм, без объяснения причин и бесплатно. Мы отвечаем в течение месяца, как устанавливает статья 12.3 GDPR.",
           "Возможно, мы попросим написать с того же номера, с которого вы записывались, — чтобы убедиться, что это вы."
         ],
         "list": [
@@ -829,17 +836,17 @@
         "heading": "Контакты",
         "summary": "Пишите на нашу почту по вопросам конфиденциальности или жалуйтесь в AEPD.",
         "body": [
-          "По любым вопросам или для реализации прав пишите на [[PENDING: email de privacidad]] либо приходите по адресу [[PENDING: dirección postal del salón en Valencia]].",
+          "По любым вопросам или для реализации прав пишите на email  либо приходите в салон.",
           "Если считаете, что мы нарушили ваши права, вы можете подать жалобу в Испанское агентство по защите данных: C/ Jorge Juan 6, 28001 Мадрид, или на aepd.es."
         ],
         "list": [
           {
             "term": "Почта",
-            "detail": "[[PENDING: email de privacidad]]"
+            "detail": "alenaesteticista@gmail.com"
           },
           {
             "term": "Адрес",
-            "detail": "[[PENDING: dirección postal del salón en Valencia]]"
+            "detail": "Calle de Móra de Rubióls 3, Valencia 46007"
           },
           {
             "term": "Надзорный орган",

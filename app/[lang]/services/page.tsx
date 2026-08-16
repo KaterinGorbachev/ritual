@@ -1,6 +1,6 @@
 import { getDictionary, toLocale } from "../dictionaries";
 import { Section } from "../../ui/Section";
-import { BubbleField } from "../../ui/BubbleField";
+import { BubbleCanvas } from "../../ui/BubbleCanvas";
 import { ServicePriceList } from "../../ui/ServicePriceList";
 import { WhatsAppButton } from "../../ui/WhatsAppButton";
 import { BookingSelectForm } from "@/app/ui/BookingSelectForm";
@@ -30,7 +30,9 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
       >
         <div className="sticky top-0 mx-auto flex h-screen items-center justify-center rounded-pill overflow-hidden ">
           <div className="h-full w-full">
-            <BubbleField />
+            {/* Still, not animated: the same bubbles as the hero, drawn once.
+                They sit behind the price text, so they must not move. */}
+            <BubbleCanvas still />
           </div>
         </div>
       </div>

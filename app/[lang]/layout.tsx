@@ -309,6 +309,7 @@ export default async function RootLayout({
             </p>
           </section>
         </footer>
+
         </MotionProvider>
       </body>
     </html>

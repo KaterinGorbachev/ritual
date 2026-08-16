@@ -457,6 +457,13 @@
     },
     "message": "Hello, I would like to book a ritual at Ritual."
   },
+  "cookies": {
+    "title": "About cookies",
+    "message": "We only store what keeps this site working for you: the language you chose and whether you asked us to stop the animations. No advertising, no tracking, nothing shared with third parties.",
+    "policyLink": "Read the privacy policy",
+    "accept": "Got it",
+    "close": "Close the cookie notice"
+  },
   "privacy": {
     "meta": {
       "title": "Privacy Policy",
@@ -479,20 +486,20 @@
         "heading": "Controller",
         "summary": "Ritual, the beauty salon in Valencia where you book, decides what your data is used for.",
         "body": [
-          "The data controller is [[PENDING: nombre legal registrado]], tax number (NIF/CIF) [[PENDING: NIF/CIF]], at [[PENDING: dirección postal del salón en Valencia]]. For any privacy matter, write to us at [[PENDING: email de privacidad]]."
+          "For any privacy matter, write to us at email or WhatsApp."
         ],
         "list": [
           {
             "term": "Controller",
-            "detail": "[[PENDING: nombre legal registrado]] — NIF/CIF [[PENDING: NIF/CIF]]"
+            "detail": "Alena Drazdova"
           },
           {
             "term": "Address",
-            "detail": "[[PENDING: dirección postal del salón en Valencia]]"
+            "detail": "Calle de Móra de Rubióls 3, Valencia 46007"
           },
           {
             "term": "Email",
-            "detail": "[[PENDING: email de privacidad]]"
+            "detail": "alenaesteticista@gmail.com"
           }
         ]
       },
@@ -756,7 +763,7 @@
         "heading": "Your rights",
         "summary": "Access, rectification, erasure, restriction, portability, objection and withdrawal of consent.",
         "body": [
-          "To exercise any of them, an email to [[PENDING: email de privacidad]] is enough: no forms, no reason to give, no cost. We reply within the one month set by article 12.3 of the GDPR.",
+          "To exercise any of them, an email is enough: no forms, no reason to give, no cost. We reply within the one month set by article 12.3 of the GDPR.",
           "We may ask you to write from the same number you booked with, to confirm it is you."
         ],
         "list": [
@@ -829,17 +836,17 @@
         "heading": "Contact",
         "summary": "Write to our privacy email, or complain to the AEPD.",
         "body": [
-          "For any question or to exercise your rights, write to [[PENDING: email de privacidad]] or come to [[PENDING: dirección postal del salón en Valencia]].",
+          "For any question or to exercise your rights, write to the email or come to salon in Valencia]].",
           "If you believe we have infringed your rights, you can complain to the Spanish Data Protection Agency, C/ Jorge Juan 6, 28001 Madrid, or at aepd.es."
         ],
         "list": [
           {
             "term": "Email",
-            "detail": "[[PENDING: email de privacidad]]"
+            "detail": "alenaesteticista@gmail.com"
           },
           {
             "term": "Address",
-            "detail": "[[PENDING: dirección postal del salón en Valencia]]"
+            "detail": "Calle de Móra de Rubióls 3, Valencia 46007"
           },
           {
             "term": "Supervisory authority",

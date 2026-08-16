@@ -27,6 +27,22 @@ export default defineConfig({
       {
         // jsdom project — fast, for plain logic/smoke tests.
         extends: true,
+        // Dictionaries (and anything else importing `server-only`) are Server
+        // Component modules, and `server-only`'s default build throws on
+        // import. On a real server Next resolves it through the "react-server"
+        // condition to an empty module; here it is aliased straight to that
+        // same empty build.
+        //
+        // An alias, not `resolve.conditions: ['react-server']` — that condition
+        // is global, so it would also swap React itself for its RSC build,
+        // which has no renderToStaticMarkup and fails on import.
+        resolve: {
+          alias: {
+            'server-only': fileURLToPath(
+              new URL('./node_modules/server-only/empty.js', import.meta.url),
+            ),
+          },
+        },
         test: {
           name: 'unit',
           environment: 'jsdom',

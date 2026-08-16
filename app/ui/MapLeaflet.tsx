@@ -25,6 +25,7 @@ type MapLeafletProps = {
   ariaLabel: string;
   googleMapLabel?: string;
   className?: string;
+  mapLink: string
 };
 
 // On-brand pin built once (not per render) — a DOM icon instead of an image,
@@ -78,9 +79,11 @@ export function MapLeaflet({
   ariaLabel,
   googleMapLabel = "Google Maps",
   className = "",
+  mapLink = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`
 }: MapLeafletProps) {
   const posix: LatLngExpression = [lat, lng];
-  const googleMapLink = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+  {/*const googleMapLink = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;*/}
+  const googleMapLink = mapLink
 
   return (
     <div className={`relative w-full ${className}`}>

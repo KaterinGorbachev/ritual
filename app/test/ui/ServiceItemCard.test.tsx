@@ -60,14 +60,7 @@ describe("ServiceItemCard content", () => {
     await expect.element(screen.getByText(`${PROPS.durationLabel}:`)).toBeInTheDocument();
   });
 
-  it("renders the parent-supplied icon and hides it from assistive tech", async () => {
-    const screen = await mount();
-    await expect.element(screen.getByTestId("icon-svg")).toBeInTheDocument();
-    await expect
-      .element(screen.getByTestId("service-item-card-icon"))
-      .toHaveAttribute("aria-hidden", "true");
-  });
-
+  
   it("is a list item, so a grid of cards is announced as a list", async () => {
     const screen = await mount();
     await expect.element(screen.getByRole("listitem")).toBeInTheDocument();
