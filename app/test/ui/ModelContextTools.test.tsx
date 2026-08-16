@@ -34,6 +34,7 @@ vi.mock("../../store/localeStore", async (importOriginal) => {
   };
 });
 
+import { cleanupWebMCPPolyfill } from "@mcp-b/webmcp-polyfill";
 import { ModelContextTools } from "../../ui/ModelContextTools";
 import { toContactFacts } from "../../lib/contactFacts";
 import en from "../../[lang]/dictionaries/en.json";
@@ -112,6 +113,9 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  // The polyfill tracks whether it has installed in module-level state, so a
+  // test that leaves it installed makes the next one a no-op. Reset both.
+  cleanupWebMCPPolyfill();
   Reflect.deleteProperty(document, "modelContext");
 });
 
@@ -283,9 +287,12 @@ describe("ModelContextTools", () => {
   });
 });
 
-describe("without WebMCP support", () => {
-  it("renders harmlessly when the browser has no modelContext", async () => {
-    // Firefox, or Chrome without the flag: the hook logs once and skips.
+describe("on a browser without native WebMCP", () => {
+  it("polyfills document.modelContext and still registers", async () => {
+    // No stable browser ships document.modelContext yet — Chrome exposes it
+    // only behind a flag, and not in every build. Removing the stub here leaves
+    // the component in the position a real visitor is in, so what this asserts
+    // is that the polyfill installs the API and the tools arrive anyway.
     Reflect.deleteProperty(document, "modelContext");
     registerTool.mockClear();
 
@@ -293,8 +300,24 @@ describe("without WebMCP support", () => {
       render(<ModelContextTools home={home} locale="en" contact={FACTS} />),
     ).not.toThrow();
 
-    // Registration happens in an effect; give it the chance it would have had.
-    await new Promise((resolve) => setTimeout(resolve, 50));
+    await vi.waitFor(() => expect(document.modelContext).toBeDefined());
+
+    const tools = await document.modelContext!.getTools();
+    expect(tools.length).toBeGreaterThan(0);
+
+    // The stub took no calls: registration went to the polyfill, not to us.
     expect(registerTool).not.toHaveBeenCalled();
+  });
+
+  it("leaves a native implementation alone when one exists", async () => {
+    // beforeEach installs the stub, standing in for real Chrome. The polyfill
+    // must not replace it — a browser's own implementation is the one an agent
+    // is actually connected to.
+    const native = document.modelContext;
+
+    const { tools } = await renderTools();
+
+    expect(document.modelContext).toBe(native);
+    expect(tools).toHaveLength(13);
   });
 });

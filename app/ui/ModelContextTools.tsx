@@ -10,8 +10,16 @@
 // writes to Firestore, sends a WhatsApp message or creates a consent record —
 // that is what makes them safe to expose without a confirmation step.
 //
-// If document.modelContext is missing (any browser without WebMCP), useWebMCP
-// logs once and skips registration; the page is unaffected.
+// document.modelContext is not yet in any stable browser — Chrome exposes it
+// only behind chrome://flags/#enable-webmcp-testing, and not in every build. The
+// polyfill installs the same API from the spec so the tools are reachable
+// everywhere, and defers to the native implementation wherever it exists.
+//
+// document, not navigator: the May 2026 WebMCP draft moved the getter from
+// Navigator to Document (webmachinelearning/webmcp#184). navigator.modelContext
+// survives as a deprecated alias and must not be used in new code.
+import { useState } from "react";
+import { initializeWebMCPPolyfill } from "@mcp-b/webmcp-polyfill";
 import { useWebMCP } from "usewebmcp";
 import { useRouter, usePathname } from "next/navigation";
 import { useLocaleStore } from "../store/localeStore";
@@ -21,6 +29,32 @@ import type { ContactFacts } from "../lib/contactFacts";
 
 /** Read-only tools that never change state and can be called repeatedly. */
 const READ_ONLY = { readOnlyHint: true, idempotentHint: true } as const;
+
+/**
+ * Install document.modelContext if the browser has not.
+ *
+ * Called during render rather than in an effect: useWebMCP registers in its own
+ * effect, and effects run child-first, so an effect here would fire *after* the
+ * hooks below had already looked for the API and given up.
+ *
+ * Idempotent, and never touches a native implementation — on a browser that
+ * ships WebMCP this is a no-op.
+ */
+function useWebMCPPolyfill() {
+  useState(() => {
+    if (typeof window === "undefined") return null; // never during SSR
+
+    // Only document.modelContext is checked. The May 2026 draft moved the
+    // getter from Navigator to Document, and the polyfill logs a deprecation
+    // warning for any read of navigator.modelContext — so testing it here would
+    // print that warning on every load. The polyfill does its own detection
+    // anyway and leaves a native implementation untouched.
+    if (!document.modelContext) {
+      initializeWebMCPPolyfill();
+    }
+    return null;
+  });
+}
 
 type ModelContextToolsProps = {
   home: HomeDict;
@@ -39,6 +73,10 @@ type ModelContextToolsProps = {
  * tree, which have no such prop.
  */
 export function ModelContextTools({ home, locale, contact }: ModelContextToolsProps) {
+  // Must come before the useWebMCP calls below — they look for the API as they
+  // register, so it has to exist by then.
+  useWebMCPPolyfill();
+
   const router = useRouter();
   const pathname = usePathname();
   const chooseLocale = useLocaleStore((s) => s.chooseLocale);
