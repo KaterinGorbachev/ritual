@@ -220,7 +220,7 @@ export default async function RootLayout({
             <div className="flex flex-row-reverse lg:flex-row items-center gap-2 ">
               {/* Pages dropdown — UI only */}
               <Dropdown
-                className="relative group isolate lg:hidden"
+                className="relative group lg:hidden"
                 data-testid="pages-menu"
               >
                 <summary

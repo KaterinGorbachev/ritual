@@ -86,6 +86,19 @@
 }
 
 
+/* --- Leaflet stacking ------------------------------------------------------ */
+
+/* leaflet.css hardcodes absolute z-indexes on the global axis: panes 200-700,
+   controls 800, popup close button 1000. The sticky header is z-40, so a bare
+   tile pane (400) paints over it and takes the header's dropdown panel with it.
+   `isolation` turns the map container into its own stacking context, so all of
+   those values are resolved *inside* the map and the whole thing competes with
+   the header as a single z-0 box. Leaflet's internal layering is untouched. */
+.leaflet-container {
+  isolation: isolate;
+  z-index: 0;
+}
+
 /* Branded map pin */
 .salon-pin {
   display: block;

@@ -86,7 +86,9 @@ export function MapLeaflet({
   const googleMapLink = mapLink
 
   return (
-    <div className={`relative w-full ${className}`}>
+    // `isolate` keeps the Google Maps button's z-index local to the map box, so
+    // it stacks above the tiles without competing with the sticky header (z-40).
+    <div className={`relative isolate w-full ${className}`}>
       {/* The map itself. react-leaflet handles init + cleanup for us. */}
       <div className="h-[340px] w-full md:h-[460px]" role="region" aria-label={ariaLabel}>
         <MapContainer
@@ -117,7 +119,7 @@ export function MapLeaflet({
       </div>
 
       {/* Google Maps button — absolutely positioned on top of the map. */}
-      <GoogleMapButton link={googleMapLink} className="absolute left-4 top-4 z-[500]">
+      <GoogleMapButton link={googleMapLink} className="absolute left-4 top-4 z-10">
         {googleMapLabel}
       </GoogleMapButton>
     </div>

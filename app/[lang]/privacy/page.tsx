@@ -103,7 +103,7 @@ export default async function PrivacyPage({
             <p className="font-handwriting text-3xl leading-none text-magenta">
               {meta.eyebrow}
             </p>
-            <h1 className="text-balance font-display text-[clamp(2.5rem,7vw,3rem)] font-semibold tracking-wider text-ink">
+            <h1 className="text-balance font-display text-[clamp(2.5rem,7vw,3rem)] font-semibold tracking-wider text-ink text-center">
               {meta.title}
             </h1>
             <p className="max-w-prose font-body text-lg leading-relaxed text-ink/80 md:text-xl text-center">
