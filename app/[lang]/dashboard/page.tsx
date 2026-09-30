@@ -2,7 +2,7 @@ import { Section } from "../../ui/Section";
 import { DashboardPanel } from "../../ui/DashboardPanel";
 import { getDictionary, toLocale } from "../dictionaries";
 import { revalidatePath } from "next/cache";
-import { getInfo, saveData, updateData } from "@/app/lib/handleData";
+import { getInfo, saveData, updateData, deleteData } from "@/app/lib/handleData";
 import {
     toServiceRecord,
     validateService,
@@ -10,6 +10,9 @@ import {
     type ServiceRecord,
     type StoredService,
 } from "@/app/lib/serviceValidation";
+
+/** Result of the delete-service server action, in the data layer's `{ ok }` shape. */
+type DeleteServiceResult = { ok: true; message: string } | { ok: false; message: string };
 
 /** Firestore collection the catalogue lives in. */
 const SERVICES_TABLE = "services";
@@ -63,6 +66,20 @@ async function updateService(id: string, item: ServiceRecord): Promise<AddServic
         : { ok: false, message: result.message };
 }
 
+// Server Function: removes one existing service after the user confirms in the dialog.
+async function deleteService(id: string): Promise<DeleteServiceResult> {
+    "use server";
+    if (typeof id !== "string" || id.trim() === "") {
+        return { ok: false, message: "Не удалось определить услугу. Обновите страницу и выберите её снова" };
+    }
+
+    const result = await deleteData(SERVICES_TABLE, id);
+    if (result.ok) refreshCatalogue();
+    return result.ok
+        ? { ok: true, message: "Услуга удалена из каталога" }
+        : { ok: false, message: result.message };
+}
+
 export default async function DashboardPage({ params }: PageProps<"/[lang]/dashboard">) {
     const { lang } = await params;
     const locale = toLocale(lang);
@@ -96,6 +113,7 @@ export default async function DashboardPage({ params }: PageProps<"/[lang]/dashb
             <DashboardPanel
                 onAdd={addService}
                 onUpdate={updateService}
+                onDelete={deleteService}
                 services={services}
                 loadError={loaded.ok ? undefined : "Не удалось загрузить список услуг. Обновите страницу или попробуйте позже"}
             ></DashboardPanel>

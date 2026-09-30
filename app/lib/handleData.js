@@ -107,6 +107,30 @@ export const saveData = async (data, table) => {
   }
 }
 
+// remove one existing document
+export const deleteData = async (table, id) => {
+  try {
+    if (!table || !id) {
+      throw new Error('Table name and document id are required')
+    }
+
+    await deleteDoc(doc(db, table, id))
+
+    return {
+      ok: true,
+      message: 'Information was deleted successfully',
+    }
+  } catch (error) {
+    console.error('Error while deleting information:', error.code)
+
+    return {
+      ok: false,
+      code: error.code,
+      message: mapFirebaseError(error),
+    }
+  }
+}
+
 // change fields of one existing document
 export const updateData = async (table, id, data) => {
   try {

@@ -190,3 +190,61 @@ describe("DashboardPanel — change-service form", () => {
         await expect.element(screen.getByTestId("service-search-status")).toHaveTextContent("Услуга с таким названием не найдена");
     });
 });
+
+async function openDeleteMenu(screen: Screen) {
+    await userEvent.click(screen.getByRole("button", { name: "Удалить", exact: true }));
+}
+
+describe("DashboardPanel — delete-service flow", () => {
+    it("does not delete right away — it opens a confirmation dialog first", async () => {
+        const onDelete = vi.fn();
+        const screen = await render(<DashboardPanel services={SAVED} onDelete={onDelete} />);
+        await openDeleteMenu(screen);
+        await userEvent.click(screen.getByRole("button", { name: "Удалить: Массаж лица" }));
+        await expect.element(screen.getByTestId("delete-confirm-dialog")).toBeVisible();
+        expect(onDelete).not.toHaveBeenCalled();
+    });
+
+    it("names the service being deleted in the dialog", async () => {
+        const screen = await render(<DashboardPanel services={SAVED} onDelete={() => {}} />);
+        await openDeleteMenu(screen);
+        await userEvent.click(screen.getByRole("button", { name: "Удалить: Массаж спины" }));
+        await expect.element(screen.getByTestId("delete-confirm-dialog")).toHaveTextContent("Массаж спины");
+    });
+
+    it("calls onDelete with the document id once the user confirms", async () => {
+        const onDelete = vi.fn().mockResolvedValue({ ok: true, message: "Услуга удалена из каталога" });
+        const screen = await render(<DashboardPanel services={SAVED} onDelete={onDelete} />);
+        await openDeleteMenu(screen);
+        await userEvent.click(screen.getByRole("button", { name: "Удалить: Массаж лица" }));
+        await userEvent.click(screen.getByTestId("delete-confirm-confirm"));
+        await vi.waitFor(() => expect(onDelete).toHaveBeenCalledTimes(1));
+        expect(onDelete).toHaveBeenCalledWith("doc-face");
+    });
+
+    it("closes the dialog and does not call onDelete when cancelled", async () => {
+        const onDelete = vi.fn();
+        const screen = await render(<DashboardPanel services={SAVED} onDelete={onDelete} />);
+        await openDeleteMenu(screen);
+        await userEvent.click(screen.getByRole("button", { name: "Удалить: Массаж лица" }));
+        await userEvent.click(screen.getByTestId("delete-confirm-cancel"));
+        await expect.element(screen.getByTestId("delete-confirm-dialog")).not.toBeVisible();
+        expect(onDelete).not.toHaveBeenCalled();
+    });
+
+    it("shows a human error message and keeps the dialog closed state clean when the delete fails", async () => {
+        const onDelete = vi.fn().mockResolvedValue({ ok: false, message: "Не удалось связаться с сервером" });
+        const screen = await render(<DashboardPanel services={SAVED} onDelete={onDelete} />);
+        await openDeleteMenu(screen);
+        await userEvent.click(screen.getByRole("button", { name: "Удалить: Массаж лица" }));
+        await userEvent.click(screen.getByTestId("delete-confirm-confirm"));
+        await expect.element(screen.getByTestId("service-delete-status")).toHaveTextContent("Не удалось связаться с сервером");
+    });
+
+    it("works with no onDelete supplied yet (nothing to call, nothing breaks)", async () => {
+        const screen = await render(<DashboardPanel services={SAVED} />);
+        await openDeleteMenu(screen);
+        await userEvent.click(screen.getByRole("button", { name: "Удалить: Массаж лица" }));
+        await expect.element(screen.getByTestId("delete-confirm-dialog")).toBeVisible();
+    });
+});
