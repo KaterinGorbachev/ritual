@@ -1,0 +1,71 @@
+rules_version = '2';
+
+// Firestore security rules for the Ritual salon.
+//
+// These are the real protection for the data. The login page and the proxy
+// cookie only gate the *page*: NEXT_PUBLIC_FIREBASE_API_KEY ships in the
+// browser bundle, so anyone can open a Firestore connection from a console
+// without ever loading /admin. What stops them writing is this file.
+//
+// Keep this in sync with the rules published in the Firebase console
+// (Firestore Database -> Rules). This file is the version-controlled copy.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Admin = a document exists at /admins/{uid} with the signed-in user's uid.
+    //
+    // Deliberately a document rather than a custom auth claim: a claim cannot
+    // be set from the Firebase console (it needs the Admin SDK), while a doc is
+    // created with a few clicks. Costs one read per write, which is nothing at
+    // salon scale.
+    function isAdmin() {
+      return request.auth != null
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    // The admin list itself. Never writable from a client — add or remove
+    // admins in the console, so a compromised session cannot grant itself
+    // permanent access or lock the owner out.
+    match /admins/{uid} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+
+    // Footer contact details and the JSON-LD source. Read by every visitor on
+    // every page; edited only by the salon.
+    match /contactData/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // The service catalogue shown on /[lang]/services and edited in the CRM.
+    match /services/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Booking flow. app/api/reservations/route.ts writes these from the server
+    // using the *client* SDK, so the request arrives unauthenticated — locking
+    // them to isAdmin() would break every customer booking.
+    //
+    // Left open on purpose. Tightening needs field-level validation here or a
+    // move to the Admin SDK; tracked as separate work, not silently ignored.
+    match /slots/{docId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // Customers create reservations; only the salon reads them back. The read
+    // rule matters — these hold customer names and phone numbers.
+    match /reservations/{docId} {
+      allow read: if isAdmin();
+      allow write: if true;
+    }
+
+    // Anything not named above is closed, including collections added later.
+    // A new collection is inaccessible until it gets an explicit rule.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

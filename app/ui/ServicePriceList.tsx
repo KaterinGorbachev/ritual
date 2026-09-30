@@ -7,6 +7,7 @@
 // already translated by the server page.
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { ServiceItemCard } from "./ServiceItemCard";
+import { WhatsAppButton } from "./WhatsAppButton";
 import { serviceCategoryIcon } from "./serviceCategoryIcons";
 
 export type PriceItem = {
@@ -193,14 +194,14 @@ export function ServicePriceList({
 
       <ul className="flex flex-col items-start justify-center gap-8 lg:gap-10 w-full ">
         {filtered.map((cat, index) => (
-          <li key={cat.id}>
+          <li key={cat.id} className="w-full flex">
             <section
               ref={(el) => {
                 sectionRefs.current[cat.id] = el;
               }}
               data-cat-id={cat.id}
               aria-labelledby={`${cat.id}-title`}
-              className="flex w-full flex-col gap-6 scroll-mt-46 p-4 rounded-pill"
+              className="flex w-full flex-col gap-6 scroll-mt-46 p-4 rounded-pill min-w-full"
               style={{
                 backgroundColor: `color-mix(in oklab, var(--color-blush) ${Math.min((index + index + 1) * 10, 100)}%, transparent)`,
               }}
@@ -232,7 +233,7 @@ export function ServicePriceList({
                 // A card per service — icon, name, description, duration/price,
                 // and a WhatsApp Book button whose message names the service.
                 // Reflows 3→2→1 as the viewport narrows, per the layout rules.
-                <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 ">
                   {cat.items.map((item) => (
                     <ServiceItemCard
                       key={item.id}
@@ -242,9 +243,21 @@ export function ServicePriceList({
                       from={from}
                       price={item.price}
                       durationLabel={durationLabel}
-                      bookLabel={bookLabel}
-                      bookMessage={bookMessage.replace("{service}", item.name)}
-                    />
+                    >
+                      {/* `text-sm px-4 py-2` trims the button to card scale;
+                          the aria-label names the service so every card's
+                          button reads distinctly. */}
+                      <WhatsAppButton
+                        message={bookMessage.replace("{service}", item.name)}
+                        ariaLabel={`${bookLabel}: ${item.name}`}
+                        className="shrink-0 text-sm px-4 py-2"
+                      >
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                          <path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2Zm5.4 13.9c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7s-3.7-3.2-3.8-3.4c-.1-.2-.9-1.2-.9-2.3s.6-1.6.8-1.8c.2-.2.4-.3.6-.3h.4c.2 0 .4 0 .6.5l.8 1.9c.1.1.1.3 0 .5l-.4.5c-.1.2-.3.3-.1.6.1.2.6 1 1.3 1.6.9.8 1.6 1 1.8 1.1.2.1.4.1.5-.1l.6-.8c.2-.2.3-.2.6-.1l1.8.9c.2.1.4.2.5.3.1.1.1.6-.1 1.2Z" />
+                        </svg>
+                        <span>{bookLabel}</span>
+                      </WhatsAppButton>
+                    </ServiceItemCard>
                   ))}
                 </ul>
               )}

@@ -66,8 +66,9 @@
     "description": "Busca por nombre o lee una categoría de arriba abajo. Cada ritual se reserva personalmente por WhatsApp para adaptarlo a tu piel y a tu semana.",
     "searchLabel": "Buscar tratamientos",
     "searchPlaceholder": "Prueba «lifting», «drenaje», «gel»…",
-    "emptyText": "Nada coincide aquí — prueba otra palabra.",
+    "emptyText": "No se encontraron servicios",
     "noResults": "Ningún tratamiento coincide con tu búsqueda. Prueba una palabra más corta o escríbenos por WhatsApp.",
+    "loadError": "Ahora mismo no hemos podido cargar nuestros tratamientos. Recarga la página en un momento o pregúntanos los precios por WhatsApp.",
     "durationLabel": "Duración",
     "from": "desde",
     "categories": [
@@ -182,6 +183,13 @@
             "description": "Un toque final — desde la clásica francesa hasta un diseño delicado, sobre cualquier manicura."
           }
         ]
+      }, 
+      {
+        "id": "other",
+        "title": "Otro",
+        "blurb": "",
+        "items": []        
+
       }
     ],
     "bookLabel": "Reservar",

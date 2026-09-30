@@ -2,8 +2,52 @@ import { getDictionary, toLocale } from "../dictionaries";
 import { Section } from "../../ui/Section";
 import { BubbleCanvas } from "../../ui/BubbleCanvas";
 import { ServicePriceList } from "../../ui/ServicePriceList";
-import { WhatsAppButton } from "../../ui/WhatsAppButton";
 import { BookingSelectForm } from "@/app/ui/BookingSelectForm";
+import { getInfo } from "@/app/lib/handleData";
+import type { Locale } from "@/app/lib/locales";
+import type { PriceItem } from "../../ui/ServicePriceList";
+
+// Firestore-backed data is read at build time; re-read it at most hourly.
+// The dashboard also calls revalidatePath after adding a service.
+export const revalidate = 3600;
+
+/** A document in the "services" collection, as the dashboard saves it. */
+type ServiceDoc = {
+  id: string;
+  type?: string;
+  nameRU?: string; nameEN?: string; nameES?: string;
+  descriptionRU?: string; descriptionEN?: string; descriptionES?: string;
+  time?: number;
+  price?: number;
+  createdAt?: { toMillis?: () => number };
+};
+
+const FIELD_SUFFIX = { en: "EN", es: "ES", ru: "RU" } as const;
+const INTL_TAG = { en: "en-GB", es: "es-ES", ru: "ru-RU" } as const;
+
+// One Firestore doc → one card item in the page's language. A doc with no name
+// in this language or a bad time/price is skipped rather than rendered half-empty.
+function toPriceItem(doc: ServiceDoc, locale: Locale): PriceItem | null {
+  const suffix = FIELD_SUFFIX[locale];
+  const name = doc[`name${suffix}`]?.trim();
+  const { time, price } = doc;
+  if (!name || !Number.isFinite(time) || !Number.isFinite(price)) {
+    console.error(`ServicesPage: skipping service "${doc.id}" — missing name${suffix}, time or price`);
+    return null;
+  }
+  const tag = INTL_TAG[locale];
+  return {
+    id: doc.id,
+    name,
+    description: doc[`description${suffix}`]?.trim() ?? "",
+    duration: new Intl.NumberFormat(tag, { style: "unit", unit: "minute" }).format(time!),
+    price: new Intl.NumberFormat(tag, {
+      style: "currency",
+      currency: "EUR",
+      trailingZeroDisplay: "stripIfInteger",
+    }).format(price!),
+  };
+}
 
 // Services & Prices. Reuses app/[lang]/layout.tsx (header + footer) via the
 // App Router's nested layouts — this page only renders <main>'s children.
@@ -16,6 +60,21 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
   const locale = toLocale(lang);
   const dict = await getDictionary(locale);
   const page = dict.servicesPage;
+
+  // Treatments come from Firestore; category titles and blurbs stay in the
+  // dictionary. Only plain strings go to the client list, no Timestamps.
+  const services = await getInfo("services");
+  if (!services.ok) console.error("ServicesPage: could not load services:", services.error);
+  const docs = (services.ok ? services.data ?? [] : []) as ServiceDoc[];
+  const items = docs
+    .toSorted((a, b) => (a.createdAt?.toMillis?.() ?? 0) - (b.createdAt?.toMillis?.() ?? 0))
+    .map((doc) => ({ type: doc.type, item: toPriceItem(doc, locale) }));
+  const categories = page.categories.map(({ id, title, blurb }) => ({
+    id,
+    title,
+    blurb,
+    items: items.flatMap(({ type, item }) => (type === id && item ? [item] : [])),
+  })).filter((c) => c.items.length > 0);
 
   return (
     <Section className="relative isolate w-full overflow-clip">
@@ -53,9 +112,17 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
 
       {/* --- Page header (with the search bar) + the category lists --- */}
       <div className="flex w-full flex-col items-center gap-10 lg:gap-14 py-12 px-2">
+        {!services.ok && (
+          <p
+            role="alert"
+            className="w-full max-w-2xl rounded-pill bg-cream/95 px-6 py-6 text-center font-body text-lg leading-relaxed text-ink shadow-sm"
+          >
+            {page.loadError}
+          </p>
+        )}
         <ServicePriceList
           from={page.from}
-          categories={JSON.parse(JSON.stringify(page.categories))}
+          categories={categories}
           eyebrow={page.eyebrow}
           title={page.title}
           description={page.description}
