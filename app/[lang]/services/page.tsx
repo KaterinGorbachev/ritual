@@ -74,7 +74,7 @@ export default async function ServicesPage({ params }: PageProps<"/[lang]/servic
     title,
     blurb,
     items: items.flatMap(({ type, item }) => (type === id && item ? [item] : [])),
-  }));
+  })).filter((c) => c.items.length > 0);
 
   return (
     <Section className="relative isolate w-full overflow-clip">

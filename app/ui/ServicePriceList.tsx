@@ -194,7 +194,7 @@ export function ServicePriceList({
 
       <ul className="flex flex-col items-start justify-center gap-8 lg:gap-10 w-full ">
         {filtered.map((cat, index) => (
-          <li key={cat.id}>
+          <li key={cat.id} className="w-full flex">
             <section
               ref={(el) => {
                 sectionRefs.current[cat.id] = el;
@@ -233,7 +233,7 @@ export function ServicePriceList({
                 // A card per service — icon, name, description, duration/price,
                 // and a WhatsApp Book button whose message names the service.
                 // Reflows 3→2→1 as the viewport narrows, per the layout rules.
-                <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 ">
                   {cat.items.map((item) => (
                     <ServiceItemCard
                       key={item.id}
