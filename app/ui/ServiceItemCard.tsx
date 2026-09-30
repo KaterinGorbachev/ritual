@@ -1,12 +1,10 @@
-import { WhatsAppButton } from "./WhatsAppButton";
+import type { ReactNode } from "react";
 
-// One service, as a card: a category glyph in a circle, the name, a short
-// description, the duration + price, and a WhatsApp booking button. The button
-// is a <WhatsAppButton>, so it reads the salon number from the store and builds
-// the wa.me link itself from the prefilled `bookMessage` (which names this
-// service). This makes the card a client-tree component.
+// One service, as a card: the name, a short description, the duration + price,
+// and a call-to-action slot. The CTA (a <WhatsAppButton> on the services page)
+// is passed in by the parent as `children`, so the card stays presentational
+// and doesn't depend on the WhatsApp store.
 type ServiceItemCardProps = {
-
   name: string;
   from: string;
   description: string;
@@ -16,27 +14,26 @@ type ServiceItemCardProps = {
   price: string;
   /** Screen-reader prefix for the duration, e.g. "Duration". */
   durationLabel: string;
-  /** Visible + accessible booking label, e.g. "Book on WhatsApp". */
-  bookLabel: string;
-  /** Prefilled WhatsApp message naming this service, e.g. "…book Lifting facial". */
-  bookMessage: string;
+  /** Booking CTA, e.g. a <WhatsAppButton> whose message names this service. */
+  children?: ReactNode;
   className?: string;
+  /** "div" when the parent already wraps each card in an <li> (HorizontalGallery). */
+  as?: "li" | "div";
 };
 
 export function ServiceItemCard({
-
   name,
   from,
   description,
   duration,
   price,
   durationLabel,
-  bookLabel,
-  bookMessage,
+  children,
   className = "",
+  as: Tag = "li",
 }: ServiceItemCardProps) {
   return (
-    <li
+    <Tag
       data-testid="service-item-card"
       className={`group flex h-full min-h-72 w-full flex-col justify-between gap-5 rounded-card border border-blush/10 bg-cream p-6 text-start transition hover:shadow-[0_0_0_1px_rgba(218,24,132,.12),0_18px_50px_-24px_rgba(218,24,132,.45)] ${className}`}
     >
@@ -72,22 +69,8 @@ export function ServiceItemCard({
           </span>
         </div>
 
-        {/* Primary WhatsApp CTA. <WhatsAppButton> reads the salon number from
-            the store and builds the wa.me link from `bookMessage` (which names
-            this service). `text-sm px-4 py-2` trims its default padding to card
-            scale; the aria-label names the service so every card's button reads
-            distinctly. */}
-        <WhatsAppButton
-          message={bookMessage}
-          ariaLabel={`${bookLabel}: ${name}`}
-          className="shrink-0 text-sm px-4 py-2"
-        >
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2Zm5.4 13.9c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7s-3.7-3.2-3.8-3.4c-.1-.2-.9-1.2-.9-2.3s.6-1.6.8-1.8c.2-.2.4-.3.6-.3h.4c.2 0 .4 0 .6.5l.8 1.9c.1.1.1.3 0 .5l-.4.5c-.1.2-.3.3-.1.6.1.2.6 1 1.3 1.6.9.8 1.6 1 1.8 1.1.2.1.4.1.5-.1l.6-.8c.2-.2.3-.2.6-.1l1.8.9c.2.1.4.2.5.3.1.1.1.6-.1 1.2Z" />
-          </svg>
-          <span>{bookLabel}</span>
-        </WhatsAppButton>
+        {children}
       </div>
-    </li>
+    </Tag>
   );
 }

@@ -68,6 +68,7 @@
     "searchPlaceholder": "Try “lifting”, “drainage”, “gel”…",
     "emptyText": "Nothing here matches — try another word.",
     "noResults": "No treatments match your search. Try a shorter word, or ask us on WhatsApp.",
+    "loadError": "We couldn't load our treatments just now. Please refresh the page in a moment, or ask us about prices on WhatsApp.",
     "durationLabel": "Duration",
     "from": "from",
     "categories": [

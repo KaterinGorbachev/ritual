@@ -1,86 +1,416 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TextArea } from "./TextArea";
 import { NumberInput } from "./NumberInput";
+import { SelectCategory } from "./SelectCategory"
+import {
+    EMPTY_SERVICE_ITEM,
+    SERVICE_FIELD_ORDER,
+    SERVICE_LANGUAGES as LANGUAGES,
+    SERVICE_TYPES as options,
+    toServiceDraft,
+    toServiceRecord,
+    validateService,
+    type AddServiceResult,
+    type ServiceDraft,
+    type ServiceErrors,
+    type ServiceRecord,
+    type StoredService,
+} from "../lib/serviceValidation";
+import { HorizontalGallery } from "./HorizontalGallery";
+import { ServiceItemCard } from "./ServiceItemCard";
 
 type Menu = "add" | "change" | "delete";
-/** The three locales every service text must be entered in. */
-const LANGUAGES = [
-    { code: "ru", label: "RU" },
-    { code: "en", label: "EN" },
-    { code: "es", label: "ES" },
-] as const;
 
-export function DashboardPanel() {
+/** Which saved service the edit form is open for, if any. */
+type ChangeService = { state: "open"; id: string } | { state: "close" }
+
+const priceFormat = new Intl.NumberFormat("ru-RU", {
+    style: "currency",
+    currency: "EUR",
+    trailingZeroDisplay: "stripIfInteger",
+});
+
+type SaveStatus =
+    | { state: "idle" }
+    | { state: "saving" }
+    | { state: "success"; message: string }
+    | { state: "error"; message: string };
+
+type DashboardPanelProps = {
+    /**
+     * Server action from the dashboard page — the only way this panel reaches
+     * Firestore. Gets the checked item with trimmed texts and real numbers.
+     */
+    onAdd?: (item: ServiceRecord) => Promise<AddServiceResult | void> | AddServiceResult | void;
+    /** Server action that saves the edited fields of the service with this id. */
+    onUpdate?: (id: string, item: ServiceRecord) => Promise<AddServiceResult | void> | AddServiceResult | void;
+    /** The catalogue as it is in Firestore, loaded by the dashboard page. */
+    services?: StoredService[];
+    /** Human message when the catalogue could not be loaded. */
+    loadError?: string;
+};
+
+export function DashboardPanel({ onAdd, onUpdate, services = [], loadError }: DashboardPanelProps) {
+
     const [selected, setSelected] = useState<Menu>("add");
+    const [toChange, setToChange] = useState<ChangeService>({ state: "close" })
+    const [newServiceItem, setNewServiceItem] = useState<ServiceDraft>(EMPTY_SERVICE_ITEM);
+    const [editServiceItem, setEditServiceItem] = useState<ServiceDraft>(EMPTY_SERVICE_ITEM);
+    const [search, setSearch] = useState("");
+    const [errors, setErrors] = useState<ServiceErrors>({});
+    const [status, setStatus] = useState<SaveStatus>({ state: "idle" });
+    const editHeadingRef = useRef<HTMLHeadingElement>(null);
+
+    // Both forms share the handlers below; the open menu decides which draft they fill.
+    const isEdit = selected === "change";
+    const draft = isEdit ? editServiceItem : newServiceItem;
+    const setDraft = isEdit ? setEditServiceItem : setNewServiceItem;
+    const uiValue = options.find((o) => o.value === draft.type) ?? null;
+
+    // Search by name in any of the three languages.
+    const query = search.trim().toLocaleLowerCase();
+    const foundServices = query
+        ? services.filter((s) =>
+            [s.nameRU, s.nameEN, s.nameES].some((name) => name.toLocaleLowerCase().includes(query)))
+        : services;
+
+    // When the edit form opens, move focus to it so keyboard and screen-reader
+    // users know it appeared below the gallery.
+    const editingId = toChange.state === "open" ? toChange.id : null;
+    useEffect(() => {
+        if (editingId) editHeadingRef.current?.focus();
+    }, [editingId]);
+
+    // The forms share errors and the save message, so each menu starts clean.
+    function selectMenu(menu: Menu) {
+        if (menu === selected) return;
+        setSelected(menu);
+        setErrors({});
+        setStatus({ state: "idle" });
+    }
+
+    // Fill every field of the edit form with the saved values of that service.
+    function openEdit(service: StoredService) {
+        setEditServiceItem(toServiceDraft(service));
+        setErrors({});
+        setStatus({ state: "idle" });
+        setToChange({ state: "open", id: service.id });
+    }
+
+    function updateField(name: keyof ServiceDraft, value: string) {
+        setDraft((prev) => ({ ...prev, [name]: value }));
+        // Clear the message as soon as the field is touched again.
+        setErrors((prev) => (prev[name] ? { ...prev, [name]: undefined } : prev));
+        if (status.state === "success" || status.state === "error") setStatus({ state: "idle" });
+    }
+
+    // One handler for every text and number field. The input's `name` is the key to update.
+    function handleChange(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
+        const { name, value } = e.target;
+        updateField(name as keyof ServiceDraft, value);
+    }
+
+    // Move focus to the first problem so keyboard and screen-reader users land on it.
+    function focusFirstError(form: HTMLFormElement, found: ServiceErrors) {
+        const first = SERVICE_FIELD_ORDER.find((key) => found[key]);
+        if (!first) return false;
+        const target = first === "type"
+            ? document.getElementById("booking-category")
+            : form.elements.namedItem(first);
+        if (target instanceof HTMLElement) target.focus();
+        return true;
+    }
+
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();                 // otherwise the page reloads
+        if (status.state === "saving") return;
+        const form = e.currentTarget;
+
+        const found = validateService(draft);
+        setErrors(found);
+        if (focusFirstError(form, found)) return;
+
+        const save = isEdit
+            ? (editingId && onUpdate ? (item: ServiceRecord) => onUpdate(editingId, item) : undefined)
+            : onAdd;
+        if (!save) return;
+        setStatus({ state: "saving" });
+        let result: AddServiceResult | void;
+        try {
+            result = await save(toServiceRecord(draft));
+        } catch {
+            // The action itself never throws; this is the network or server being down.
+            result = { ok: false, message: "Не удалось связаться с сервером. Проверьте интернет и попробуйте ещё раз" };
+        }
+
+        if (!result) {
+            setStatus({ state: "idle" });
+        } else if (result.ok) {
+            // A new item empties the form; an edited one stays on screen as saved.
+            if (!isEdit) setNewServiceItem(EMPTY_SERVICE_ITEM);
+            setStatus({ state: "success", message: result.message });
+        } else {
+            setStatus({ state: "error", message: result.message });
+            if (result.errors) {
+                setErrors(result.errors);
+                focusFirstError(form, result.errors);
+            }
+        }
+    }
 
     return (
         <div className="flex flex-col lg:flex-row gap-4 lg:gap-16 justify-between w-full min-h-screen items-start max-w-[1024px] px-4">
             <div className="flex lg:flex-col flex-row gap-2">
-                <button type="button" name="addService" onClick={() => setSelected("add")} className={`font-body font-bold text-base tracking-wider px-4 py-2 min-h-11 min-w-9 transition duration-500 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-cream focus:ring-mint border-blush text-ink-60 rounded-pill border-2 cursor-pointer active:ring-blush active:bg-blush active:scale-95 hover:bg-blush/50  disabled:bg-mauve disabled:text-mauve ${selected === "add" ? 'bg-blush' : 'bg-transparent'}`}>Добавить</button>
-                <button type="button" name="changeService" onClick={() => setSelected("change")} className="font-body font-bold text-base tracking-wider px-4 py-2 min-h-11 min-w-9 transition duration-500 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-cream focus:ring-mint border-blush text-ink-60 rounded-pill border-2 cursor-pointer active:ring-blush active:bg-blush active:scale-95 hover:bg-blush/50  disabled:bg-mauve disabled:text-mauve">Изменить</button>
-                <button type="button" name="deleteService" onClick={() => setSelected("delete")} className="font-body font-bold text-base tracking-wider px-4 py-2 min-h-11 min-w-9 transition duration-500 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-cream focus:ring-mint border-blush text-ink-60 rounded-pill border-2 cursor-pointer active:ring-blush active:bg-blush active:scale-95 hover:bg-blush/50  disabled:bg-mauve disabled:text-mauve">Удалить</button>
+                <button type="button" name="addService" onClick={() => selectMenu("add")} className={`font-body font-bold text-base tracking-wider px-4 py-2 min-h-11 min-w-9 transition duration-500 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-cream focus:ring-mint border-blush text-ink-60 rounded-pill border-2 cursor-pointer active:ring-blush active:bg-blush active:scale-95 hover:bg-blush/50  disabled:bg-mauve disabled:text-mauve ${selected === "add" ? 'bg-blush' : 'bg-transparent'}`}>Добавить</button>
+                <button type="button" name="changeService" onClick={() => selectMenu("change")} className={`font-body font-bold text-base tracking-wider px-4 py-2 min-h-11 min-w-9 transition duration-500 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-cream focus:ring-mint border-blush text-ink-60 rounded-pill border-2 cursor-pointer active:ring-blush active:bg-blush active:scale-95 hover:bg-blush/50  disabled:bg-mauve disabled:text-mauve ${selected === "change" ? 'bg-blush' : 'bg-transparent'}`}>Изменить</button>
+                <button type="button" name="deleteService" onClick={() => selectMenu("delete")} className={`font-body font-bold text-base tracking-wider px-4 py-2 min-h-11 min-w-9 transition duration-500 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-cream focus:ring-mint border-blush text-ink-60 rounded-pill border-2 cursor-pointer active:ring-blush active:bg-blush active:scale-95 hover:bg-blush/50  disabled:bg-mauve disabled:text-mauve ${selected === "delete" ? 'bg-blush' : 'bg-transparent'}`}>Удалить</button>
             </div>
-            <div className="flex min-w-full lg:w-[60%] py-6 lg:pb-12 lg:pt-0">
-                {selected === "add" && 
-                <form action="" className="flex flex-col gap-4 ">
-                    <h2 className="text-balance font-handwriting text-[clamp(0.9rem,2vw,1.7rem)] font-semibold tracking-wider text-magenta/70 pb-5">Добавьте новую услугу в каталог, обязательно введите тексты на русском, английском и испанском</h2>
-                    <fieldset className="flex min-w-0 flex-col gap-2">
-                        <legend className="pb-3 text-[clamp(1rem,2vw,1.2rem)] font-body text-base font-semibold text-ink/80">Название услуги от 2 до 150 символов</legend>
-                        {LANGUAGES.map(({ code, label }) => (
-                            <TextArea
-                                key={code}
-                                label={label}
-                                name={`title_${code}`}
-                                testId={`service-title-${code}`}
-                                rows={2}
-                                minLength={2}
-                                maxLength={150}
-                                required
-                                
+            {/* w-full + min-w-0, not min-w-full: the parent uses items-start, so a
+                min width alone lets the gallery track stretch this past the viewport. */}
+            <div className="flex w-full min-w-0 lg:w-[60%] lg:flex-1 py-6 lg:pb-12 lg:pt-0">
+                {selected === "add" &&
+                    // noValidate: the browser's own bubbles can't be translated, so the
+                    // checks in validateService show Russian messages under each field.
+                    <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-6 ">
+                        <h2 className="text-balance font-handwriting text-[clamp(0.9rem,2vw,1.7rem)] font-semibold tracking-wider text-magenta/70 pb-5">Добавьте новую услугу в каталог, обязательно введите тексты на русском, английском и испанском</h2>
+                        <div className="flex flex-col items-start justify-start gap-2 mb-4">
+                            <label htmlFor="booking-category" className="pb-3 text-[clamp(1rem,2vw,1.2rem)] font-body text-base font-semibold text-ink/80">Выберите тип услуги *</label>
+                            <SelectCategory inputId="booking-category" ariaLabel=""
+                                placeholder="" options={options}
+                                value={uiValue} onChange={(o) => updateField("type", o?.value ?? "")}></SelectCategory>
+                            {errors.type ? (
+                                <p id="booking-category-error" role="alert" data-testid="service-category-error" className="font-body text-sm font-semibold text-magenta">{errors.type}</p>
+                            ) : null}
+
+                        </div>
+
+                        <fieldset className="flex min-w-0 flex-col gap-2">
+                            <legend className="pb-3 text-[clamp(1rem,2vw,1.2rem)] font-body text-base font-semibold text-ink/80">Название услуги от 2 до 150 символов</legend>
+                            {LANGUAGES.map(({ code, label }) => (
+                                <TextArea
+                                    key={code}
+                                    label={label}
+                                    name={`name${label}`}
+                                    testId={`service-title-${code}`}
+                                    value={draft[`name${label}`]}
+                                    error={errors[`name${label}`]}
+                                    rows={2}
+                                    minLength={2}
+                                    maxLength={150}
+                                    required
+                                    onChange={handleChange}
+
+                                />
+                            ))}
+                        </fieldset>
+                        <fieldset className="flex min-w-0 flex-col gap-4">
+                            <legend className="pb-3 text-[clamp(1rem,2vw,1.2rem)] font-body text-base font-semibold text-ink/80">Описание услуги от 10 до 500 символов</legend>
+                            {LANGUAGES.map(({ code, label }) => (
+                                <TextArea
+                                    key={code}
+                                    label={label}
+                                    name={`description${label}`}
+                                    testId={`service-description-${code}`}
+                                    value={draft[`description${label}`]}
+                                    error={errors[`description${label}`]}
+                                    rows={5}
+                                    minLength={10}
+                                    maxLength={500}
+                                    required
+                                    onChange={handleChange}
+                                />
+                            ))}
+                        </fieldset>
+                        <NumberInput
+                            label="Продолжительность услуги в минутах"
+                            unit="мин"
+                            name="time"
+                            testId="service-duration"
+                            value={draft.time}
+                            error={errors.time}
+                            min={5}
+                            max={480}
+                            required
+                            onChange={handleChange}
+                        />
+                        <NumberInput
+                            label="Стоимость услуги в евро"
+                            unit="€"
+                            name="price"
+                            testId="service-price"
+                            value={draft.price}
+                            error={errors.price}
+                            step="0.01"
+                            min={1}
+                            max={1000}
+                            required
+                            onChange={handleChange}
+                        />
+
+
+                        <button className="mt-4 mb-4 font-body font-bold text-[1.2em] tracking-wider px-6 py-3 min-h-11 min-w-9 border-mint  bg-mint transition duration-500 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-cream focus:ring-mint text-ink-60 rounded-pill border-2 cursor-pointer active:ring-magenta active:bg-magenta active:scale-95 hover:brightness-105  disabled:bg-mauve disabled:text-mauve lg:max-w-[300px]" type="submit" data-testid="service-submit" disabled={status.state === "saving"}>{status.state === "saving" ? "Сохраняем…" : "Добавить"}</button>
+                        {/* Always in the DOM so screen readers pick up the text when it changes. */}
+                        <p role="status" data-testid="service-save-status" className={`font-body text-[1.2rem] font-semibold   text-center leading-10 rounded-card transition-all duration-500 opacity-0 ${status.state === "error" ? "text-magenta border-magenta opacity-100 border-2 shadow-sm" : status.state === "success" ? "text-ink/80 border-mauve opacity-100 border-2 shadow-sm" : ""}`}>
+                            {status.state === "success" || status.state === "error" ? status.message : ""}
+                        </p>
+                    </form>
+                } 
+                 {selected === "change" &&
+                <div className="flex w-full min-w-0 flex-col gap-8">
+                    <div className="flex w-full gap-2 flex-col">
+                        <h2 className="text-balance font-handwriting text-[clamp(0.9rem,3vw,1.7rem)] font-semibold tracking-wider text-magenta/70 pb-5 ">Выберите услугу для изменения</h2>
+                        <div className="flex flex-col gap-2">
+                            <label htmlFor="service-search" className="text-[clamp(1rem,2vw,1.2rem)] font-body text-base font-semibold text-ink/80">Поиск по названию</label>
+                            <input
+                                id="service-search"
+                                type="search"
+                                placeholder="Начните ввод"
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                data-testid="service-search"
+                                className="min-h-11 w-full rounded-pill border-2 border-blush bg-cream px-4 py-2 font-body text-base text-ink placeholder:text-ink/60 focus:border-mint focus:outline-none"
                             />
-                        ))}
-                    </fieldset>
-                    <fieldset className="flex min-w-0 flex-col gap-4">
-                        <legend className="pb-3 text-[clamp(1rem,2vw,1.2rem)] font-body text-base font-semibold text-ink/80">Описание услуги от 10 до 500 символов</legend>
-                        {LANGUAGES.map(({ code, label }) => (
-                            <TextArea
-                                key={code}
-                                label={label}
-                                name={`description_${code}`}
-                                testId={`service-description-${code}`}
-                                rows={5}
-                                minLength={10}
-                                maxLength={500}
-                                required
-                            />
-                        ))}
-                    </fieldset>
-                    <NumberInput
-                        label="Продолжительность услуги в минутах"
-                        unit="мин"
-                        name="duration"
-                        testId="service-duration"
-                        min={5}
-                        max={480}
-                        required
-                    />
-                    <NumberInput
-                        label="Стоимость услуги в евро"
-                        unit="€"
-                        name="price"
-                        testId="service-price"
-                        step="0.01"
-                        min={1}
-                        max={1000}
-                        required
-                    />
-                    <button className="mt-4 mb-4 font-body font-bold text-[1.2em] tracking-wider px-6 py-3 min-h-11 min-w-9 border-mint  bg-mint transition duration-500 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-cream focus:ring-mint text-ink-60 rounded-pill border-2 cursor-pointer active:ring-magenta active:bg-magenta active:scale-95 hover:brightness-105  disabled:bg-mauve disabled:text-mauve lg:max-w-[300px]">Добавить</button>
-                </form>
+                        </div>
+                    </div>
+                    <div className="flex min-w-0 flex-col gap-4 w-full">
+                        {/* Always in the DOM so screen readers hear when the list empties. */}
+                        <p role="status" data-testid="service-search-status" className="font-body text-base font-semibold text-ink/80 empty:hidden">
+                            {loadError
+                                ? ""
+                                : services.length === 0
+                                    ? "В каталоге пока нет услуг"
+                                    : foundServices.length === 0
+                                        ? "Услуга с таким названием не найдена"
+                                        : ""}
+                        </p>
+                        {loadError ? (
+                            <p role="alert" data-testid="service-load-error" className="font-body text-base font-semibold text-magenta">{loadError}</p>
+                        ) : null}
+                        <HorizontalGallery
+                            labels={{ previous: "Предыдущие услуги", next: "Следующие услуги", track: "Услуги каталога" }}
+                            data-testid="service-edit-gallery" className="bg-blush/20 py-2 px-4 rounded-card"
+                        >
+                            {foundServices.map((service) => (
+                                <ServiceItemCard
+                                    key={service.id}
+                                    as="div"
+                                    name={service.nameRU}
+                                    description={service.descriptionRU}
+                                    duration={`${service.time} мин`}
+                                    from=""
+                                    price={priceFormat.format(service.price)}
+                                    durationLabel="Продолжительность"
+                                    className={toChange.state === "open" && toChange.id === service.id ? "border border-magenta" : ""}
+                                >
+                                    {/* Opens the form below, filled with this service's saved values. */}
+                                    <button
+                                        type="button"
+                                        onClick={() => openEdit(service)}
+                                        aria-label={`Изменить: ${service.nameRU}`}
+                                        aria-controls={editingId ? "service-edit-form" : undefined}
+                                        data-testid="service-edit-open"
+                                        className="shrink-0 font-body font-bold text-sm tracking-wider px-4 py-2 min-h-11 min-w-9 transition duration-500 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-cream focus:ring-mint border-blush bg-blush text-ink rounded-pill border-2 cursor-pointer active:scale-95 hover:bg-blush/50"
+                                    >
+                                        Изменить
+                                    </button>
+                                </ServiceItemCard>
+                            ))}
+                        </HorizontalGallery>
+                    </div>
+                    {toChange.state === "open" &&
+                    // noValidate: the browser's own bubbles can't be translated, so the
+                    // checks in validateService show Russian messages under each field.
+                    <form id="service-edit-form" onSubmit={handleSubmit} noValidate className="flex w-full min-w-0 flex-col gap-6 ">
+                        <h2 ref={editHeadingRef} tabIndex={-1} className="text-balance font-handwriting text-[clamp(0.9rem,2vw,1.7rem)] font-semibold tracking-wider text-magenta/70 pb-5 focus:outline-none">Измените услугу «{services.find((s) => s.id === toChange.id)?.nameRU ?? ""}», обязательно заполните тексты на русском, английском и испанском</h2>
+                        <div className="flex flex-col items-start justify-start gap-2 mb-4">
+                            <label htmlFor="booking-category" className="pb-3 text-[clamp(1rem,2vw,1.2rem)] font-body text-base font-semibold text-ink/80">Выберите тип услуги *</label>
+                            <SelectCategory inputId="booking-category" ariaLabel=""
+                                placeholder="" options={options}
+                                value={uiValue} onChange={(o) => updateField("type", o?.value ?? "")}></SelectCategory>
+                            {errors.type ? (
+                                <p id="booking-category-error" role="alert" data-testid="service-category-error" className="font-body text-sm font-semibold text-magenta">{errors.type}</p>
+                            ) : null}
+
+                        </div>
+
+                        <fieldset className="flex min-w-0 flex-col gap-2">
+                            <legend className="pb-3 text-[clamp(1rem,2vw,1.2rem)] font-body text-base font-semibold text-ink/80">Название услуги от 2 до 150 символов</legend>
+                            {LANGUAGES.map(({ code, label }) => (
+                                <TextArea
+                                    key={code}
+                                    label={label}
+                                    name={`name${label}`}
+                                    testId={`service-title-${code}`}
+                                    value={draft[`name${label}`]}
+                                    error={errors[`name${label}`]}
+                                    rows={2}
+                                    minLength={2}
+                                    maxLength={150}
+                                    required
+                                    onChange={handleChange}
+
+                                />
+                            ))}
+                        </fieldset>
+                        <fieldset className="flex min-w-0 flex-col gap-4">
+                            <legend className="pb-3 text-[clamp(1rem,2vw,1.2rem)] font-body text-base font-semibold text-ink/80">Описание услуги от 10 до 500 символов</legend>
+                            {LANGUAGES.map(({ code, label }) => (
+                                <TextArea
+                                    key={code}
+                                    label={label}
+                                    name={`description${label}`}
+                                    testId={`service-description-${code}`}
+                                    value={draft[`description${label}`]}
+                                    error={errors[`description${label}`]}
+                                    rows={5}
+                                    minLength={10}
+                                    maxLength={500}
+                                    required
+                                    onChange={handleChange}
+                                />
+                            ))}
+                        </fieldset>
+                        <NumberInput
+                            label="Продолжительность услуги в минутах"
+                            unit="мин"
+                            name="time"
+                            testId="service-duration"
+                            value={draft.time}
+                            error={errors.time}
+                            min={5}
+                            max={480}
+                            required
+                            onChange={handleChange}
+                        />
+                        <NumberInput
+                            label="Стоимость услуги в евро"
+                            unit="€"
+                            name="price"
+                            testId="service-price"
+                            value={draft.price}
+                            error={errors.price}
+                            step="0.01"
+                            min={1}
+                            max={1000}
+                            required
+                            onChange={handleChange}
+                        />
+
+
+                        <button className="mt-4 mb-4 font-body font-bold text-[1.2em] tracking-wider px-6 py-3 min-h-11 min-w-9 border-mint  bg-mint transition duration-500 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-cream focus:ring-mint text-ink-60 rounded-pill border-2 cursor-pointer active:ring-magenta active:bg-magenta active:scale-95 hover:brightness-105  disabled:bg-mauve disabled:text-mauve lg:max-w-[300px]" type="submit" data-testid="service-submit" disabled={status.state === "saving"}>{status.state === "saving" ? "Сохраняем…" : "Сохранить изменения"}</button>
+                        {/* Always in the DOM so screen readers pick up the text when it changes. */}
+                        <p role="status" data-testid="service-save-status" className={`font-body text-[1.2rem] font-semibold   text-center leading-10 rounded-card transition-all duration-500 opacity-0 ${status.state === "error" ? "text-magenta border-magenta opacity-100 border-2 shadow-sm" : status.state === "success" ? "text-ink/80 border-mauve opacity-100 border-2 shadow-sm" : ""}`}>
+                            {status.state === "success" || status.state === "error" ? status.message : ""}
+                        </p>
+                    </form>
                 }
 
+
+                    </div>}
+
             </div>
-            
+
         </div>
-            );
+    );
 }

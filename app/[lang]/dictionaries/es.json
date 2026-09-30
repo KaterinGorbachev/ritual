@@ -68,6 +68,7 @@
     "searchPlaceholder": "Prueba «lifting», «drenaje», «gel»…",
     "emptyText": "Nada coincide aquí — prueba otra palabra.",
     "noResults": "Ningún tratamiento coincide con tu búsqueda. Prueba una palabra más corta o escríbenos por WhatsApp.",
+    "loadError": "Ahora mismo no hemos podido cargar nuestros tratamientos. Recarga la página en un momento o pregúntanos los precios por WhatsApp.",
     "durationLabel": "Duración",
     "from": "desde",
     "categories": [
