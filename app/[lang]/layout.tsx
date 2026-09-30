@@ -175,9 +175,10 @@ export default async function RootLayout({
                     <li>
                       <NavLink href="/#aboutus">{dict.nav.about}</NavLink>
                     </li>
-                    {/*<li>
+                    <li>
                       <NavLink href="/services">{dict.nav.services}</NavLink>
                     </li>
+                    {/*
                     <li>
                       <NavLink href="#faqs">{dict.nav.faqs}</NavLink>
                     </li>*/}
@@ -240,9 +241,10 @@ export default async function RootLayout({
                     <li>
                       <NavLink href="/#aboutus">{dict.nav.about}</NavLink>
                     </li>
-                    {/*<li>
+                    <li>
                       <NavLink href="/services">{dict.nav.services}</NavLink>
                     </li>
+                    {/*
                     <li>
                       <NavLink href="#faqs">{dict.nav.faqs}</NavLink>
                     </li>*/}

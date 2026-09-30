@@ -120,14 +120,14 @@ export function Modal({
             aria-labelledby={titleId}
             aria-describedby={subtitle ? subtitleId : undefined}
             onClick={handleClick}
-            className="modal-dialog w-full max-w-lg bg-transparent p-0 text-ink backdrop:bg-blush/50 backdrop:backdrop-blur-sm focus:outline-none"
+            className="modal-dialog w-full max-w-lg bg-transparent px-4 text-ink backdrop:bg-transparent focus:outline-none py-12"
         >
             {/* The visible panel. Clicks inside must not reach the <dialog>, or
                 the backdrop check above would treat them as a dismissal. */}
             <div
                 data-testid="modal-panel"
                 onClick={(event) => event.stopPropagation()}
-                className={`relative flex w-full flex-col gap-5 rounded-card border border-blush/10 bg-cream p-6 text-start shadow-[0_0_0_1px_rgba(218,24,132,.12),0_18px_50px_-24px_rgba(218,24,132,.45)] ${className}`}
+                className={`relative flex w-full flex-col gap-5 rounded-card border-4 border-mauve/60 bg-cream p-6 text-start shadow-[0_0_0_1px_rgba(218,24,132,.12),0_18px_50px_-24px_rgba(218,24,132,.45)] ${className}`}
             >
                 <div className="flex items-center justify-between gap-4">
                     <div className="flex flex-col gap-1">

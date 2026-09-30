@@ -20,6 +20,7 @@ import {
 import { HorizontalGallery } from "./HorizontalGallery";
 import { ServiceItemCard } from "./ServiceItemCard";
 import { Modal } from "./Modal";
+import { getInfo, saveData, updateData, deleteData } from "../lib/handleData";
 
 type Menu = "add" | "change" | "delete";
 
@@ -44,36 +45,165 @@ type SaveStatus =
   | { state: "success"; message: string }
   | { state: "error"; message: string };
 
+/** Firestore collection the catalogue lives in. */
+const SERVICES_TABLE = "services";
+
+/** A raw document from the "services" collection. */
+type ServiceDoc = Partial<ServiceRecord> & {
+  id: string;
+  createdAt?: { toMillis?: () => number };
+};
+
+/**
+ * What to say when Firestore refuses a write.
+ *
+ * `permission-denied` here almost always means the session expired rather than
+ * that the owner lacks rights, so the message says what to do about it. The
+ * data layer's own Spanish string would be wrong in this Russian panel.
+ */
+function messageForWriteError(result: { code?: string; message?: string }) {
+  if (result.code === "permission-denied") {
+    return "Нет прав на это действие. Возможно, сеанс истёк — войдите заново";
+  }
+  return result.message ?? "Не удалось сохранить изменения. Попробуйте ещё раз";
+}
+
 type DashboardPanelProps = {
   /**
-   * Server action from the dashboard page — the only way this panel reaches
-   * Firestore. Gets the checked item with trimmed texts and real numbers.
+   * Overrides the built-in Firestore write. Present so tests can inject a spy;
+   * in the app this is left undefined and the default below is used.
    */
   onAdd?: (
     item: ServiceRecord,
   ) => Promise<AddServiceResult | void> | AddServiceResult | void;
-  /** Server action that saves the edited fields of the service with this id. */
+  /** Overrides the built-in update. See `onAdd`. */
   onUpdate?: (
     id: string,
     item: ServiceRecord,
   ) => Promise<AddServiceResult | void> | AddServiceResult | void;
-  /** Server action that removes the service with this id. */
+  /** Overrides the built-in delete. See `onAdd`. */
   onDelete?: (
     id: string,
   ) => Promise<DeleteServiceResult | void> | DeleteServiceResult | void;
-  /** The catalogue as it is in Firestore, loaded by the dashboard page. */
+  /**
+   * The catalogue. When omitted the panel loads it itself, as the signed-in
+   * admin — which is the real path; passing it is for tests.
+   */
   services?: StoredService[];
   /** Human message when the catalogue could not be loaded. */
   loadError?: string;
+  /** Server action that revalidates the public Services page after a write. */
+  onSaved?: () => void | Promise<void>;
 };
 
+/**
+ * The CMS panel: add, edit and delete services.
+ *
+ * ## Why this component talks to Firestore directly
+ *
+ * It used to receive three server actions as props. Those ran on the Node
+ * server, where the Firebase client SDK has no signed-in user, so every write
+ * reached Firestore anonymously — and for them to work at all, the security
+ * rules had to permit anonymous writes to `services`.
+ *
+ * Here in the browser the owner's Firebase identity is real, so
+ * `firestore.rules` can require `/admins/{uid}` and enforce it itself. A write
+ * from anyone else is rejected by the database, not by code.
+ *
+ * The props survive as optional overrides so the existing tests can inject
+ * spies without a Firestore mock.
+ */
 export function DashboardPanel({
   onAdd,
   onUpdate,
   onDelete,
-  services = [],
-  loadError,
+  services: servicesProp,
+  loadError: loadErrorProp,
+  onSaved,
 }: DashboardPanelProps) {
+  // When the caller supplies a catalogue (tests), use it as-is and never fetch.
+  const isControlled = servicesProp !== undefined;
+  const [loaded, setLoaded] = useState<StoredService[]>([]);
+  const [loadFailure, setLoadFailure] = useState<string | undefined>(undefined);
+  const [reloadKey, setReloadKey] = useState(0);
+
+  const services = isControlled ? servicesProp : loaded;
+  const loadError = isControlled ? loadErrorProp : loadFailure;
+
+  useEffect(() => {
+    if (isControlled) return;
+    let active = true;
+
+    (async () => {
+      const result = await getInfo(SERVICES_TABLE);
+      if (!active) return;
+
+      if (!result.ok) {
+        console.error("DashboardPanel: could not load services:", result.error);
+        setLoadFailure(
+          "Не удалось загрузить список услуг. Обновите страницу или попробуйте позже",
+        );
+        return;
+      }
+
+      setLoadFailure(undefined);
+      // Oldest first, like the Services page. Only plain fields are kept:
+      // toServiceRecord drops the Firestore Timestamp, which cannot be
+      // rendered directly.
+      setLoaded(
+        ((result.data ?? []) as ServiceDoc[])
+          .toSorted(
+            (a, b) => (a.createdAt?.toMillis?.() ?? 0) - (b.createdAt?.toMillis?.() ?? 0),
+          )
+          .map((doc) => ({ id: doc.id, ...toServiceRecord(doc as ServiceRecord) })),
+      );
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [isControlled, reloadKey]);
+
+  /** Re-read the catalogue and refresh the public page after a write. */
+  async function afterWrite() {
+    setReloadKey((n) => n + 1);
+    try {
+      await onSaved?.();
+    } catch (error) {
+      // A failed revalidate means the public page is briefly stale — worth
+      // logging, but not worth telling the owner their save failed.
+      console.error("DashboardPanel: could not revalidate:", error);
+    }
+  }
+
+  // Default handlers: the real write path, running as the signed-in admin.
+  const addService =
+    onAdd ??
+    (async (item: ServiceRecord): Promise<AddServiceResult> => {
+      const result = await saveData(toServiceRecord(item), SERVICES_TABLE);
+      if (!result.ok) return { ok: false, message: messageForWriteError(result) };
+      await afterWrite();
+      return { ok: true, message: "Услуга добавлена в каталог" };
+    });
+
+  const updateService =
+    onUpdate ??
+    (async (id: string, item: ServiceRecord): Promise<AddServiceResult> => {
+      const result = await updateData(SERVICES_TABLE, id, toServiceRecord(item));
+      if (!result.ok) return { ok: false, message: messageForWriteError(result) };
+      await afterWrite();
+      return { ok: true, message: "Изменения сохранены" };
+    });
+
+  const deleteService =
+    onDelete ??
+    (async (id: string): Promise<DeleteServiceResult> => {
+      const result = await deleteData(SERVICES_TABLE, id);
+      if (!result.ok) return { ok: false, message: messageForWriteError(result) };
+      await afterWrite();
+      return { ok: true, message: "Услуга удалена из каталога" };
+    });
+
   const [selected, setSelected] = useState<Menu>("add");
   const [toChange, setToChange] = useState<ChangeService>({ state: "close" });
   const [toDelete, setToDelete] = useState<DeleteTarget>({ state: "close" });
@@ -137,12 +267,12 @@ export function DashboardPanel({
   }
 
   async function confirmDelete() {
-    if (toDelete.state !== "open" || !onDelete) return;
+    if (toDelete.state !== "open") return;
     const id = toDelete.id;
     setDeleteStatus({ state: "saving" });
     let result: DeleteServiceResult | void;
     try {
-      result = await onDelete(id);
+      result = await deleteService(id);
     } catch {
       // onDelete itself never throws; this is the network or server being down.
       result = {
@@ -198,10 +328,10 @@ export function DashboardPanel({
     if (focusFirstError(form, found)) return;
 
     const save = isEdit
-      ? editingId && onUpdate
-        ? (item: ServiceRecord) => onUpdate(editingId, item)
+      ? editingId
+        ? (item: ServiceRecord) => updateService(editingId, item)
         : undefined
-      : onAdd;
+      : addService;
     if (!save) return;
     setStatus({ state: "saving" });
     let result: AddServiceResult | void;
