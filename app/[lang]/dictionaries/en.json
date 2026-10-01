@@ -221,6 +221,7 @@
   "topServices": {
     "eyebrow": "what we do with all that listening",
     "title": "High-tech, gentle hands",
+    "description": "Give your body a moment to slow down and your face a chance to glow. Our massage treatments combine relaxing touch, carefully selected techniques and a calm atmosphere to help you switch off from everyday stress.",
     "ctaQuestion": "Not sure which?",
     "ctaComment": "Tell us how you slept this week and we'll choose a ritual for you.",
     "cta": "Ask on WhatsApp",
@@ -273,7 +274,37 @@
         "name": "Lymphatic drainage, pressotherapy and algae wrap",
         "description": "The gentlest of our body rituals and the favourite of everyone who arrives with heavy legs. Manual lymphatic drainage massage and pressotherapy help the body release excess fluid, while the algae wrap feeds the skin with minerals, leaves it smooth and firm and makes the effect last. It eases swelling and heaviness, improves your sleep and gives the body back its lightness — ideal after a flight, after pregnancy or after a long week on your feet.",
         "image": "/services/body-vs.webp"
-      }
+      }, 
+      {
+        "id": "nails",
+        "name": "Manicure",
+        "description": "",
+        "image": ""
+      }, 
+      {
+        "id": "nails2",
+        "name": "Spa pedicure",
+        "description": "",
+        "image": ""
+      }, 
+      {
+        "id": "lamination",
+        "name": "Lamination",
+        "description": "",
+        "image": ""
+      }, 
+      {
+        "id": "permanent",
+        "name": "Permanent",
+        "description": "",
+        "image": ""
+      },
+      {
+        "id": "depilation",
+        "name": "Depilation electrica",
+        "description": "",
+        "image": ""
+      }  
     ]
   },
   "aboutStaff": {

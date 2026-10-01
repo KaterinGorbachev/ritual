@@ -221,6 +221,7 @@
   "topServices": {
     "eyebrow": "lo que hacemos con todo lo que escuchamos",
     "title": "Alta tecnología, manos suaves",
+    "description": "Regálate una pausa. Nuestros tratamientos combinan técnicas de masaje, atención personalizada y un ambiente tranquilo para ayudarte a liberar tensiones y recuperar una agradable sensación de bienestar.",
     "ctaQuestion": "¿No sabes cuál elegir?",
     "ctaComment": "Cuéntanos cómo has dormido esta semana y elegimos un ritual por ti.",
     "cta": "Pregúntanos por WhatsApp",
@@ -273,7 +274,37 @@
         "name": "Drenaje linfático, presoterapia y envoltura de algas",
         "description": "El ritual corporal más suave y el favorito de quienes llegan con las piernas pesadas. El masaje de drenaje linfático manual y la presoterapia ayudan al cuerpo a eliminar el exceso de líquido, y la envoltura de algas nutre la piel con minerales, la deja lisa y firme y prolonga el efecto. Alivia la hinchazón y la sensación de pesadez, mejora el descanso y devuelve la ligereza al cuerpo: ideal después de un vuelo, del embarazo o de una semana larga de pie.",
         "image": "/services/body-vs.webp"
-      }
+      }, 
+      {
+        "id": "nails",
+        "name": "Manicura",
+        "description": "",
+        "image": ""
+      }, 
+      {
+        "id": "nails2",
+        "name": "Pedicura spa",
+        "description": "",
+        "image": ""
+      }, 
+      {
+        "id": "lamination",
+        "name": "Lamination",
+        "description": "",
+        "image": ""
+      }, 
+      {
+        "id": "permanent",
+        "name": "Permanent",
+        "description": "",
+        "image": ""
+      },
+      {
+        "id": "depilation",
+        "name": "Depilación eléctrica",
+        "description": "",
+        "image": ""
+      }  
     ]
   },
   "aboutStaff": {

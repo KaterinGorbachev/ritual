@@ -84,7 +84,7 @@ export function HorizontalGallery({
     children,
     labels,
     className = "",
-    itemClassName = "basis-[85%] sm:basis-[48%] lg:basis-[32%]",
+    itemClassName = "basis-[85%] sm:basis-[48%] lg:basis-[20%]",
     "data-testid": testId = "horizontal-gallery",
 }: HorizontalGalleryProps) {
     const trackRef = useRef<HTMLUListElement>(null);
