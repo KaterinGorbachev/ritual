@@ -92,7 +92,7 @@ const FALLBACK: ReactNode = (
   <svg
     width={SIZE}
     height={SIZE}
-    viewBox="0 0 512 512"
+    viewBox="0 0 712 712"
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
     stroke="currentColor"
@@ -102,8 +102,8 @@ const FALLBACK: ReactNode = (
     aria-hidden="true"
     focusable="false"
   >
-    <path d="M256 70c16 44 42 70 86 86-44 16-70 42-86 86-16-44-42-70-86-86 44-16 70-42 86-86Z" />
-    <path d="M256 270c12 34 32 54 66 66-34 12-54 32-66 66-12-34-32-54-66-66 34-12 54-32 66-66Z" />
+    
+    <path d="M 0,200 a 200,200 0 1,0 400,0 a 200,200 0 1,0 -400,0" fill="#ffadae" stroke="#ffadae" stroke-width="6" />
   </svg>
 );
 

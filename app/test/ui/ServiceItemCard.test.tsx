@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { render } from "vitest-browser-react";
 import { ServiceItemCard } from "../../ui/ServiceItemCard";
+import { WhatsAppButton } from "../../ui/WhatsAppButton";
 import { useWhatsAppStore } from "../../store/whatsappStore";
 
 // A category-specific decorative glyph, supplied by the parent (mirrors the
@@ -16,22 +17,29 @@ const PROPS = {
   name: "Lifting facial massage",
   description: "A face, neck and scalp massage that relaxes muscles.",
   duration: "60 min",
+  from: "from",
   price: "€65",
   durationLabel: "Duration",
-  bookLabel: "Book on WhatsApp",
-  bookMessage: "Hello",
 };
 
-// The card's <WhatsAppButton> reads the salon number from the store to build
-// the wa.me link. Seed a known number before each test so hrefs are stable.
+const BOOK_LABEL = "Book on WhatsApp";
+const BOOK_MESSAGE = "Hello";
+
+// The <WhatsAppButton> the parent passes in reads the salon number from the
+// store to build the wa.me link. Seed a known number so hrefs are stable.
 beforeEach(() => {
   useWhatsAppStore.getState().setNumber("34600000000");
 });
 
 function mount(overrides: Partial<typeof PROPS> = {}) {
+  const props = { ...PROPS, ...overrides };
   return render(
     <ul>
-      <ServiceItemCard {...PROPS} {...overrides} />
+      <ServiceItemCard {...props}>
+        <WhatsAppButton message={BOOK_MESSAGE} ariaLabel={`${BOOK_LABEL}: ${props.name}`}>
+          <span>{BOOK_LABEL}</span>
+        </WhatsAppButton>
+      </ServiceItemCard>
     </ul>,
   );
 }
@@ -72,7 +80,7 @@ describe("ServiceItemCard booking link", () => {
     const screen = await mount();
     await expect
       .element(screen.getByTestId("whatsapp-button"))
-      .toHaveAttribute("href", `https://wa.me/34600000000?text=${encodeURIComponent(PROPS.bookMessage)}`);
+      .toHaveAttribute("href", `https://wa.me/34600000000?text=${encodeURIComponent(BOOK_MESSAGE)}`);
   });
 
   it("opens WhatsApp in a new, safely-rel'd tab", async () => {
@@ -88,7 +96,7 @@ describe("ServiceItemCard booking link", () => {
     // aria-label disambiguates which service is being booked.
     await expect
       .element(screen.getByTestId("whatsapp-button"))
-      .toHaveAttribute("aria-label", `${PROPS.bookLabel}: ${PROPS.name}`);
+      .toHaveAttribute("aria-label", `${BOOK_LABEL}: ${PROPS.name}`);
   });
 
   it("still renders a usable link when the number is missing", async () => {
@@ -98,6 +106,6 @@ describe("ServiceItemCard booking link", () => {
     const screen = await mount();
     await expect
       .element(screen.getByTestId("whatsapp-button"))
-      .toHaveAttribute("href", `https://wa.me/?text=${encodeURIComponent(PROPS.bookMessage)}`);
+      .toHaveAttribute("href", `https://wa.me/?text=${encodeURIComponent(BOOK_MESSAGE)}`);
   });
 });

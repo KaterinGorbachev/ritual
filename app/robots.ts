@@ -23,12 +23,21 @@ const AI_CRAWLERS = [
   "meta-externalagent",
 ];
 
+// Paths with nothing to index. /admin and /dashboard sit outside /[lang] (see
+// app/ui/AdminShell.tsx), so a plain prefix match is enough — no per-locale
+// entries needed, unlike a path that lives under [lang].
+const ADMIN_PATHS = ["/api/", "/admin", "/dashboard"];
+
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       // /api/ holds the reservation write endpoint — nothing indexable there.
-      { userAgent: "*", allow: "/", disallow: ["/api/"] },
-      { userAgent: AI_CRAWLERS, allow: "/", disallow: ["/api/"] },
+      // /admin and /dashboard are the CRM: no public content, and a login page
+      // in search results is only an invitation to try passwords. This hides
+      // them from honest crawlers; the proxy and the Firestore rules are what
+      // actually keep them shut.
+      { userAgent: "*", allow: "/", disallow: ADMIN_PATHS },
+      { userAgent: AI_CRAWLERS, allow: "/", disallow: ADMIN_PATHS },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,
     host: SITE_URL,

@@ -30,6 +30,7 @@ export function SelectCategory({
             classNamePrefix="react-select"
             className={`select-style ${className}`}
             menuPlacement="auto"
+            name="type"
             
         />        
 
