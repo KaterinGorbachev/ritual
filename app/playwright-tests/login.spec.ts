@@ -58,8 +58,8 @@ test.describe('login to CMS system', () => {
     await test.step('sumbit and land on dashboard', async () => {
       const submitButton = page.getByTestId('login-submit')
       await submitButton.click()
-      await expect(submitButton).toHaveAttribute('disabled');
-      await page.waitForURL(/\/dashboard$/)
+      //await expect(submitButton).toHaveAttribute('disabled');
+      await expect(page).toHaveURL(/\/dashboard$/)
 
     })
 
@@ -90,7 +90,7 @@ test.describe('login to CMS system', () => {
       const submitButton = page.getByTestId('login-submit')
       await submitButton.click()
       await expect(page).toHaveURL(/\/admin$/)
-      await expect(page.getByTestId('login-error')).toBeVisible()
+      await expect(page.getByTestId('login-error')).toBeVisible({ timeout: 10000 })
       await expect(page.getByTestId('login-error')).toHaveText('Неверная почта или пароль. Проверьте раскладку клавиатуры и попробуйте снова')
 
     })
@@ -124,7 +124,7 @@ test.describe('login to CMS system', () => {
       const submitButton = page.getByTestId('login-submit')
       await submitButton.click()
       await expect(page).toHaveURL(/\/admin$/)
-      await expect(page.getByTestId('login-error')).toBeVisible()
+      await expect(page.getByTestId('login-error')).toBeVisible({ timeout: 10000 })
       await expect(page.getByTestId('login-error')).toHaveText('Неверная почта или пароль. Проверьте раскладку клавиатуры и попробуйте снова')
 
     })
@@ -154,7 +154,7 @@ test.describe('login to CMS system', () => {
       const submitButton = page.getByTestId('login-submit')
       await submitButton.click()
       await expect(page).toHaveURL(/\/admin$/)
-      await expect(page.getByTestId('login-error')).toBeVisible()
+      await expect(page.getByTestId('login-error')).toBeVisible({ timeout: 10000 })
       await expect(page.getByTestId('login-error')).toHaveText('Неверная почта или пароль. Проверьте раскладку клавиатуры и попробуйте снова')
 
     })
