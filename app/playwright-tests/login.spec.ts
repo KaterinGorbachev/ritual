@@ -65,6 +65,66 @@ test.describe('login to CMS system', () => {
 
   })
 
+  test('login with valid email in caps  passes', async ({ page }) => {
+    test.skip(!ADMIN_EMAIL || !ADMIN_PASSWORD, 'E2E_ADMIN_EMAIL / E2E_ADMIN_PASSWORD not set');
+
+    await test.step('fill email', async () => {
+      const emailBox = page.getByTestId('login-email-field')
+      await expect(emailBox.locator('label')).toHaveText(/Электронная почта/)
+      await expect(emailBox.locator('input[name="email"]')).toBeVisible()
+      await emailBox.locator('input[name="email"]').fill(ADMIN_EMAIL!.toUpperCase())
+
+
+    })
+
+    await test.step('fill password', async () => {
+      const passwordBox = page.getByTestId('login-password-field')
+      await expect(passwordBox.locator('label')).toHaveText(/Пароль/)
+      await expect(passwordBox.locator('input[name="password"]')).toBeVisible()
+      await passwordBox.locator('input[name="password"]').fill(ADMIN_PASSWORD!)
+
+    })
+
+    await test.step('sumbit and land on dashboard', async () => {
+      const submitButton = page.getByTestId('login-submit')
+      await submitButton.click()
+      //await expect(submitButton).toHaveAttribute('disabled');
+      await expect(page).toHaveURL(/\/dashboard$/)
+
+    })
+
+  })
+
+  test('login with valid email in lower case  passes', async ({ page }) => {
+    test.skip(!ADMIN_EMAIL || !ADMIN_PASSWORD, 'E2E_ADMIN_EMAIL / E2E_ADMIN_PASSWORD not set');
+
+    await test.step('fill email', async () => {
+      const emailBox = page.getByTestId('login-email-field')
+      await expect(emailBox.locator('label')).toHaveText(/Электронная почта/)
+      await expect(emailBox.locator('input[name="email"]')).toBeVisible()
+      await emailBox.locator('input[name="email"]').fill(ADMIN_EMAIL!.toLowerCase())
+
+
+    })
+
+    await test.step('fill password', async () => {
+      const passwordBox = page.getByTestId('login-password-field')
+      await expect(passwordBox.locator('label')).toHaveText(/Пароль/)
+      await expect(passwordBox.locator('input[name="password"]')).toBeVisible()
+      await passwordBox.locator('input[name="password"]').fill(ADMIN_PASSWORD!)
+
+    })
+
+    await test.step('sumbit and land on dashboard', async () => {
+      const submitButton = page.getByTestId('login-submit')
+      await submitButton.click()
+      //await expect(submitButton).toHaveAttribute('disabled');
+      await expect(page).toHaveURL(/\/dashboard$/)
+
+    })
+
+  })
+
   test('login with wrong credentials fails with error message', async ({ page }) => {
     await test.step('enter wrong email', async () => {
       const emailBox = page.getByTestId('login-email-field')
@@ -147,6 +207,36 @@ test.describe('login to CMS system', () => {
       await expect(passwordBox.locator('label')).toHaveText(/Пароль/)
       await expect(passwordBox.locator('input[name="password"]')).toBeVisible()
       await passwordBox.locator('input[name="password"]').fill('12345678')
+
+    })
+
+    await test.step('sumbit and land on dashboard', async () => {
+      const submitButton = page.getByTestId('login-submit')
+      await submitButton.click()
+      await expect(page).toHaveURL(/\/admin$/)
+      await expect(page.getByTestId('login-error')).toBeVisible({ timeout: 10000 })
+      await expect(page.getByTestId('login-error')).toHaveText('Неверная почта или пароль. Проверьте раскладку клавиатуры и попробуйте снова')
+
+    })
+
+  })
+
+  test('login with password in lower case fails with error message', async ({ page }) => {
+    test.skip(!ADMIN_EMAIL, 'E2E_ADMIN_PASSWORD not set');
+
+    await test.step('enter wrong email', async () => {
+      const emailBox = page.getByTestId('login-email-field')
+      await expect(emailBox.locator('label')).toHaveText(/Электронная почта/)
+      await expect(emailBox.locator('input[name="email"]')).toBeVisible()
+      await emailBox.locator('input[name="email"]').fill(ADMIN_EMAIL!)
+
+    })
+
+    await test.step('enter wrong password', async () => {
+      const passwordBox = page.getByTestId('login-password-field')
+      await expect(passwordBox.locator('label')).toHaveText(/Пароль/)
+      await expect(passwordBox.locator('input[name="password"]')).toBeVisible()
+      await passwordBox.locator('input[name="password"]').fill(ADMIN_PASSWORD!.toLowerCase())
 
     })
 
