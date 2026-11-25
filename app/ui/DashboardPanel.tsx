@@ -21,6 +21,7 @@ import { HorizontalGallery } from "./HorizontalGallery";
 import { ServiceItemCard } from "./ServiceItemCard";
 import { Modal } from "./Modal";
 import { getInfo, saveData, updateData, deleteData } from "../lib/handleData";
+import { auth } from "../database/firebase.config";
 
 type Menu = "add" | "change" | "delete";
 
@@ -66,6 +67,23 @@ function messageForWriteError(result: { code?: string; message?: string }) {
     return "Нет прав на это действие. Возможно, сеанс истёк — войдите заново";
   }
   return result.message ?? "Не удалось сохранить изменения. Попробуйте ещё раз";
+}
+
+/** Shown when there is no signed-in Firebase user to write as. */
+const SESSION_EXPIRED = "Сеанс истёк — войдите заново";
+
+/**
+ * Start Firebase Auth on this page and wait until it has restored the saved user.
+ *
+ * Without this every write reaches Firestore anonymously and is refused. `/admin`
+ * and `/dashboard` are separate root layouts, so the redirect after login is a
+ * full page load, and `auth` in firebase.config.js is created lazily — on the
+ * dashboard nothing touched it until logout. Firestore attaches the user's token
+ * only once Auth has been started on the page; it never starts Auth itself.
+ */
+async function hasSignedInUser(): Promise<boolean> {
+  await auth.authStateReady();
+  return auth.currentUser !== null;
 }
 
 type DashboardPanelProps = {
@@ -180,6 +198,7 @@ export function DashboardPanel({
   const addService =
     onAdd ??
     (async (item: ServiceRecord): Promise<AddServiceResult> => {
+      if (!(await hasSignedInUser())) return { ok: false, message: SESSION_EXPIRED };
       const result = await saveData(toServiceRecord(item), SERVICES_TABLE);
       if (!result.ok) return { ok: false, message: messageForWriteError(result) };
       await afterWrite();
@@ -189,6 +208,7 @@ export function DashboardPanel({
   const updateService =
     onUpdate ??
     (async (id: string, item: ServiceRecord): Promise<AddServiceResult> => {
+      if (!(await hasSignedInUser())) return { ok: false, message: SESSION_EXPIRED };
       const result = await updateData(SERVICES_TABLE, id, toServiceRecord(item));
       if (!result.ok) return { ok: false, message: messageForWriteError(result) };
       await afterWrite();
@@ -198,6 +218,7 @@ export function DashboardPanel({
   const deleteService =
     onDelete ??
     (async (id: string): Promise<DeleteServiceResult> => {
+      if (!(await hasSignedInUser())) return { ok: false, message: SESSION_EXPIRED };
       const result = await deleteData(SERVICES_TABLE, id);
       if (!result.ok) return { ok: false, message: messageForWriteError(result) };
       await afterWrite();
